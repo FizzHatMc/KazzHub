@@ -1,0 +1,307 @@
+:root {
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
+  --text-main: #ffffff;
+  --text-muted: #a0a0a0;
+  --accent: #3b82f6;
+  --border-color: #30363d;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+
+.rarity-common    { color: #FFFFFF; }
+.rarity-uncommon  { color: #55FF55; }
+.rarity-rare      { color: #5555FF; }
+.rarity-epic      { color: #AA00AA; }
+.rarity-legendary { color: #FFAA00; }
+.rarity-mythic    { color: #FF55FF; }
+.rarity-divine    { color: #55FFFF;}
+.rarity-special   { color: #FF5555; }
+.rarity-very-special    { color: #FF5555; }
+
+
+body {
+  background-color: var(--card-bg);
+  color: white;
+  font-family: sans-serif;
+  margin: 0;
+}
+
+nav {
+  padding: 20px;
+  background: var(--bg-color);
+}
+
+.back-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.back-link:hover {
+  color: white;
+}
+
+.workspace {
+  padding: 40px;
+  text-align: center;
+}
+
+
+.app-layout {
+  display: grid;
+  /* Two columns: 350px for sidebar, 1fr (fraction) for the rest */
+  grid-template-columns: 350px 1fr;
+  gap: 20px; /* Space between left and right */
+  height: 100%; /* Fill the screen */
+}
+
+.sidebar {
+  grid-row: 1 / -1;
+  grid-column: 1;   /* Lock to first column */
+  display: flex;
+  flex-direction: column;    /* Stack items vertically */
+  gap: 20px;                 /* Space between Search and Layout cards */
+  height: 100%;
+}
+
+.main-content {
+  grid-column: 2; /* Lock to second column */
+  grid-row: 1;    /* Lock to first row */
+  border: 2px dashed var(--border-color); /* Dashed look from your image */
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b949e;
+}
+
+.results-panel {
+  grid-column: 2; /* Lock to second column */
+  grid-row: 2;    /* Lock to second row */
+  background-color: #1e1e1e;
+  border: 1px solid #444;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.result-row {
+  cursor: pointer;
+  padding: 5px;
+  border-bottom: 1px solid #333;
+}
+
+.result-row:hover {
+  background-color: #2a2a2a; /* Light hover effect */
+}
+
+.selected-row {
+  font-weight: bold;
+  text-decoration: underline;
+  /*background-color: #3b82f6;  Optional: Blue background to make it obvious */
+  color: white;
+}
+
+/* 1. SCROLLABLE WRAPPER */
+.tree-container {
+  padding: 50px;
+  width: 100%;
+  overflow-x: auto; /* Allow scrolling if tree is wide */
+  white-space: nowrap; /* Keep tree on one line */
+  display: flex;
+  justify-content: center;
+}
+
+/* 2. FLEX STRUCTURE */
+.tree-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 10px; /* Spacing between sibling branches */
+  position: relative; /* Needed for lines */
+}
+
+.children-container {
+  display: flex;
+  flex-direction: row; /* Forces children side-by-side */
+  padding-top: 20px;   /* Space for the connector lines */
+  position: relative;
+}
+
+/* 3. THE BOXES */
+.node-content {
+  border: 1px solid #444;
+  background-color: #161b22;
+  padding: 10px 15px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 120px;
+  z-index: 2; /* Sit on top of lines */
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+/* Typography */
+.item-name { font-weight: bold; margin-bottom: 4px; font-size: 0.9rem; }
+.item-qty { font-size: 0.8rem; color: #8b949e; }
+
+/* RARITY COLORS (Borders & Text) */
+
+
+/* Vertical line down from PARENT to middle split */
+.children-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 10px; /* <--- CHANGED: Was 20px. Now stops at the split. */
+  background-color: #555;
+  transform: translateX(-50%);
+}
+
+/* Vertical line up from CHILD to middle split */
+.tree-node::before {
+  content: '';
+  position: absolute;
+  top: -10px;   /* <--- CHANGED: Was -20px. Starts at the split. */
+  left: 50%;
+  width: 2px;
+  height: 10px; /* <--- CHANGED: Was 20px. Goes down to the box. */
+  background-color: #555;
+  transform: translateX(-50%);
+}
+
+/* Horizontal line across children (The "Split") */
+.tree-node::after {
+  content: '';
+  position: absolute;
+  top: -10px;  /* <--- CHANGED: Was -20px. Moves the bar down to the middle. */
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #555;
+}
+
+/* 5. FIXING FIRST & LAST CHILD LINES */
+/* The lines shouldn't extend infinitely. We hide the left half of the first child's line... */
+.tree-node:first-child::after {
+  left: 50%;
+  width: 50%;
+}
+/* ...and the right half of the last child's line */
+.tree-node:last-child::after {
+  width: 50%;
+}
+
+/* 6. SINGLE CHILD FIX */
+/* If there's only one child, we don't need the horizontal bar, just the vertical one */
+.tree-node:only-child::after {
+  display: none;
+}
+.tree-node:only-child::before {
+  height: 20px; /* Just the vertical connector */
+}
+
+/* 7. ROOT NODE FIX */
+/* The very top node shouldn't have a line going up */
+.tree-container > .tree-node::before,
+.tree-container > .tree-node::after {
+  display: none;
+}
+
+
+
+/* ############# ZOOM ############*/
+
+/* 1. THE VIEWPORT (The Window) */
+#panZoomViewport {
+  /* Keep your existing border/layout styles here */
+  position: relative; /* Essential for relative positioning */
+  overflow: hidden;   /* Hides the tree parts that are "off-screen" */
+  cursor: grab;       /* Shows the hand icon */
+
+  /* Ensure flex settings don't break dragging */
+  display: block;
+}
+
+#panZoomViewport:active {
+  cursor: grabbing;   /* Closes the hand when clicking */
+}
+
+/* 2. THE MOVABLE LAYER (The Map) */
+.zoom-layer {
+  transform-origin: 0 0; /* Scaling happens from top-left, math fixes the rest */
+  width: 100%;
+  height: 100%;
+  /* We will set 'transform' via JavaScript */
+}
+
+
+/* Container for the list of conflicts */
+.sidebar-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* The Box for a specific Item (e.g. "Sulphuric Coal") */
+.variant-card {
+  background-color: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 10px;
+  animation: fadeIn 0.3s ease;
+}
+
+.variant-title {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #58a6ff;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #30363d;
+  padding-bottom: 5px;
+}
+
+/* The individual recipe options */
+.recipe-option {
+  font-size: 0.8rem;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: all 0.2s;
+}
+
+.recipe-option:hover {
+  opacity: 1;
+  border-color: #8b949e;
+}
+
+/* Highlighting the selected one */
+.recipe-option.active-recipe {
+  border-color: #238636; /* Green border */
+  background-color: #0e2a15; /* Greenish bg */
+  opacity: 1;
+  font-weight: bold;
+}
+
+.recipe-details {
+  color: #8b949e;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

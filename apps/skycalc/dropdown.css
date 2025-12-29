@@ -1,0 +1,144 @@
+/* 1. DEFINE YOUR VARIABLES */
+:root {
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
+  --text-main: #ffffff;
+  --text-muted: #a0a0a0;
+  --dark-bg: #444444;
+  --accent: #3b82f6;
+}
+
+/* 2. Global Reset for Dark Mode */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, sans-serif;
+  padding: 20px;
+}
+
+/* 3. The Dropdown Container */
+.complex-dropdown {
+  width: 350px; /* Slightly wider for better spacing */
+  position: relative;
+}
+
+/* 4. The Main Toggle Button */
+.drop-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--card-bg);
+  color: var(--text-main);
+  border: 1px solid var(--dark-bg);
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.drop-btn:hover {
+  border-color: var(--accent);
+}
+
+/* 5. The Dropdown Content Panel */
+.dropdown-content {
+  display: none; /* Hidden by default */
+  position: absolute;
+  background-color: var(--card-bg);
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--dark-bg);
+  border-radius: 6px;
+  box-shadow: 0px 8px 24px rgba(0,0,0,0.5); /* Darker shadow */
+  z-index: 10;
+  margin-top: 5px;
+}
+
+/* Custom Scrollbar for Dark Mode */
+.dropdown-content::-webkit-scrollbar { width: 8px; }
+.dropdown-content::-webkit-scrollbar-track { background: var(--card-bg); }
+.dropdown-content::-webkit-scrollbar-thumb { background: var(--dark-bg); border-radius: 4px; }
+.dropdown-content::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* 6. Sticky Search Bar */
+.search-container {
+  position: sticky;
+  top: 0;
+  background-color: var(--card-bg);
+  padding: 10px;
+  border-bottom: 1px solid var(--dark-bg);
+  z-index: 2;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: var(--bg-color); /* Darker than card */
+  border: 1px solid var(--dark-bg);
+  color: var(--text-main);
+  border-radius: 4px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+}
+
+/* 7. The Item Rows */
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--dark-bg);
+  transition: background 0.15s;
+}
+
+.item-row:last-child { border-bottom: none; }
+.item-row:hover { background-color: var(--dark-bg); }
+
+.item-label {
+  flex-grow: 1;
+  margin-left: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 8. Checkbox Styling (Accent Color) */
+input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* 9. Quantity Input Styling */
+.qty-input {
+  width: 60px;
+  padding: 6px;
+  margin-left: 10px;
+  background-color: var(--bg-color);
+  border: 1px solid var(--dark-bg);
+  color: var(--text-main);
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* Disabled State for Quantity */
+.qty-input:disabled {
+  background-color: var(--card-bg); /* Blend into background */
+  color: var(--text-muted);
+  border-color: transparent;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.qty-input:focus {
+  outline: 2px solid var(--accent);
+  border-color: transparent;
+}
+
+/* Utility to show dropdown */
+.show { display: block; }
+

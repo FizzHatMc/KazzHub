@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyCalc - KazzHub</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dropdown.css">
+
+  <script src="script.js"></script>
+</head>
+<body>
+<nav>
+  <a href="../../index.html" class="back-link">← Back to KazzHub</a>
+</nav>
+
+<main>
+
+  <div class="workspace">
+    <h1>SkyCalc</h1>
+
+
+    <div class="app-layout">
+      <div class="sidebar-column">
+      <div class="complex-dropdown card">
+        <button onclick="toggleDropdown()" class="drop-btn">Select Items...</button>
+
+        <div id="myDropdown" class="dropdown-content">
+
+          <div class="search-container">
+            <input type="text" placeholder="Search..." id="searchInput" onkeyup="filterItems()" class="search-input">
+          </div>
+
+          <div id="itemList"></div>
+
+        </div>
+
+        <button onclick="getSelectedItems()" style="margin-top: 20px; padding: 10px;">
+          Calculate Resources
+        </button>
+      </div>
+        <div class="card" id="itemListDisplay"></div>
+
+        <div class="card search-card"></div>
+
+        <div id="recipe-variant-container" class="sidebar-stack">
+        </div>
+
+        <div class="card layout-card"></div>
+      </div>
+
+      <div class="main-content" id="panZoomViewport">
+        <div class="app-card zoom-layer" id="tree-display"></div>
+      </div>
+
+      <div class="results-panel"></div>
+    </div>
+
+
+
+  </div>
+
+
+</main>
+
+
+<footer>
+  <p>&copy; 2025 RealKazz</p>
+</footer>
+
+</body>
+
+
+
+</html>
