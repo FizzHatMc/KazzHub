@@ -11,26 +11,38 @@ let currentTreeContext = null;
 
 document.addEventListener('DOMContentLoaded', async function () {
 
-  // --- A. FETCH DATA ---
-  try {
-    // Ensure this path matches exactly where your file is
-    const response = await fetch('../../assets/data.json');
+     // --- A. FETCH DATA ---
+     try {
+       // Ensure this path matches exactly where your file is
+       const response = await fetch('../../assets/data.json');
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+       if (!response.ok) {
+         throw new Error(`HTTP error! status: ${response.status}`);
+       }
 
-    inventoryData = await response.json();
-    console.log("Data loaded successfully:", inventoryData.length, "items.");
+       inventoryData = await response.json();
+       console.log("Data loaded successfully:", inventoryData.length, "items.");
 
-    // Once data is loaded, render the sidebar list
-    renderList();
+       // Once data is loaded, render the sidebar list
+       renderList();
 
-  } catch (error) {
-    console.error("Failed to load inventory data:", error);
-    alert("Error loading data. Check console. (Note: You must use a Local Server to fetch JSON files due to CORS)");
-    return; // Stop execution if data fails
-  }
+     } catch (error) {
+       console.error("Failed to load inventory data:", error);
+       alert("Error loading data. Check console. (Note: You must use a Local Server to fetch JSON files due to CORS)");
+       return; // Stop execution if data fails
+     }
+
+  /*
+
+       // Load Data
+       if (typeof DATA !== 'undefined') {
+         inventoryData = DATA;
+         console.log("Data loaded successfully:", inventoryData.length, "items.");
+         renderList();
+       } else {
+         console.error("Data source missing. Make sure mutations.js is linked in HTML.");
+       }
+  */
 
   // --- B. SETUP UI REFERENCES ---
   const viewport = document.getElementById('panZoomViewport');
@@ -114,6 +126,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
       // 5. Render
       if (zoomLayer) {
+        zoomLayer.classList.add('tree-container');
         zoomLayer.innerHTML = renderTreeHTML(resultTree);
 
         // Reset Camera
@@ -192,7 +205,6 @@ function toggleQty(checkbox) {
   }
 }
 
-// Close dropdown on outside click
 window.onclick = function (event) {
   if (!event.target.matches('.drop-btn') && !event.target.closest('.dropdown-content')) {
     var dropdowns = document.getElementsByClassName("dropdown-content");
@@ -210,122 +222,178 @@ function getSelectedItems() {
   const listItems = [];
 
   checkedBoxes.forEach(checkbox => {
+    // 1. Get User Input
     const cleanId = parseInt(checkbox.id.replace('item-', ''));
     const row = checkbox.closest('.item-row');
     const qtyInput = row.querySelector('.qty-input');
-    const quantity = parseInt(qtyInput.value) || 1; // Default to 1 if empty
-    const originalItem = inventoryData.find(item => item.id === cleanId);
+    const quantity = parseInt(qtyInput.value) || 1;
 
-    let currentItemMin = Infinity;
-    let currentItemMax = 0;
+    // 2. Find Data
+    // Use NAME matching if ID fails, just to be safe
+    let originalItem = inventoryData.find(item => item.id === cleanId);
 
+    if (!originalItem) return; // Skip if error
 
+    // 3. CALCULATE Min/Max Crafts
+    let minCrafts = 0;
+    let maxCrafts = 0;
+
+    if (originalItem.recipe && originalItem.recipe.length > 0) {
+      // Get the "gives" amount for every recipe variant
+      const yieldAmounts = originalItem.recipe.map(r => parseInt(r.gives || 1));
+
+      // Calculate how many crafts needed for the requested quantity
+      // Math.ceil(12 needed / 4 gives) = 3 crafts
+      const possibleCrafts = yieldAmounts.map(yieldAmt => Math.ceil(quantity / yieldAmt));
+
+      // Min crafts = using the high-yield recipe
+      // Max crafts = using the low-yield recipe
+      minCrafts = Math.min(...possibleCrafts);
+      maxCrafts = Math.max(...possibleCrafts);
+    }
+
+    // 4. Push to List
     listItems.push({
       name: originalItem.name,
       rarity: originalItem.rarity,
       quantity: quantity,
-      timesToCraftMin: currentItemMin,
-      timesToCraftMax: currentItemMax
+      timesToCraftMin: minCrafts,
+      timesToCraftMax: maxCrafts
     });
   });
 
+  // 5. Render the List HTML
   const displayContainer = document.getElementById('itemListDisplay');
   displayContainer.innerHTML = "";
   let htmlString = "";
 
   listItems.forEach((entry) => {
-    // Note: dataset.quantity stores the raw User Input amount
+    // Only show Min/Max if it's actually a craftable item (count > 0)
+    const craftInfo = entry.timesToCraftMax > 0
+      ? `| Min Crafts: ${entry.timesToCraftMin} | Max Crafts: ${entry.timesToCraftMax}`
+      : `| Base Material`;
+
     htmlString += `
     <p class="result-row"
        data-name="${entry.name}"
-       data-min="${entry.timesToCraftMin}"
-       data-quantity="${entry.quantity}">
+       data-quantity="${entry.quantity}"
+       style="cursor:pointer; padding: 5px; border-bottom: 1px solid #333;">
 
-      <span class="rarity-${entry.rarity}">${entry.name}</span>
-      | Min: ${entry.timesToCraftMin}
-      | Max: ${entry.timesToCraftMax}
-      | Amount: ${entry.quantity}
+      <span class="rarity-${entry.rarity}" style="font-weight:bold;">${entry.name}</span>
+      ${craftInfo}
+      | <strong>Amount: ${entry.quantity}</strong>
     </p>`;
   });
 
+  displayContainer.innerHTML = htmlString;
+
+  // 6. TRIGGER THE UPDATES
+  // Because we fixed the crash above, these will now run correctly:
   renderMaterialSummary(listItems);
   updateRecipeSelectors(listItems);
-  displayContainer.innerHTML = htmlString;
+
   return listItems;
 }
 
-/**
- * Builds a recursive tree structure based on item requirements.
- * @param {string} itemId - The ID of the item to build (e.g., "ashwreath")
- * @param {number} qtyNeeded - How many of this item are needed
- */
-function buildRecipeTree(itemId, qtyNeeded = 1) {
-  // Find the item by ID in your new data structure
-  const item = inventoryData.find(i => i.id === itemId);
 
-  // Fallback if item doesn't exist in data
+function buildRecipeTree(identifier, qtyNeeded = 1) {
+  // 1. Find the item
+  let item = inventoryData.find(i => i.name === identifier);
+  if (!item) item = inventoryData.find(i => i.id == identifier);
+
   if (!item) {
     return {
-      name: itemId, // Fallback to ID if name unknown
-      id: itemId,
+      name: identifier,
+      id: null,
       quantity: qtyNeeded,
-      color: 'bg-gray-400', // Default styling for unknown items
-      textColor: 'text-black',
+      color: 'bg-red-800',
+      textColor: 'text-white',
       ingredients: []
     };
   }
 
   const children = [];
 
-  // Check if item has requirements (ingredients)
-  if (item.requirements && item.requirements.length > 0) {
-    item.requirements.forEach(req => {
-      // Calculate total needed: (Amount per item) * (Total items needed)
-      const totalAmountNeeded = req.amount * qtyNeeded;
-      children.push(buildRecipeTree(req.id, totalAmountNeeded));
-    });
+  // Variable to track how many items we ACTUALLY create.
+  // If we need 1 but recipe makes 4, this becomes 4.
+  let actualAmountProduced = qtyNeeded;
+
+  // 2. Process Recipe
+  if (item.recipe && item.recipe.length > 0) {
+    const recipeIndex = activeRecipeOverrides[item.name] || 0;
+    const activeRecipe = item.recipe[recipeIndex];
+
+    if (activeRecipe) {
+      const gives = activeRecipe.gives ? parseInt(activeRecipe.gives) : 1;
+
+      const craftsRequired = Math.ceil(qtyNeeded / gives);
+
+      // Update the display amount to reflect the full batch
+      actualAmountProduced = craftsRequired * gives;
+
+      Object.keys(activeRecipe).forEach(ingredientName => {
+        if (ingredientName === 'gives') return;
+
+        const amountPerCraft = parseInt(activeRecipe[ingredientName]);
+        // Total needed is simple multiplication now (integers only)
+        const totalAmountNeeded = amountPerCraft * craftsRequired;
+
+        children.push(buildRecipeTree(ingredientName, totalAmountNeeded));
+      });
+    }
   }
 
   return {
     name: item.name,
     id: item.id,
-    quantity: qtyNeeded,
-    color: item.color,      // e.g., "bg-orange-800"
-    textColor: item.text,   // e.g., "text-orange-100"
+    quantity: actualAmountProduced,
+    color: item.color,
+    textColor: item.text || 'text-white',
     ingredients: children
   };
 }
 
 /**
  * Renders the recursive HTML for the tree.
+ * Matches CSS structure: .tree-node > .node-content + .children-container
  */
 function renderTreeHTML(node) {
   if (!node) return '';
 
-  // Use the classes directly from the data (color + text)
-  const nodeClasses = `${node.color || ''} ${node.textColor || ''}`;
+  // 1. wrapper for the whole node (parent + children)
+  let html = `<div class="tree-node">`;
 
-  let html = `
-    <div class="tree-node">
-      <div class="node-content ${nodeClasses}" style="padding: 8px; border-radius: 6px; display: inline-block; border: 1px solid #ccc;">
-        <strong>${node.name}</strong><br>
-        <small>x${node.quantity.toLocaleString()}</small>
-      </div>
+  // 2. The Content Card (The actual item box)
+  // We use the classes from the node object
+  const colorClass = node.color || 'bg-gray-700';
+  const textClass = node.textColor || 'text-white';
+
+  html += `
+    <div class="node-content ${colorClass} ${textClass}">
+      <div class="item-name">${node.name}</div>
+      <div class="item-qty">x${node.quantity.toLocaleString()}</div>
+    </div>
   `;
 
-  // Render Children recursively
+  // 3. Children Container
+  // Only create this div if there are actually children.
+  // This prevents empty vertical lines dropping down from leaf nodes.
   if (node.ingredients && node.ingredients.length > 0) {
-    html += '<div class="children-container" style="display: flex; gap: 20px; justify-content: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee;">';
+    html += `<div class="children-container">`;
+
+    // Recursive loop
     node.ingredients.forEach(child => {
       html += renderTreeHTML(child);
     });
-    html += '</div>';
+
+    html += `</div>`;
   }
 
-  html += '</div>';
+  // Close the wrapper
+  html += `</div>`;
+
   return html;
 }
-
 function renderMaterialSummary(selectedItems) {
   const totals = {};
 
@@ -394,68 +462,104 @@ function renderMaterialSummary(selectedItems) {
 
 function updateRecipeSelectors(selectedItems) {
   const container = document.getElementById('recipe-variant-container');
-  if (!container) return;
 
+  // Debug check:
+  if (!container) {
+    console.error("HTML Error: Could not find <div id='recipe-variant-container'> in your HTML.");
+    return;
+  }
+
+  container.innerHTML = ""; // Clear previous
+
+  // Track which items we have already created a dropdown for
   const itemsWithMultipleRecipes = new Set();
-  const processed = new Set();
+  const processedItems = new Set();
 
-  function scanRecipes(itemName) {
-    if (processed.has(itemName)) return;
-    processed.add(itemName);
+  // Recursive scanner to find ALL items in the tree that have multiple recipes
+  function scanForAlternates(itemName) {
+    if (processedItems.has(itemName)) return;
+    processedItems.add(itemName);
 
     const item = inventoryData.find(i => i.name === itemName);
     if (!item || !item.recipe) return;
 
+    // If item has 2+ recipes, mark it for a dropdown
     if (item.recipe.length > 1) {
       itemsWithMultipleRecipes.add(item.name);
     }
 
+    // Continue scanning down the CURRENT active recipe
     const activeIndex = activeRecipeOverrides[item.name] || 0;
     const activeRecipe = item.recipe[activeIndex];
 
-    if(activeRecipe) {
+    if (activeRecipe) {
       Object.keys(activeRecipe).forEach(key => {
-        if (key !== 'gives') scanRecipes(key);
+        if (key !== 'gives') scanForAlternates(key);
       });
     }
   }
 
-  selectedItems.forEach(entry => scanRecipes(entry.name));
+  // Start scan from selected items
+  selectedItems.forEach(entry => scanForAlternates(entry.name));
 
-  container.innerHTML = "";
+  if (itemsWithMultipleRecipes.size === 0) {
+    container.innerHTML = "<p style='color:#888; font-size:0.8rem; padding:10px;'>No alternative recipes available for this selection.</p>";
+    return;
+  }
 
-  if (itemsWithMultipleRecipes.size === 0) return;
-
+  // Render the Dropdowns
   itemsWithMultipleRecipes.forEach(itemName => {
     const itemData = inventoryData.find(i => i.name === itemName);
     const currentIndex = activeRecipeOverrides[itemName] || 0;
 
-    const card = document.createElement('div');
-    card.className = 'variant-card';
+    const wrapper = document.createElement('div');
+    wrapper.style.marginBottom = "15px";
+    wrapper.style.padding = "10px";
+    wrapper.style.background = "#1f2937";
+    wrapper.style.borderRadius = "8px";
+    wrapper.style.border = "1px solid #374151";
 
-    let html = `<div class="variant-title">Select Recipe: ${itemName}</div>`;
+    const title = document.createElement('div');
+    title.innerText = `Recipe for: ${itemName}`;
+    title.style.color = "#fff";
+    title.style.fontWeight = "bold";
+    title.style.marginBottom = "5px";
+    wrapper.appendChild(title);
 
+    const select = document.createElement('select');
+    select.style.width = "100%";
+    select.style.padding = "5px";
+    select.style.background = "#111827";
+    select.style.color = "#fff";
+    select.style.border = "1px solid #4b5563";
+    select.style.borderRadius = "4px";
+
+    // Create options
     itemData.recipe.forEach((recipe, index) => {
-      const isSelected = index === currentIndex;
-      const ingredientsList = Object.entries(recipe)
-        .filter(([k]) => k !== 'gives')
-        .map(([k, v]) => `${v} ${k}`)
-        .join(', ');
-      const givesAmount = recipe.gives || 1;
+      const option = document.createElement('option');
+      option.value = index;
 
-      html += `
-        <div class="recipe-option ${isSelected ? 'active-recipe' : ''}"
-             onclick="selectRecipe('${itemName}', ${index})">
-          <div><strong>Option ${index + 1}</strong> (Gives ${givesAmount})</div>
-          <div class="recipe-details">${ingredientsList}</div>
-        </div>`;
+      // Create a nice label: "Option 1 (Gives 4) - Cost: 16 Coal..."
+      const gives = recipe.gives || 1;
+      const ingredients = Object.keys(recipe)
+        .filter(k => k !== 'gives')
+        .map(k => `${recipe[k]} ${k}`)
+        .join(', ');
+
+      option.text = `Var ${index + 1} (x${gives}): ${ingredients}`;
+      if (index === currentIndex) option.selected = true;
+      select.appendChild(option);
     });
 
-    card.innerHTML = html;
-    container.appendChild(card);
+    // Handle Change
+    select.onchange = function() {
+      window.selectRecipe(itemName, parseInt(this.value));
+    };
+
+    wrapper.appendChild(select);
+    container.appendChild(wrapper);
   });
 }
-
 // Global window function for the onclick events in the generated HTML
 window.selectRecipe = function (itemName, index) {
   console.log(`Switched ${itemName} to recipe option ${index}`);

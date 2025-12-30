@@ -1,4 +1,4 @@
-[
+const DATA = [
   {
     "id": 1,
     "name": "Maddox Badphone",
@@ -10278,16 +10278,22 @@
     "rarity": "rare"
   },
   {
-    "id": 867,
-    "name": "Heavy Gabagool",
+    "id": 1860,
+    "name": "Sulphuric Coal",
     "recipe": [
       {
-        "Fuel Gabagool": "24",
-        "Sulphuric Coal": "1",
-        "gives": "1"
+        "Enchanted Coal": "16",
+        "Enchanted Sulphur": "1",
+        "gives": "4"
+      },
+      {
+        "Enchanted Coal": "16",
+        "Enchanted Sulphur": "1",
+        "Chili Pepper": "4",
+        "gives": "12"
       }
     ],
-    "rarity": "epic"
+    "rarity": "rare"
   },
   {
     "id": 868,
@@ -22154,24 +22160,6 @@
     "rarity": "rare"
   },
   {
-    "id": 1860,
-    "name": "Sulphuric Coal",
-    "recipe": [
-      {
-        "Enchanted Coal": "16",
-        "Enchanted Sulphur": "1",
-        "gives": "4"
-      },
-      {
-        "Enchanted Coal": "16",
-        "Enchanted Sulphur": "1",
-        "Chili Pepper": "4",
-        "gives": "12"
-      }
-    ],
-    "rarity": "rare"
-  },
-  {
     "id": 1861,
     "name": "Sulphur Bow",
     "recipe": [
@@ -25160,4 +25148,4 @@
     ],
     "rarity": "rare"
   }
-]
+];
