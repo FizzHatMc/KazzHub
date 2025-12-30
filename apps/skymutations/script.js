@@ -186,17 +186,19 @@ document.addEventListener('DOMContentLoaded', async function () {
   }
 
 
-/*
-  // Load Data
-  if (typeof MUTATIONS !== 'undefined') {
-    mutations = MUTATIONS;
-    console.log("Data loaded successfully:", mutations.length, "items.");
-    renderList();
-  } else {
-    console.error("Data source missing. Make sure mutations.js is linked in HTML.");
-  }
 
- */
+
+  /*
+    // Load Data
+    if (typeof MUTATIONS !== 'undefined') {
+      mutations = MUTATIONS;
+      console.log("Data loaded successfully:", mutations.length, "items.");
+      renderList();
+    } else {
+      console.error("Data source missing. Make sure mutations.js is linked in HTML.");
+    }
+   */
+
 
 
 
@@ -252,8 +254,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     };
   }
 
-  // Click Handler for Tree Generation
-  // Updated Click Handler for Tree Generation AND Solver
   if (displayContainer) {
     displayContainer.addEventListener('click', function (e) {
       const clickedRow = e.target.closest('.result-row');
@@ -336,6 +336,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
     });
   }
+
   initLayoutGrid();
 });
 
@@ -707,6 +708,10 @@ function toggleGridCell(cell) {
   }
 }
 
+
+/* =========================================
+   SOLVER LOGIC: ATOMIC PLACEMENT (Guaranteed Stability)
+   ========================================= */
 
 const getCropIndices = (topLeftIndex, size) => {
   const indices = [];
