@@ -157,11 +157,11 @@ header {
 
 
 #panZoomViewport {
-
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Key: Hides the giant tree parts that are off-screen */
   position: relative;
-  overflow: hidden;
   cursor: grab;
-  display: block;
 }
 
 #panZoomViewport:active {
@@ -245,7 +245,15 @@ header {
   text-shadow: 0px 1px 3px rgba(0,0,0,0.8);
 }
 
+#tree-display {
+  width: fit-content;  /* Critical: Expands the div to fit the full tree width */
+  height: fit-content; /* Critical: Expands the div to fit the full tree height */
+  min-width: 100%;     /* Ensure it covers the screen even if tree is small */
+  min-height: 100%;
 
+  overflow: visible !important; /* Allow content to exist outside the bounds */
+  transform-origin: 0 0;        /* Math for zooming from top-left */
+}
 
 /* --------------------- */
 
