@@ -420,3 +420,19 @@ header {
   object-fit: cover;
   border-radius: 2px;
 }
+
+/* Update this class in your CSS */
+.grid-cell.mutation-spot {
+  background-color: #1f6feb !important;
+  border-color: #fff !important;
+  padding: 0; /* Remove padding to let image fit */
+  overflow: hidden;
+}
+
+/* Ensure images fill the cell */
+.grid-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* or 'cover' if you want them flush */
+  display: block;
+}

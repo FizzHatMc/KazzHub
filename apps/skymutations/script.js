@@ -123,9 +123,7 @@ function getSelectedItems() {
     const qtyInput = row.querySelector('.qty-input');
     const quantity = parseInt(qtyInput.value) || 1;
 
-    // Find based on String ID
     const originalItem = mutations.find(item => item.id === cleanId);
-
     if (!originalItem) return;
 
     listItems.push({
@@ -155,7 +153,9 @@ function getSelectedItems() {
       <span class="${itemClasses}" style="padding: 2px 6px; border-radius: 4px;">
         ${entry.name}
       </span>
-      | Ratio: ${entry.quantity}
+      <span style="opacity: 0.7; font-size: 0.9em;">
+       | Ratio: ${entry.quantity} | Amount: <span class="calc-amount" data-id="${entry.id}">0</span>
+      </span>
     </p>`;
   });
 
@@ -164,7 +164,7 @@ function getSelectedItems() {
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
-
+/*
   try {
     // Ensure this path matches exactly where your file is
     const response = await fetch('data/mutations.json');
@@ -184,7 +184,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     alert("Error loading data. Check console. (Note: You must use a Local Server to fetch JSON files due to CORS)");
     return; // Stop execution if data fails
   }
-  /*
+
+ */
+
   // Load Data
   if (typeof MUTATIONS !== 'undefined') {
     mutations = MUTATIONS;
@@ -194,7 +196,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     console.error("Data source missing. Make sure mutations.js is linked in HTML.");
   }
 
-   */
+
 
   // Pan & Zoom Logic
   const viewport = document.getElementById('panZoomViewport');
@@ -249,45 +251,87 @@ document.addEventListener('DOMContentLoaded', async function () {
   }
 
   // Click Handler for Tree Generation
+  // Updated Click Handler for Tree Generation AND Solver
   if (displayContainer) {
     displayContainer.addEventListener('click', function (e) {
       const clickedRow = e.target.closest('.result-row');
       if (!clickedRow) return;
 
+      // 1. Visual Select Highlight
       const currentSelected = displayContainer.querySelector('.selected-row');
       if (currentSelected) currentSelected.classList.remove('selected-row');
       clickedRow.classList.add('selected-row');
 
+      // 2. Tree Logic (Standard)
       const itemId = clickedRow.dataset.id;
       const itemName = clickedRow.dataset.name;
       const qtyNeeded = parseInt(clickedRow.dataset.quantity) || 1;
 
-      // 1. Build Tree
       currentTreeContext = { id: itemId, name: itemName, qty: qtyNeeded };
-      console.log(`Generating tree and solving for: ${itemName}`);
-
       const resultTree = buildRecipeTree(itemId || itemName, qtyNeeded);
 
       if (zoomLayer) {
         zoomLayer.innerHTML = renderTreeHTML(resultTree);
-        scale = 1; pointX = 0; pointY = 0;
-        if (typeof setTransform === 'function') setTransform();
       }
 
       // ---------------------------------------------
-      // 2. TRIGGER SOLVER
+      // 3. SOLVER LOGIC (Best of 5 + Count Update)
       // ---------------------------------------------
-      const fullItemData = mutations.find(i => i.id === itemId || i.name === itemName);
+      const isMultiMode = document.getElementById('mode-multiple').checked;
 
-      // Get current Grid State (true = open/green, false = locked/red)
+      // Get Grid State
       const gridCells = document.querySelectorAll('#layoutGrid .grid-cell');
       const gridState = Array.from(gridCells).map(cell => cell.classList.contains('open'));
 
-      // Run Solver
-      const solution = runSolver(fullItemData, gridState);
+      let solution;
+      let selectionList = [];
 
-      // Render Results on Grid
+      // Prepare Data
+      if (isMultiMode) {
+        const selectedItems = getSelectedItems();
+        selectionList = selectedItems.map(s => {
+          const fullItem = mutations.find(m => m.id === s.id);
+          return { item: fullItem, ratio: s.quantity, id: s.id };
+        });
+      } else {
+        const fullItemData = mutations.find(i => i.id === itemId || i.name === itemName);
+        selectionList = [{ item: fullItemData, ratio: 1, id: fullItemData.id }];
+      }
+
+      // RUN SOLVER (5 Times)
+      console.log("Running Best-of-5 Solver...");
+      solution = runSolverBestOf(5, selectionList, gridState);
+
+      // Render Grid
       renderSolverResults(solution, gridCells);
+
+      // ---------------------------------------------
+      // 4. UPDATE SIDEBAR COUNTS
+      // ---------------------------------------------
+      // Reset all counts to 0 first
+      const allAmountSpans = displayContainer.querySelectorAll('.calc-amount');
+      allAmountSpans.forEach(span => span.innerText = "0");
+
+      if (solution && solution.placements) {
+        // Count placements: { "choconut": 12, "wheat": 5 }
+        const counts = {};
+        solution.placements.forEach(p => {
+          const id = p.item.id;
+          counts[id] = (counts[id] || 0) + 1;
+        });
+
+        // Update HTML
+        Object.keys(counts).forEach(id => {
+          // Find the specific span for this ID
+          const targetSpan = displayContainer.querySelector(`.calc-amount[data-id="${id}"]`);
+          if (targetSpan) {
+            targetSpan.innerText = counts[id];
+            // Optional: Make it bold/green to pop
+            targetSpan.style.fontWeight = "bold";
+            targetSpan.style.color = "#4ade80";
+          }
+        });
+      }
     });
   }
   initLayoutGrid();
@@ -661,10 +705,6 @@ function toggleGridCell(cell) {
   }
 }
 
-/* =========================================
-   SOLVER LOGIC INTEGRATION
-   Adapted from mutationsSolver.js
-   ========================================= */
 
 const getCropIndices = (topLeftIndex, size) => {
   const indices = [];
@@ -698,256 +738,222 @@ const getRingNeighbors = (topLeftIndex, size) => {
   return neighbors;
 };
 
-const fillIngredients = (spots, reqMap, mSize, gridState) => {
-  // ADAPTATION: Use global 'mutations' instead of INITIAL_DATA import
-  const INITIAL_DATA = mutations;
+/* --- ATOMIC SOLVER ---
+   Places Mutation + Ingredients in one step.
+*/
+const runMultiSolver = (selectionList, gridState) => {
+  const INITIAL_DATA = mutations; // Access global data
 
-  const layout = {};
-  const spotNeeds = spots.map(s => ({
-    spot: s,
-    needs: reqMap.flatMap(r => Array(r.count).fill(r.id))
+  // 1. Setup Result Container
+  let bestScore = -1;
+  let bestResult = { placements: [], layout: {} };
+
+  // 2. Prepare Targets
+  const totalRatio = selectionList.reduce((acc, cur) => acc + cur.ratio, 0);
+  const normalizedTargets = selectionList.map(s => ({
+    ...s,
+    weight: s.ratio / totalRatio,
+    placedCount: 0
   }));
 
-  let allSatisfied = false;
-  let safety = 0;
+  const ATTEMPTS = 100; // High speed iterations
 
-  while(!allSatisfied && safety++ < 100) {
-    let pendingSpots = spotNeeds.filter(sn => sn.needs.length > 0);
+  for (let run = 0; run < ATTEMPTS; run++) {
+    // Current Run State
+    let currentPlacements = []; // [{index, item}]
+    let currentLayout = {};     // {index: IngredientItem}
+    let placedCounts = selectionList.map(() => 0);
 
-    if (pendingSpots.length === 0) {
-      allSatisfied = true;
-      break;
-    }
+    // Occupied Set (Tracks both Mutations AND Ingredients)
+    let occupied = new Set();
+    gridState.forEach((isOpen, idx) => { if(!isOpen) occupied.add(idx); }); // Add locked cells
 
-    pendingSpots.sort((a,b) => {
-      const nA = getRingNeighbors(a.spot, mSize).filter(n => gridState[n] && !layout[n] && !spots.includes(n)).length;
-      const nB = getRingNeighbors(b.spot, mSize).filter(n => gridState[n] && !layout[n] && !spots.includes(n)).length;
-      return nA - nB;
-    });
+    // Shuffle Grid Start Positions
+    let openCells = gridState.map((isOpen, idx) => isOpen ? idx : -1).filter(i => i !== -1);
+    openCells.sort(() => Math.random() - 0.5);
 
-    const target = pendingSpots[0];
-    const neighbors = getRingNeighbors(target.spot, mSize).filter(n => gridState[n] && !spots.includes(n));
+    // --- PLACEMENT LOOP ---
+    for (const cellIndex of openCells) {
+      if (occupied.has(cellIndex)) continue; // Skip if already taken by previous placement
 
-    const currentNeeds = reqMap.flatMap(r => Array(r.count).fill(r.id));
-    for (const n of neighbors) {
-      if (layout[n]) {
-        const idx = currentNeeds.indexOf(layout[n].id);
-        if (idx > -1) currentNeeds.splice(idx, 1);
-      }
-    }
+      const totalPlaced = currentPlacements.length || 1;
 
-    if (currentNeeds.length === 0) {
-      target.needs = [];
-      continue;
-    }
+      // Prioritize items that are "behind" on their ratio
+      const candidates = selectionList.map((s, i) => ({
+        id: i,
+        item: s.item,
+        deficit: (placedCounts[i] / totalPlaced) - normalizedTargets[i].weight
+      }));
 
-    const nextNeed = currentNeeds[0];
-    const emptyN = neighbors.filter(n => !layout[n]);
+      candidates.sort((a, b) => a.deficit - b.deficit); // Highest deficit first
 
-    if (emptyN.length === 0) return null;
+      // Try candidates in order
+      for (const candidate of candidates) {
+        const item = candidate.item;
+        const mSize = item.size || 1;
+        const indices = getCropIndices(cellIndex, mSize);
 
-    emptyN.sort((a, b) => {
-      const utilA = pendingSpots.filter(ps => getRingNeighbors(ps.spot, mSize).includes(a)).length;
-      const utilB = pendingSpots.filter(ps => getRingNeighbors(ps.spot, mSize).includes(b)).length;
-      return utilB - utilA;
-    });
+        // A. Basic Space Check (For the Mutation itself)
+        if (!indices) continue; // Bounds check
+        if (indices.some(idx => occupied.has(idx))) continue; // Overlap check
 
-    const bestSlot = emptyN[0];
-    layout[bestSlot] = INITIAL_DATA.find(d => d.id === nextNeed);
-    target.needs.shift();
-  }
-
-  return allSatisfied ? layout : null;
-};
-
-const solveExact = (unlockedIndices, reqMap, totalReq, mSize, gridState) => {
-  let maxMutations = -1;
-  let bestSolution = { spots: [], layout: {} };
-
-  const canBeMutation = (idx, currentSpots) => {
-    const indices = getCropIndices(idx, mSize);
-    if (!indices) return false;
-
-    for (const s of currentSpots) {
-      const sIndices = getCropIndices(s, mSize);
-      if (indices.some(i => sIndices.includes(i))) return false;
-    }
-
-    const proposedSpots = [...currentSpots, idx];
-
-    for (const s of proposedSpots) {
-      const sNeighbors = getRingNeighbors(s, mSize);
-      const availableNeighbors = sNeighbors.filter(n => {
-        if (!gridState[n]) return false;
-        for (const p of proposedSpots) {
-          const pIndices = getCropIndices(p, mSize);
-          if (pIndices.includes(n)) return false;
+        // B. Atomic Ingredient Check (Can we satisfy needs RIGHT NOW?)
+        // Calculate raw needs
+        const requiredIngredients = [];
+        if (item.requirements) {
+          item.requirements.forEach(req => {
+            for(let k=0; k<req.amount; k++) requiredIngredients.push(req.id);
+          });
         }
-        return true;
-      });
 
-      if (availableNeighbors.length < totalReq) return false;
-    }
-
-    return true;
-  };
-
-  const solve = (candidateIndex, currentSpots) => {
-    const remaining = unlockedIndices.length - candidateIndex;
-    if (currentSpots.length + remaining <= maxMutations) return;
-
-    if (candidateIndex >= unlockedIndices.length) {
-      if (currentSpots.length > maxMutations) {
-        const layout = fillIngredients(currentSpots, reqMap, mSize, gridState);
-        if (layout) {
-          maxMutations = currentSpots.length;
-          bestSolution = { spots: [...currentSpots], layout };
+        // If no requirements, easy placement
+        if (requiredIngredients.length === 0) {
+          // Success! Place it.
+          indices.forEach(idx => occupied.add(idx));
+          currentPlacements.push({ index: cellIndex, item: item });
+          placedCounts[candidate.id]++;
+          break; // Move to next cell
         }
-      }
-      return;
-    }
 
-    const spot = unlockedIndices[candidateIndex];
+        // C. Check Neighbors for Ingredients
+        const neighbors = getRingNeighbors(cellIndex, mSize);
+        const validNeighbors = neighbors.filter(n => gridState[n] && !indices.includes(n)); // Exclude self
 
-    if (canBeMutation(spot, currentSpots)) {
-      currentSpots.push(spot);
-      solve(candidateIndex + 1, currentSpots);
-      currentSpots.pop();
-    }
+        // We need to match requirements to neighbors.
+        // 1. Use Existing: Check if a neighbor ALREADY has the needed ingredient.
+        // 2. Place New: Use an empty neighbor.
 
-    solve(candidateIndex + 1, currentSpots);
-  };
+        let satisfiedCount = 0;
+        let spotsToFill = []; // { index: 55, itemId: "wheat" }
 
-  solve(0, []);
-  return bestSolution;
-};
+        // Clone needs so we can tick them off
+        let pendingNeeds = [...requiredIngredients];
 
-const solveHeuristic = (unlockedIndices, reqList, totalReq, mSize, gridState) => {
-  let bestScore = -1;
-  let bestRes = { spots: [], layout: {} };
-
-  const ATTEMPTS = 100;
-  for(let k=0; k<ATTEMPTS; k++) {
-    const shuffled = [...unlockedIndices].sort(() => Math.random() - 0.5);
-    const spots = [];
-
-    const canAdd = (idx) => {
-      const indices = getCropIndices(idx, mSize);
-      if (!indices || indices.some(i => !gridState[i])) return false;
-
-      for(const s of spots) {
-        const sIdx = getCropIndices(s, mSize);
-        if (indices.some(i => sIdx.includes(i))) return false;
-      }
-
-      const neighbors = getRingNeighbors(idx, mSize).filter(n => gridState[n]);
-      const validN = neighbors.filter(n => {
-        for(const s of [...spots, idx]) {
-          if (getCropIndices(s, mSize).includes(n)) return false;
-        }
-        return true;
-      });
-
-      return validN.length >= totalReq;
-    };
-
-    for(const i of shuffled) {
-      if (canAdd(i)) {
-        let breaksOthers = false;
-        for(const s of spots) {
-          const neighbors = getRingNeighbors(s, mSize).filter(n => gridState[n]);
-          const validCount = neighbors.filter(n => {
-            const allSpots = [...spots, i];
-            for(const m of allSpots) {
-              if (getCropIndices(m, mSize).includes(n)) return false;
+        // Step C1: Check Existing Layout
+        for (const nIdx of validNeighbors) {
+          if (currentLayout[nIdx]) {
+            const existingId = currentLayout[nIdx].id;
+            const needIdx = pendingNeeds.indexOf(existingId);
+            if (needIdx > -1) {
+              pendingNeeds.splice(needIdx, 1); // Satisfied by existing!
             }
-            return true;
-          }).length;
-
-          if (validCount < totalReq) { breaksOthers = true; break; }
+          }
         }
 
-        if (!breaksOthers) spots.push(i);
+        // Step C2: Fill Empty Spots
+        if (pendingNeeds.length > 0) {
+          // Find empty valid neighbors
+          const emptyNeighbors = validNeighbors.filter(n => !occupied.has(n));
+
+          if (emptyNeighbors.length >= pendingNeeds.length) {
+            // We have enough space! Assign them.
+            for (let i = 0; i < pendingNeeds.length; i++) {
+              spotsToFill.push({ index: emptyNeighbors[i], itemId: pendingNeeds[i] });
+            }
+            pendingNeeds = []; // All accounted for
+          }
+        }
+
+        // D. Final Decision
+        if (pendingNeeds.length === 0) {
+          // SUCCESS - COMMIT EVERYTHING
+
+          // 1. Mark Mutation Spots
+          indices.forEach(idx => occupied.add(idx));
+          currentPlacements.push({ index: cellIndex, item: item });
+          placedCounts[candidate.id]++;
+
+          // 2. Mark Ingredient Spots
+          spotsToFill.forEach(fill => {
+            occupied.add(fill.index);
+            const ingData = INITIAL_DATA.find(d => d.id === fill.itemId);
+            if (ingData) {
+              currentLayout[fill.index] = ingData;
+            }
+          });
+
+          break; // Success, stop checking candidates for this cell
+        }
       }
     }
 
-    if (spots.length > bestScore) {
-      const layout = fillIngredients(spots, reqList, mSize, gridState);
-      if (layout) {
-        bestScore = spots.length;
-        bestRes = { spots: [...spots], layout };
-      }
+    // End of Run - Check Score
+    if (currentPlacements.length > bestScore) {
+      bestScore = currentPlacements.length;
+      bestResult = { placements: [...currentPlacements], layout: {...currentLayout} };
     }
   }
 
-  return bestRes;
+  return bestResult;
 };
 
-// Main function to call
-const runSolver = (selectedMutation, gridState) => {
-  if (!selectedMutation) return { spots: [], layout: {} };
-
-  const mSize = selectedMutation.size || 1;
-  const unlockedIndices = gridState.map((u, i) => u ? i : -1).filter(i => i !== -1);
-
-  const reqList = [];
-  if (selectedMutation.requirements) {
-    selectedMutation.requirements.forEach(req => {
-      reqList.push({ id: req.id, count: req.amount });
-    });
-  }
-  const totalReq = reqList.reduce((a,b)=>a+b.count,0);
-
-  if (unlockedIndices.length <= 30 && mSize === 1) {
-    return solveExact(unlockedIndices, reqList, totalReq, mSize, gridState);
-  } else {
-    return solveHeuristic(unlockedIndices, reqList, totalReq, mSize, gridState);
-  }
-};
-
+/* --- RENDERER (Ensure this matches your latest version) --- */
 function renderSolverResults(solution, gridCells) {
-  // 1. Reset Grid (Clear previous results but keep Open/Locked state)
+  // 1. Reset Grid
   gridCells.forEach(cell => {
-    // Reset styling classes
     cell.classList.remove('mutation-spot', 'ingredient-spot');
-    // Remove images
     const img = cell.querySelector('img');
     if (img) img.remove();
-
-    // Restore text content based on state
-    if (cell.classList.contains('locked')) {
-      cell.innerText = 'X';
-    } else {
-      cell.innerText = '';
-    }
+    cell.innerText = cell.classList.contains('locked') ? 'X' : '';
   });
 
-  if (!solution || !solution.spots) return;
+  if (!solution || !solution.placements || solution.placements.length === 0) {
+    console.warn("Solver: No layout generated.");
+    return;
+  }
 
-  // 2. Draw Mutation Spots (The main crops)
-  solution.spots.forEach(index => {
-    if (gridCells[index]) {
-      const cell = gridCells[index];
-      cell.classList.add('mutation-spot');
-      cell.innerText = 'M'; // Or use an icon
-    }
+  // 2. Draw Mutation Spots
+  solution.placements.forEach(obj => {
+    const mSize = obj.item.size || 1;
+    const indices = getCropIndices(obj.index, mSize);
+    if (!indices) return;
+
+    indices.forEach(idx => {
+      if (gridCells[idx]) {
+        const cell = gridCells[idx];
+        cell.classList.add('mutation-spot');
+        cell.innerText = '';
+
+        // Add Image
+        const img = document.createElement('img');
+        img.src = obj.item.image ? obj.item.image : `assets/images/${obj.item.name.toLowerCase().replace(/\s/g, '_')}.png`;
+        img.onerror = function() { this.style.display = 'none'; this.parentNode.innerText = 'M'; };
+        cell.appendChild(img);
+      }
+    });
   });
 
-  // 3. Draw Ingredients (The surrounding crops)
-  // solution.layout is an object: { index: itemDataObject, ... }
-  Object.keys(solution.layout).forEach(index => {
+  // 3. Draw Ingredients
+  Object.keys(solution.layout).forEach(key => {
+    const index = parseInt(key); // Fix string key
     if (gridCells[index]) {
       const cell = gridCells[index];
-      const item = solution.layout[index];
+      const item = solution.layout[key];
 
       cell.classList.add('ingredient-spot');
-      cell.innerText = ''; // Clear text to show image
+      cell.innerText = '';
 
-      // Create Image
       const img = document.createElement('img');
       img.src = item.image ? item.image : `assets/images/${item.name.toLowerCase().replace(/\s/g, '_')}.png`;
-      img.onerror = function() { this.style.display = 'none'; this.parentNode.innerText = item.abbr || item.name.substring(0,2); };
+      img.onerror = function() { this.style.display = 'none'; this.parentNode.innerText = item.abbr || 'Ing'; };
       cell.appendChild(img);
     }
   });
+}
+
+function runSolverBestOf(attempts, selectionList, gridState) {
+  let bestGlobalScore = -1;
+  let bestGlobalResult = { placements: [], layout: {} };
+
+  for (let i = 0; i < attempts; i++) {
+    // Run the solver (which already does 100 internal attempts, so this is very thorough)
+    const result = runMultiSolver(selectionList, gridState);
+
+    if (result && result.placements.length > bestGlobalScore) {
+      bestGlobalScore = result.placements.length;
+      bestGlobalResult = result;
+    }
+  }
+
+  return bestGlobalResult;
 }
