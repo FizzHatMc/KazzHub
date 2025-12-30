@@ -1,5 +1,32 @@
+:root {
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
+  --text-main: #ffffff;
+  --text-muted: #a0a0a0;
+  --accent: #3b82f6;
+  --border-color: #30363d;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.rarity-common    { color: #FFFFFF; }
+.rarity-uncommon  { color: #55FF55; }
+.rarity-rare      { color: #5555FF; }
+.rarity-epic      { color: #AA00AA; }
+.rarity-legendary { color: #FFAA00; }
+.rarity-mythic    { color: #FF55FF; }
+.rarity-divine    { color: #55FFFF;}
+.rarity-special   { color: #FF5555; }
+.rarity-very-special    { color: #FF5555; }
+
+
 body {
-  background-color: #1e1e1e; /* Slightly different dark blue for distinction */
+  background-color: var(--card-bg);
   color: white;
   font-family: sans-serif;
   margin: 0;
@@ -7,11 +34,11 @@ body {
 
 nav {
   padding: 20px;
-  background: #121212;
+  background: var(--bg-color);
 }
 
 .back-link {
-  color: #94a3b8;
+  color: var(--accent);
   text-decoration: none;
   font-weight: bold;
 }
@@ -23,4 +50,373 @@ nav {
 .workspace {
   padding: 40px;
   text-align: center;
+}
+
+header {
+  padding: 20px;
+  border-bottom: 1px solid #333;
+}
+
+
+.tree-container {
+  padding: 50px;
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  display: flex;
+  justify-content: center;
+}
+
+
+.tree-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 10px;
+  position: relative;
+}
+
+
+.tree-node::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 2px;
+  height: 10px;
+  background-color: #555;
+  transform: translateX(-50%);
+}
+
+
+.tree-node::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #555;
+}
+
+
+.tree-node:first-child::after {
+  left: 50%;
+  width: 50%;
+}
+
+.tree-node:last-child::after {
+  width: 50%;
+}
+
+.tree-node:only-child::after {
+  display: none;
+}
+.tree-node:only-child::before {
+  height: 20px;
+}
+
+.tree-container > .tree-node::before,
+.tree-container > .tree-node::after {
+  display: none;
+}
+
+.children-container {
+  display: flex;
+  flex-direction: row;
+  padding-top: 20px;
+  position: relative;
+}
+
+
+.node-content {
+  border: 1px solid #444;
+  background-color: #161b22;
+  padding: 10px 15px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 120px;
+  z-index: 2;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.item-name { font-weight: bold; margin-bottom: 4px; font-size: 0.9rem; }
+.item-qty { font-size: 0.8rem; color: #8b949e; }
+
+.children-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 10px;
+  background-color: #555;
+  transform: translateX(-50%);
+}
+
+
+#panZoomViewport {
+
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+  display: block;
+}
+
+#panZoomViewport:active {
+  cursor: grabbing;
+}
+
+
+.zoom-layer {
+  transform-origin: 0 0;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+.app-layout {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 20px;
+  height: 100%;
+}
+
+.sidebar {
+  grid-row: 1 / -1;
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+}
+
+.main-content {
+  grid-column: 2;
+  grid-row: 1;
+  border: 2px dashed var(--border-color);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b949e;
+}
+
+.results-panel {
+  grid-column: 2;
+  grid-row: 2;
+  background-color: #1e1e1e;
+  border: 1px solid #444;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.result-row {
+  cursor: pointer;
+  padding: 5px;
+  border-bottom: 1px solid #333;
+}
+
+.result-row:hover {
+  background-color: #2a2a2a;
+}
+
+/* Style for the image inside the tree node */
+.tree-icon {
+  width: 32px;        /* Keep it small so the tree doesn't get huge */
+  height: 32px;
+  object-fit: cover;  /* Ensures square images don't stretch */
+  border-radius: 4px;
+  margin-bottom: 5px; /* Space between image and text */
+  display: block;     /* Ensures it sits on its own line (above text) */
+  margin-left: auto;  /* These two lines center the image... */
+  margin-right: auto; /* ...horizontally */
+}
+
+/* Ensure the rarity colors override the default text color in the tree */
+.node-content .item-name {
+  /* The font-weight is already in your CSS, but let's make sure colors pop */
+  text-shadow: 0px 1px 3px rgba(0,0,0,0.8);
+}
+
+
+
+/* --------------------- */
+
+/* --- Optimized Layout Container --- */
+.layout-card {
+  /* Removed background-color to match your black theme */
+  background: transparent;
+  /* Removed border to blend in */
+  border: none;
+  padding: 10px 0; /* Reduced padding */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.layout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #333; /* Darker, subtle border */
+  padding-bottom: 10px;
+}
+
+.header-title {
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #fff; /* Pure white for better contrast on black */
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Legend Dots */
+.legend {
+  display: flex;
+  gap: 10px;
+  font-size: 0.75rem;
+  color: #a0a0a0;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-open { background-color: #2ea043; box-shadow: 0 0 5px rgba(46, 160, 67, 0.5); }
+.dot-locked { background-color: #f85149; }
+
+/* --- The Responsive Grid --- */
+.grid-container {
+  display: grid;
+  /* FIX: Use 1fr instead of fixed pixels.
+     This forces the columns to share available space equally. */
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px; /* Slightly smaller gap to save space */
+
+  /* Optional: Cap the size so it doesn't get huge on big screens */
+  max-width: 400px;
+  margin: 0 auto; /* Center it */
+}
+
+.grid-cell {
+  width: 100%;
+  /* FIX: Aspect-ratio keeps cells square even when they shrink */
+  aspect-ratio: 1 / 1;
+
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.8rem; /* Smaller font to fit in small boxes */
+  transition: background-color 0.1s;
+}
+
+/* STATE: LOCKED (Red X) - Darker Theme Version */
+.grid-cell.locked {
+  /* Very subtle red background */
+  background-color: rgba(248, 81, 73, 0.05);
+  border: 1px solid #3a1c1c; /* Dark border instead of bright red */
+  color: #f85149;
+}
+
+.grid-cell.locked:hover {
+  background-color: rgba(248, 81, 73, 0.15);
+  border-color: #f85149;
+}
+
+/* STATE: OPEN (Green Empty) - Darker Theme Version */
+.grid-cell.open {
+  /* Very subtle green background */
+  background-color: rgba(46, 160, 67, 0.05);
+  border: 1px solid #1c3a20; /* Dark border */
+  color: transparent;
+}
+
+.grid-cell.open:hover {
+  background-color: rgba(46, 160, 67, 0.15);
+  border-color: #2ea043;
+}
+
+.layout-footer {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.75rem;
+  color: #555;
+}
+
+/* --- Toggle Switch Styling --- */
+.switch-toggle {
+  display: inline-flex;
+  background: #0d1117;
+  border-radius: 6px;
+  border: 1px solid #30363d;
+  overflow: hidden;
+}
+
+.switch-toggle input {
+  display: none;
+}
+
+.switch-toggle label {
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  color: #8b949e;
+  cursor: pointer;
+  border-right: 1px solid #30363d;
+  transition: all 0.2s;
+}
+
+.switch-toggle label:last-child {
+  border-right: none;
+}
+
+.switch-toggle input:checked + label {
+  background: #238636; /* Green */
+  color: white;
+}
+
+/* --- Solver Result Styling (Inside the Grid) --- */
+.grid-cell.mutation-spot {
+  background-color: #1f6feb !important; /* Blue for the main crop */
+  border-color: #fff !important;
+  color: white !important;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+}
+
+.grid-cell.ingredient-spot {
+  background-color: #238636 !important; /* Green for ingredients */
+  color: white !important;
+  font-size: 0.6rem;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 2px;
 }

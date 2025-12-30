@@ -3,19 +3,121 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SkyCalc - KazzHub</title>
+  <title>SkyMutations - KazzHub</title>
+
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dropdown.css">
+  <script src="script.js"></script>
+  <script src="data/tempMutation.js"></script>
 </head>
 <body>
+<header>
+  <nav>
+    <a href="../../index.html" class="back-link">← Back to KazzHub</a>
+  </nav>
 
-<nav>
-  <a href="../../index.html" class="back-link">← Back to KazzHub</a>
-</nav>
+</header>
 
-<div class="workspace">
-  <h1>SkyMutationse</h1>
-  <p>Calculator interface loading...</p>
-</div>
+<main>
+
+  <div class="workspace">
+    <h1>SkyMutations</h1>
+
+
+    <div class="app-layout">
+      <div class="sidebar-column">
+        <div class="complex-dropdown card">
+          <button onclick="toggleDropdown()" class="drop-btn">Select Items...</button>
+
+          <div id="myDropdown" class="dropdown-content">
+
+            <div class="search-container">
+              <input type="text" placeholder="Search..." id="searchInput" onkeyup="filterItems()" class="search-input">
+            </div>
+
+            <div id="itemList"></div>
+
+          </div>
+          <button onclick="selectMutations([
+            { id: 'glasscorn', quantity: 1 },
+            { id: 'devourer', quantity: 1 },
+            { id: 'allinaloe', quantity: 1 },
+            { id: 'phantomleaf', quantity: 1 },
+            { id: 'timestalk', quantity: 1 },
+            ]);" style="margin-top: 20px; padding: 10px;">
+            Drag
+          </button>
+          <button onclick="getSelectedItems()" style="margin-top: 20px; padding: 10px;">
+            Calculate Resources
+          </button>
+          <button onclick="selectMutations([])" style="margin-top: 20px; padding: 10px;">
+            Reset
+          </button>
+        </div>
+        <div class="card" id="itemListDisplay"></div>
+
+        <div class="card search-card"></div>
+
+        <div class="layout-card">
+          <div class="layout-header">
+            <div class="header-title">
+              <span style="opacity: 0.7;">▤</span> OPTIMIZED LAYOUT
+            </div>
+            <div class="legend">
+              <div class="legend-item">
+                <span class="dot dot-open"></span> Open
+              </div>
+              <div class="legend-item">
+                <span class="dot dot-locked"></span> Locked
+              </div>
+            </div>
+          </div>
+
+          <div id="layoutGrid" class="grid-container"></div>
+
+          <div class="layout-controls" style="text-align: center; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
+            <span style="font-size: 0.8rem; color: #a0a0a0; margin-right: 10px;">Mode:</span>
+            <div class="switch-toggle">
+              <input type="radio" id="mode-single" name="solver-mode" checked>
+              <label for="mode-single">Single</label>
+
+              <input type="radio" id="mode-multiple" name="solver-mode">
+              <label for="mode-multiple">Multiple</label>
+            </div>
+          </div>
+
+          <button onclick="resetGrid()" style="margin-top: 20px; padding: 10px;">
+            Reset Layout
+          </button>
+
+          <button onclick="unlockAll()" style="margin-top: 20px; padding: 10px;">
+            Unlock All
+          </button>
+
+        </div>
+      </div>
+
+      <div class="main-content" id="panZoomViewport">
+        <div class="app-card zoom-layer" id="tree-display"></div>
+      </div>
+
+
+    </div>
+
+
+
+  </div>
+
+
+</main>
+
+
+<footer>
+  <p>&copy; 2025 RealKazz</p>
+</footer>
 
 </body>
+
+
+
 </html>

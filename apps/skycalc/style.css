@@ -25,6 +25,10 @@ footer {
 .rarity-special   { color: #FF5555; }
 .rarity-very-special    { color: #FF5555; }
 
+header {
+  padding: 20px;
+  border-bottom: 1px solid #333;
+}
 
 body {
   background-color: var(--card-bg);
@@ -56,25 +60,24 @@ nav {
 
 .app-layout {
   display: grid;
-  /* Two columns: 350px for sidebar, 1fr (fraction) for the rest */
   grid-template-columns: 350px 1fr;
-  gap: 20px; /* Space between left and right */
-  height: 100%; /* Fill the screen */
+  gap: 20px;
+  height: 100%;
 }
 
 .sidebar {
   grid-row: 1 / -1;
-  grid-column: 1;   /* Lock to first column */
+  grid-column: 1;
   display: flex;
-  flex-direction: column;    /* Stack items vertically */
-  gap: 20px;                 /* Space between Search and Layout cards */
+  flex-direction: column;
+  gap: 20px;
   height: 100%;
 }
 
 .main-content {
-  grid-column: 2; /* Lock to second column */
-  grid-row: 1;    /* Lock to first row */
-  border: 2px dashed var(--border-color); /* Dashed look from your image */
+  grid-column: 2;
+  grid-row: 1;
+  border: 2px dashed var(--border-color);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -83,8 +86,8 @@ nav {
 }
 
 .results-panel {
-  grid-column: 2; /* Lock to second column */
-  grid-row: 2;    /* Lock to second row */
+  grid-column: 2;
+  grid-row: 2;
   background-color: #1e1e1e;
   border: 1px solid #444;
   border-radius: 12px;
@@ -98,43 +101,42 @@ nav {
 }
 
 .result-row:hover {
-  background-color: #2a2a2a; /* Light hover effect */
+  background-color: #2a2a2a;
 }
 
 .selected-row {
   font-weight: bold;
   text-decoration: underline;
-  /*background-color: #3b82f6;  Optional: Blue background to make it obvious */
   color: white;
 }
 
-/* 1. SCROLLABLE WRAPPER */
+
 .tree-container {
   padding: 50px;
   width: 100%;
-  overflow-x: auto; /* Allow scrolling if tree is wide */
-  white-space: nowrap; /* Keep tree on one line */
+  overflow-x: auto;
+  white-space: nowrap;
   display: flex;
   justify-content: center;
 }
 
-/* 2. FLEX STRUCTURE */
+
 .tree-node {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 10px; /* Spacing between sibling branches */
-  position: relative; /* Needed for lines */
+  padding: 0 10px;
+  position: relative;
 }
 
 .children-container {
   display: flex;
-  flex-direction: row; /* Forces children side-by-side */
-  padding-top: 20px;   /* Space for the connector lines */
+  flex-direction: row;
+  padding-top: 20px;
   position: relative;
 }
 
-/* 3. THE BOXES */
+
 .node-content {
   border: 1px solid #444;
   background-color: #161b22;
@@ -142,116 +144,97 @@ nav {
   border-radius: 8px;
   text-align: center;
   min-width: 120px;
-  z-index: 2; /* Sit on top of lines */
+  z-index: 2;
   position: relative;
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
-/* Typography */
 .item-name { font-weight: bold; margin-bottom: 4px; font-size: 0.9rem; }
 .item-qty { font-size: 0.8rem; color: #8b949e; }
 
-/* RARITY COLORS (Borders & Text) */
-
-
-/* Vertical line down from PARENT to middle split */
 .children-container::before {
   content: '';
   position: absolute;
   top: 0;
   left: 50%;
   width: 2px;
-  height: 10px; /* <--- CHANGED: Was 20px. Now stops at the split. */
+  height: 10px;
   background-color: #555;
   transform: translateX(-50%);
 }
 
-/* Vertical line up from CHILD to middle split */
+
 .tree-node::before {
   content: '';
   position: absolute;
-  top: -10px;   /* <--- CHANGED: Was -20px. Starts at the split. */
+  top: -10px;
   left: 50%;
   width: 2px;
-  height: 10px; /* <--- CHANGED: Was 20px. Goes down to the box. */
+  height: 10px;
   background-color: #555;
   transform: translateX(-50%);
 }
 
-/* Horizontal line across children (The "Split") */
+
 .tree-node::after {
   content: '';
   position: absolute;
-  top: -10px;  /* <--- CHANGED: Was -20px. Moves the bar down to the middle. */
+  top: -10px;
   left: 0;
   width: 100%;
   height: 2px;
   background-color: #555;
 }
 
-/* 5. FIXING FIRST & LAST CHILD LINES */
-/* The lines shouldn't extend infinitely. We hide the left half of the first child's line... */
+
 .tree-node:first-child::after {
   left: 50%;
   width: 50%;
 }
-/* ...and the right half of the last child's line */
+
 .tree-node:last-child::after {
   width: 50%;
 }
 
-/* 6. SINGLE CHILD FIX */
-/* If there's only one child, we don't need the horizontal bar, just the vertical one */
 .tree-node:only-child::after {
   display: none;
 }
 .tree-node:only-child::before {
-  height: 20px; /* Just the vertical connector */
+  height: 20px;
 }
 
-/* 7. ROOT NODE FIX */
-/* The very top node shouldn't have a line going up */
 .tree-container > .tree-node::before,
 .tree-container > .tree-node::after {
   display: none;
 }
 
 
-
-/* ############# ZOOM ############*/
-
-/* 1. THE VIEWPORT (The Window) */
 #panZoomViewport {
-  /* Keep your existing border/layout styles here */
-  position: relative; /* Essential for relative positioning */
-  overflow: hidden;   /* Hides the tree parts that are "off-screen" */
-  cursor: grab;       /* Shows the hand icon */
 
-  /* Ensure flex settings don't break dragging */
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
   display: block;
 }
 
 #panZoomViewport:active {
-  cursor: grabbing;   /* Closes the hand when clicking */
+  cursor: grabbing;
 }
 
-/* 2. THE MOVABLE LAYER (The Map) */
+
 .zoom-layer {
-  transform-origin: 0 0; /* Scaling happens from top-left, math fixes the rest */
+  transform-origin: 0 0;
   width: 100%;
   height: 100%;
-  /* We will set 'transform' via JavaScript */
 }
 
 
-/* Container for the list of conflicts */
 .sidebar-stack {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-/* The Box for a specific Item (e.g. "Sulphuric Coal") */
 .variant-card {
   background-color: #161b22;
   border: 1px solid #30363d;
@@ -269,7 +252,6 @@ nav {
   padding-bottom: 5px;
 }
 
-/* The individual recipe options */
 .recipe-option {
   font-size: 0.8rem;
   background: #0d1117;
@@ -287,10 +269,9 @@ nav {
   border-color: #8b949e;
 }
 
-/* Highlighting the selected one */
 .recipe-option.active-recipe {
-  border-color: #238636; /* Green border */
-  background-color: #0e2a15; /* Greenish bg */
+  border-color: #238636;
+  background-color: #0e2a15;
   opacity: 1;
   font-weight: bold;
 }

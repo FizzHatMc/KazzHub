@@ -229,24 +229,9 @@ function getSelectedItems() {
     let currentItemMin = Infinity;
     let currentItemMax = 0;
 
-    // Calculate Min/Max based on ALL recipes (ignoring overrides for the general stats)
-    if (originalItem.recipe && originalItem.recipe.length > 0) {
-      originalItem.recipe.forEach((recipeVariant) => {
-        const givesVal = recipeVariant.gives ? parseInt(recipeVariant.gives) : 1;
-        const timesCrafted = Math.ceil(quantity / givesVal);
-        if (timesCrafted < currentItemMin) currentItemMin = timesCrafted;
-        if (timesCrafted > currentItemMax) currentItemMax = timesCrafted;
-      });
-    } else {
-      // Logic for base items or items with no recipe
-      currentItemMin = quantity;
-      currentItemMax = quantity;
-    }
 
     listItems.push({
       name: originalItem.name,
-      timesToCraftMin: currentItemMin,
-      timesToCraftMax: currentItemMax,
       rarity: originalItem.rarity,
       quantity: quantity
     });
@@ -271,73 +256,74 @@ function getSelectedItems() {
     </p>`;
   });
 
-  renderMaterialSummary(listItems);
+  //renderMaterialSummary(listItems);
   updateRecipeSelectors(listItems);
   displayContainer.innerHTML = htmlString;
   return listItems;
 }
 
-function buildRecipeTree(itemName, qtyNeeded = 1) {
-  const item = inventoryData.find(i => i.name.trim() === itemName.trim());
+/**
+ * Builds a recursive tree structure based on item requirements.
+ * @param {string} itemId - The ID of the item to build (e.g., "ashwreath")
+ * @param {number} qtyNeeded - How many of this item are needed
+ */
+function buildRecipeTree(itemId, qtyNeeded = 1) {
+  // Find the item by ID in your new data structure
+  const item = itemsData.find(i => i.id === itemId);
 
+  // Fallback if item doesn't exist in data
   if (!item) {
     return {
-      name: itemName,
+      name: itemId, // Fallback to ID if name unknown
+      id: itemId,
       quantity: qtyNeeded,
+      color: 'bg-gray-400', // Default styling for unknown items
+      textColor: 'text-black',
       ingredients: []
     };
   }
-
-  // Check for override, default to 0
-  const recipeIndex = activeRecipeOverrides[item.name] || 0;
-  // Safety check if recipe exists
-  const selectedRecipe = (item.recipe && item.recipe[recipeIndex]) ? item.recipe[recipeIndex] : null;
-
-  if (!selectedRecipe) {
-    return {
-      name: item.name,
-      quantity: qtyNeeded,
-      rarity: item.rarity,
-      crafts: 0,
-      ingredients: []
-    };
-  }
-
-  const gives = selectedRecipe.gives ? parseInt(selectedRecipe.gives) : 1;
-  const craftsRequired = Math.ceil(qtyNeeded / gives);
 
   const children = [];
 
-  for (const [key, value] of Object.entries(selectedRecipe)) {
-    if (key === "gives") continue;
-    const amountPerCraft = parseInt(value);
-    const totalAmountNeeded = amountPerCraft * craftsRequired;
-    children.push(buildRecipeTree(key, totalAmountNeeded));
+  // Check if item has requirements (ingredients)
+  if (item.requirements && item.requirements.length > 0) {
+    item.requirements.forEach(req => {
+      // Calculate total needed: (Amount per item) * (Total items needed)
+      const totalAmountNeeded = req.amount * qtyNeeded;
+      children.push(buildRecipeTree(req.id, totalAmountNeeded));
+    });
   }
 
   return {
     name: item.name,
+    id: item.id,
     quantity: qtyNeeded,
-    rarity: item.rarity,
-    crafts: craftsRequired,
+    color: item.color,      // e.g., "bg-orange-800"
+    textColor: item.text,   // e.g., "text-orange-100"
     ingredients: children
   };
 }
 
+/**
+ * Renders the recursive HTML for the tree.
+ */
 function renderTreeHTML(node) {
   if (!node) return '';
-  const rarityClass = node.rarity ? `rarity-${node.rarity}` : 'rarity-common';
+
+  // Use the classes directly from the data (color + text)
+  const nodeClasses = `${node.color || ''} ${node.textColor || ''}`;
 
   let html = `
     <div class="tree-node">
-      <div class="node-content ${rarityClass}">
+      <div class="node-content ${nodeClasses}" style="padding: 8px; border-radius: 6px; display: inline-block; border: 1px solid #ccc;">
         <strong>${node.name}</strong><br>
         <small>x${node.quantity.toLocaleString()}</small>
       </div>
   `;
 
+  // Render Children recursively
   if (node.ingredients && node.ingredients.length > 0) {
-    html += '<div class="children-container">';
+    html += '<div class="children-container" style="display: flex; gap: 20px; justify-content: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee;">';
     node.ingredients.forEach(child => {
       html += renderTreeHTML(child);
     });
@@ -347,7 +333,6 @@ function renderTreeHTML(node) {
   html += '</div>';
   return html;
 }
-
 function renderMaterialSummary(selectedItems) {
   const totals = {};
 
