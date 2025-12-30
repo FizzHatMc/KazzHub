@@ -164,7 +164,7 @@ function getSelectedItems() {
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
-/*
+
   try {
     // Ensure this path matches exactly where your file is
     const response = await fetch('data/mutations.json');
@@ -185,8 +185,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     return; // Stop execution if data fails
   }
 
- */
 
+/*
   // Load Data
   if (typeof MUTATIONS !== 'undefined') {
     mutations = MUTATIONS;
@@ -195,6 +195,8 @@ document.addEventListener('DOMContentLoaded', async function () {
   } else {
     console.error("Data source missing. Make sure mutations.js is linked in HTML.");
   }
+
+ */
 
 
 
