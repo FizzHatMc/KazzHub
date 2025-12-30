@@ -143,12 +143,19 @@ function renderList() {
 
   inventoryData.forEach(item => {
     const row = document.createElement("div");
-    row.className = "item-row";
+    row.className = "item-row"; // We added flex style for this in CSS
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.id = "item-" + item.id;
     checkbox.onchange = function () { toggleQty(this); };
+
+    // --- NEW: Create Image Element ---
+    const img = document.createElement("img");
+    img.src = getImagePath(item.name);
+    img.className = "item-icon-small";
+    // Optional: Hide image if file is missing so it doesn't show a broken icon
+    img.onerror = function() { this.style.display = 'none'; };
 
     const label = document.createElement("label");
     label.htmlFor = "item-" + item.id;
@@ -164,13 +171,14 @@ function renderList() {
     qty.min = 1;
     qty.disabled = true;
 
+    // --- Append in order: Checkbox -> Image -> Label -> Qty ---
     row.appendChild(checkbox);
+    row.appendChild(img);
     row.appendChild(label);
     row.appendChild(qty);
     listContainer.appendChild(row);
   });
 }
-
 function toggleDropdown() {
   document.getElementById("myDropdown").classList.toggle("show");
 }
@@ -271,15 +279,24 @@ function getSelectedItems() {
       ? `| Min Crafts: ${entry.timesToCraftMin} | Max Crafts: ${entry.timesToCraftMax}`
       : `| Base Material`;
 
+    // --- NEW: Generate Image Path ---
+    const imgPath = getImagePath(entry.name);
+
     htmlString += `
     <p class="result-row"
        data-name="${entry.name}"
        data-quantity="${entry.quantity}"
-       style="cursor:pointer; padding: 5px; border-bottom: 1px solid #333;">
+       style="cursor:pointer; padding: 5px; border-bottom: 1px solid #333; display: flex; align-items: center;">
 
-      <span class="rarity-${entry.rarity}" style="font-weight:bold;">${entry.name}</span>
-      ${craftInfo}
-      | <strong>Amount: ${entry.quantity}</strong>
+      <img src="${imgPath}" class="item-icon-small" onerror="this.style.display='none'">
+
+      <span class="rarity-${entry.rarity}" style="font-weight:bold; margin-right: 5px;">${entry.name}</span>
+
+      <span style="flex-grow: 1; font-size: 0.9em; color: #aaa;">
+         ${craftInfo}
+      </span>
+
+      <strong>x${entry.quantity}</strong>
     </p>`;
   });
 
@@ -358,40 +375,35 @@ function buildRecipeTree(identifier, qtyNeeded = 1) {
 function renderTreeHTML(node) {
   if (!node) return '';
 
-  // 1. wrapper for the whole node (parent + children)
   let html = `<div class="tree-node">`;
 
-  // 2. The Content Card (The actual item box)
-  // We use the classes from the node object
   const colorClass = node.color || 'bg-gray-700';
   const textClass = node.textColor || 'text-white';
 
+  // --- NEW: Get Image ---
+  const imgPath = getImagePath(node.name);
+
   html += `
     <div class="node-content ${colorClass} ${textClass}">
+      <img src="${imgPath}" class="tree-icon" onerror="this.style.display='none'">
+
       <div class="item-name">${node.name}</div>
       <div class="item-qty">x${node.quantity.toLocaleString()}</div>
     </div>
   `;
 
-  // 3. Children Container
-  // Only create this div if there are actually children.
-  // This prevents empty vertical lines dropping down from leaf nodes.
   if (node.ingredients && node.ingredients.length > 0) {
     html += `<div class="children-container">`;
-
-    // Recursive loop
     node.ingredients.forEach(child => {
       html += renderTreeHTML(child);
     });
-
     html += `</div>`;
   }
 
-  // Close the wrapper
   html += `</div>`;
-
   return html;
 }
+
 function renderMaterialSummary(selectedItems) {
   const totals = {};
 
@@ -576,3 +588,10 @@ window.selectRecipe = function (itemName, index) {
     }
   }
 };
+
+function getImagePath(itemName) {
+  if (!itemName) return '';
+  // Replace all spaces with underscores
+  const formattedName = itemName.replace(/ /g, '_');
+  return `images/${formattedName}.png`;
+}

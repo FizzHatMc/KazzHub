@@ -301,3 +301,37 @@ nav {
   from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* --- New Image Styles --- */
+
+/* Small icons for lists and dropdowns */
+.item-icon-small {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  margin: 0 8px;
+  vertical-align: middle;
+}
+
+/* Larger icons for the Tree View */
+.tree-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  margin-bottom: 8px;
+  display: block;       /* Force it to its own line */
+  margin-left: auto;    /* Center horizontally */
+  margin-right: auto;
+}
+
+/* Ensure the list rows align the checkbox, image, and text nicely */
+.item-row {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.item-label {
+  flex-grow: 1; /* Pushes the input box to the right */
+  cursor: pointer;
+}
