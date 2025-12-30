@@ -436,3 +436,165 @@ header {
   object-fit: contain; /* or 'cover' if you want them flush */
   display: block;
 }
+
+/* Instructions / Empty State */
+.instruction-overlay {
+  text-align: center;
+  max-width: 600px;
+  padding: 40px;
+  color: var(--text-muted);
+  pointer-events: none; /* Allows click-through for panning if needed, though usually we hide this */
+}
+
+.instruction-overlay h2 {
+  color: var(--text-main);
+  margin-bottom: 30px;
+}
+
+.step-guide {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  text-align: left;
+  margin-top: 30px;
+}
+
+.step {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 8px;
+  flex: 1;
+  border: 1px solid #333;
+}
+
+.step-num {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  font-weight: bold;
+  margin-right: 8px;
+  margin-bottom: 10px;
+}
+
+.step strong {
+  display: block;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.step p {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Hide helper when tree is active */
+.hidden {
+  display: none !important;
+}
+
+.action-btn {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: opacity 0.2s;
+}
+
+.action-btn:hover { opacity: 0.9; }
+
+.primary-btn {
+  background-color: var(--accent); /* Blue */
+  color: white;
+}
+
+.secondary-btn {
+  background-color: #30363d;
+  color: #c9d1d9;
+}
+
+.text-btn {
+  background: none;
+  border: none;
+  color: #58a6ff;
+  cursor: pointer;
+  text-decoration: underline;
+  width: 100%;
+}
+
+/* --- Header Icons --- */
+.icon-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  border-color: var(--text-main);
+  color: var(--text-main);
+  background: rgba(255,255,255,0.1);
+}
+
+/* --- Instruction Overlay Updates --- */
+.instruction-overlay {
+  /* Absolute positioning ensures it covers the viewport
+     even if the user has panned the tree away */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  /* Center content */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(18, 18, 18, 0.95); /* High opacity to hide the tree behind it */
+  z-index: 100; /* Sit on top of everything in the viewport */
+  text-align: center;
+  padding: 40px;
+  box-sizing: border-box;
+  pointer-events: auto;
+  transition: opacity 0.3s ease;
+}
+
+/* The Close 'X' Button inside the help screen */
+.close-overlay-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.close-overlay-btn:hover {
+  color: var(--text-main);
+}
+
+/* Logic to hide it */
+.instruction-overlay.hidden {
+  opacity: 0;
+  pointer-events: none; /* Allows clicking through to the tree when hidden */
+}

@@ -8,14 +8,17 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="dropdown.css">
   <script src="script.js?v=2"></script>
-  <!--<script src="data/tempMutation.js"></script>-->
+ <!-- <script src="data/tempMutation.js"></script> -->
 </head>
 <body>
 <header>
-  <nav>
+  <nav style="display: flex; justify-content: space-between; align-items: center;">
     <a href="../../index.html" class="back-link">← Back to KazzHub</a>
-  </nav>
 
+    <button onclick="toggleHelp()" class="icon-btn" title="Show Instructions">
+      ?
+    </button>
+  </nav>
 </header>
 
 <main>
@@ -27,33 +30,37 @@
     <div class="app-layout">
       <div class="sidebar-column">
         <div class="complex-dropdown card">
-          <button onclick="toggleDropdown()" class="drop-btn">Select Items...</button>
+          <button onclick="toggleDropdown()" class="drop-btn">
+            <span style="margin-right:8px;">+</span> Add Items to Queue
+          </button>
 
           <div id="myDropdown" class="dropdown-content">
-
             <div class="search-container">
               <input type="text" placeholder="Search..." id="searchInput" onkeyup="filterItems()" class="search-input">
             </div>
-
             <div id="itemList"></div>
-
           </div>
+
+          <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button onclick="getSelectedItems()" class="action-btn primary-btn" style="flex: 2;">
+              Calculate
+            </button>
+            <button onclick="selectMutations([], true)" class="action-btn secondary-btn" style="flex: 1;">
+              Clear
+            </button>
+          </div>
+
           <button onclick="selectMutations([
             { id: 'glasscorn', quantity: 1 },
             { id: 'devourer', quantity: 1 },
             { id: 'allinaloe', quantity: 1 },
             { id: 'phantomleaf', quantity: 1 },
             { id: 'timestalk', quantity: 1 },
-            ]);" style="margin-top: 20px; padding: 10px;">
-            Drag
-          </button>
-          <button onclick="getSelectedItems()" style="margin-top: 20px; padding: 10px;">
-            Calculate Resources
-          </button>
-          <button onclick="selectMutations([])" style="margin-top: 20px; padding: 10px;">
-            Reset
+            ]);" class="text-btn" style="margin-top: 10px; font-size: 0.8rem;">
+            Load Rose Dragon Mutations
           </button>
         </div>
+
         <div class="card" id="itemListDisplay"></div>
 
         <div class="card search-card"></div>
@@ -98,8 +105,36 @@
       </div>
 
       <div class="main-content" id="panZoomViewport">
+        <div id="welcome-message" class="instruction-overlay">
+
+          <button onclick="toggleHelp()" class="close-overlay-btn">&times;</button>
+
+          <h2>Welcome to SkyMutations <br> (Help is in the Top Left Corner)</h2>
+          <p>Optimize your garden layouts and track crafting recipes in 3 steps:</p>
+
+          <div class="step-guide">
+            <div class="step">
+              <span class="step-num">1</span>
+              <strong>Select Items</strong>
+              <p>Use the dropdown on the left to choose the mutations or items you want to craft.</p>
+            </div>
+            <div class="step">
+              <span class="step-num">2</span>
+              <strong>Define Space</strong>
+              <p>Click the grid cells (bottom-left) to toggle them <span style="color:#2ea043">Open</span> or <span style="color:#f85149">Locked</span> to match your garden shape.</p>
+            </div>
+            <div class="step">
+              <span class="step-num">3</span>
+              <strong>Calculate & Solve</strong>
+              <p>Click "Calculate Resources", then click any item in the result list to generate the recipe tree and auto-solve the layout.</p>
+            </div>
+          </div>
+        </div>
+
         <div class="app-card zoom-layer" id="tree-display"></div>
       </div>
+
+
 
 
     </div>

@@ -163,41 +163,48 @@ function getSelectedItems() {
   return listItems;
 }
 
+function toggleHelp() {
+  const overlay = document.getElementById('welcome-message');
+  if (overlay) {
+    overlay.classList.toggle('hidden');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async function () {
 
-  try {
-    // Ensure this path matches exactly where your file is
-    const response = await fetch('data/mutations.json');
+    try {
+      // Ensure this path matches exactly where your file is
+      const response = await fetch('data/mutations.json');
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      mutations = await response.json();
+      console.log("Data loaded successfully:", mutations.length, "items.");
+
+      // Once data is loaded, render the sidebar list
+      renderList();
+
+    } catch (error) {
+      console.error("Failed to load inventory data:", error);
+      alert("Error loading data. Check console. (Note: You must use a Local Server to fetch JSON files due to CORS)");
+      return; // Stop execution if data fails
     }
-
-    mutations = await response.json();
-    console.log("Data loaded successfully:", mutations.length, "items.");
-
-    // Once data is loaded, render the sidebar list
-    renderList();
-
-  } catch (error) {
-    console.error("Failed to load inventory data:", error);
-    alert("Error loading data. Check console. (Note: You must use a Local Server to fetch JSON files due to CORS)");
-    return; // Stop execution if data fails
-  }
-
 
 
 
   /*
-    // Load Data
-    if (typeof MUTATIONS !== 'undefined') {
-      mutations = MUTATIONS;
-      console.log("Data loaded successfully:", mutations.length, "items.");
-      renderList();
-    } else {
-      console.error("Data source missing. Make sure mutations.js is linked in HTML.");
-    }
-   */
+
+      // Load Data
+      if (typeof MUTATIONS !== 'undefined') {
+        mutations = MUTATIONS;
+        console.log("Data loaded successfully:", mutations.length, "items.");
+        renderList();
+      } else {
+        console.error("Data source missing. Make sure mutations.js is linked in HTML.");
+      }
+*/
 
 
 
@@ -259,6 +266,11 @@ document.addEventListener('DOMContentLoaded', async function () {
       const clickedRow = e.target.closest('.result-row');
       if (!clickedRow) return;
 
+
+      const welcomeMsg = document.getElementById('welcome-message');
+      if (welcomeMsg && !welcomeMsg.classList.contains('hidden')) {
+        welcomeMsg.classList.add('hidden');
+      }
       // 1. Visual Select Highlight
       const currentSelected = displayContainer.querySelector('.selected-row');
       if (currentSelected) currentSelected.classList.remove('selected-row');
