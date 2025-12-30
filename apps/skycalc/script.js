@@ -1,7 +1,4 @@
-/* =========================================
-   1. GLOBAL VARIABLES
-   ========================================= */
-let inventoryData = []; // Will be loaded from JSON
+let inventoryData = [];
 let activeRecipeOverrides = {};
 let scale = 1;
 let panning = false;
@@ -12,9 +9,6 @@ let startY = 0;
 let setTransform;
 let currentTreeContext = null;
 
-/* =========================================
-   2. MAIN INITIALIZATION (Data Load & Setup)
-   ========================================= */
 document.addEventListener('DOMContentLoaded', async function () {
 
   // --- A. FETCH DATA ---
@@ -132,10 +126,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   }
 });
 
-/* =========================================
-   3. HELPER FUNCTIONS
-   ========================================= */
-
 function renderList() {
   const listContainer = document.getElementById("itemList");
   listContainer.innerHTML = "";
@@ -233,7 +223,9 @@ function getSelectedItems() {
     listItems.push({
       name: originalItem.name,
       rarity: originalItem.rarity,
-      quantity: quantity
+      quantity: quantity,
+      timesToCraftMin: currentItemMin,
+      timesToCraftMax: currentItemMax
     });
   });
 
@@ -256,7 +248,7 @@ function getSelectedItems() {
     </p>`;
   });
 
-  //renderMaterialSummary(listItems);
+  renderMaterialSummary(listItems);
   updateRecipeSelectors(listItems);
   displayContainer.innerHTML = htmlString;
   return listItems;
@@ -333,6 +325,7 @@ function renderTreeHTML(node) {
   html += '</div>';
   return html;
 }
+
 function renderMaterialSummary(selectedItems) {
   const totals = {};
 
