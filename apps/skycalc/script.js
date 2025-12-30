@@ -269,7 +269,7 @@ function getSelectedItems() {
  */
 function buildRecipeTree(itemId, qtyNeeded = 1) {
   // Find the item by ID in your new data structure
-  const item = itemsData.find(i => i.id === itemId);
+  const item = inventoryData.find(i => i.id === itemId);
 
   // Fallback if item doesn't exist in data
   if (!item) {
