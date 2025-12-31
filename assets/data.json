@@ -21819,10 +21819,6 @@
     "id": "COAL",
     "name": "Coal",
     "recipe": [
-      {
-        "COAL_BLOCK": 1,
-        "gives": "1"
-      }
     ],
     "rarity": "common",
     "category": "None",
