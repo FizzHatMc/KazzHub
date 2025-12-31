@@ -11,37 +11,37 @@ let currentTreeContext = null;
 
 document.addEventListener('DOMContentLoaded', async function () {
 
-          // --- A. FETCH DATA ---
-          try {
-            // Ensure this path matches exactly where your file is
-            const response = await fetch('../../assets/data.json');
+            // --- A. FETCH DATA ---
+            try {
+              // Ensure this path matches exactly where your file is
+              const response = await fetch('../../assets/data.json');
 
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+
+              inventoryData = await response.json();
+              console.log("Data loaded successfully:", inventoryData.length, "items.");
+
+              // Once data is loaded, render the sidebar list
+              renderList();
+
+            } catch (error) {
+              console.error("Failed to load inventory data:", error);
+              alert("Error loading data. Check console. (Note: You must use a Local Server to fetch JSON files due to CORS)");
+              return; // Stop execution if data fails
             }
 
-            inventoryData = await response.json();
-            console.log("Data loaded successfully:", inventoryData.length, "items.");
-
-            // Once data is loaded, render the sidebar list
-            renderList();
-
-          } catch (error) {
-            console.error("Failed to load inventory data:", error);
-            alert("Error loading data. Check console. (Note: You must use a Local Server to fetch JSON files due to CORS)");
-            return; // Stop execution if data fails
-          }
   /*
-
-         // Load Data
-               if (typeof DATA !== 'undefined') {
-                 inventoryData = DATA;
-                 console.log("Data loaded successfully:", inventoryData.length, "items.");
-                 renderList();
-               } else {
-                 console.error("Data source missing. Make sure mutations.js is linked in HTML.");
-               }
-*/
+             // Load Data
+                   if (typeof DATA !== 'undefined') {
+                     inventoryData = DATA;
+                     console.log("Data loaded successfully:", inventoryData.length, "items.");
+                     renderList();
+                   } else {
+                     console.error("Data source missing. Make sure mutations.js is linked in HTML.");
+                   }
+  */
   // --- B. SETUP UI REFERENCES ---
   const viewport = document.getElementById('panZoomViewport');
   const zoomLayer = document.getElementById('tree-display');
