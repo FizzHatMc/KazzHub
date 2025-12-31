@@ -11,36 +11,36 @@ let currentTreeContext = null;
 
 document.addEventListener('DOMContentLoaded', async function () {
 
-      // --- A. FETCH DATA ---
-      try {
-        // Ensure this path matches exactly where your file is
-        const response = await fetch('../../assets/data.json');
+        // --- A. FETCH DATA ---
+        try {
+          // Ensure this path matches exactly where your file is
+          const response = await fetch('../../assets/data.json');
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          inventoryData = await response.json();
+          console.log("Data loaded successfully:", inventoryData.length, "items.");
+
+          // Once data is loaded, render the sidebar list
+          renderList();
+
+        } catch (error) {
+          console.error("Failed to load inventory data:", error);
+          alert("Error loading data. Check console. (Note: You must use a Local Server to fetch JSON files due to CORS)");
+          return; // Stop execution if data fails
         }
 
-        inventoryData = await response.json();
-        console.log("Data loaded successfully:", inventoryData.length, "items.");
-
-        // Once data is loaded, render the sidebar list
-        renderList();
-
-      } catch (error) {
-        console.error("Failed to load inventory data:", error);
-        alert("Error loading data. Check console. (Note: You must use a Local Server to fetch JSON files due to CORS)");
-        return; // Stop execution if data fails
-      }
   /*
-
-   // Load Data
-         if (typeof DATA !== 'undefined') {
-           inventoryData = DATA;
-           console.log("Data loaded successfully:", inventoryData.length, "items.");
-           renderList();
-         } else {
-           console.error("Data source missing. Make sure mutations.js is linked in HTML.");
-         }
+       // Load Data
+             if (typeof DATA !== 'undefined') {
+               inventoryData = DATA;
+               console.log("Data loaded successfully:", inventoryData.length, "items.");
+               renderList();
+             } else {
+               console.error("Data source missing. Make sure mutations.js is linked in HTML.");
+             }
   */
   // --- B. SETUP UI REFERENCES ---
   const viewport = document.getElementById('panZoomViewport');
@@ -98,36 +98,29 @@ document.addEventListener('DOMContentLoaded', async function () {
   } else {
     console.warn("Pan/Zoom elements not found in HTML.");
   }
-
-  // --- E. RESULT LIST CLICK LISTENER (Tree Generation) ---
   if (displayContainer) {
     displayContainer.addEventListener('click', function (e) {
-      // 1. Find clicked row
       const clickedRow = e.target.closest('.result-row');
       if (!clickedRow) return;
 
-      // 2. Highlight
       const currentSelected = displayContainer.querySelector('.selected-row');
       if (currentSelected) currentSelected.classList.remove('selected-row');
       clickedRow.classList.add('selected-row');
 
-      // 3. Extract Data
+      // NEW: Get ID instead of Name
+      const itemId = clickedRow.dataset.id;
       const itemName = clickedRow.dataset.name;
-      // Note: We use dataset.quantity (from getSelectedItems)
       const qtyNeeded = parseInt(clickedRow.dataset.quantity) || 1;
 
-      // 4. Save Context & Build Tree
-      currentTreeContext = { name: itemName, qty: qtyNeeded };
-      console.log(`Generating tree for: ${itemName} (x${qtyNeeded})`);
+      // Update Context to use ID
+      currentTreeContext = { id: itemId, name: itemName, qty: qtyNeeded };
+      console.log(`Generating tree for ID: ${itemId}`);
 
-      const resultTree = buildRecipeTree(itemName, qtyNeeded);
+      const resultTree = buildRecipeTree(itemId, qtyNeeded);
 
-      // 5. Render
       if (zoomLayer) {
         zoomLayer.classList.add('tree-container');
         zoomLayer.innerHTML = renderTreeHTML(resultTree);
-
-        // Reset Camera
         scale = 1;
         pointX = 0;
         pointY = 0;
@@ -142,26 +135,33 @@ function renderList() {
   listContainer.innerHTML = "";
 
   inventoryData.forEach(item => {
+    // --- NEW: Skip items with empty/missing recipes ---
+    if (!item.recipe || item.recipe.length === 0) return;
+
     const row = document.createElement("div");
-    row.className = "item-row"; // We added flex style for this in CSS
+    row.className = "item-row";
+
+    // Normalize Category: "NONE" -> "None", Title Case, etc.
+    const rawCat = item.category || "None";
+    row.dataset.category = rawCat.toLowerCase() === "none" ? "None" : rawCat;
+    row.dataset.rarity = (item.rarity || "common").toLowerCase();
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.id = "item-" + item.id;
+    checkbox.dataset.id = item.id; // Store ID for logic
     checkbox.onchange = function () { toggleQty(this); };
 
-    // --- NEW: Create Image Element ---
     const img = document.createElement("img");
     img.src = getImagePath(item.name);
     img.className = "item-icon-small";
-    // Optional: Hide image if file is missing so it doesn't show a broken icon
     img.onerror = function() { this.style.display = 'none'; };
 
     const label = document.createElement("label");
     label.htmlFor = "item-" + item.id;
     label.className = "item-label";
     label.innerText = item.name;
-    if (item.rarity) label.classList.add("rarity-" + item.rarity);
+    if (item.rarity) label.classList.add("rarity-" + item.rarity.toLowerCase());
 
     const qty = document.createElement("input");
     qty.type = "number";
@@ -171,32 +171,108 @@ function renderList() {
     qty.min = 1;
     qty.disabled = true;
 
-    // --- Append in order: Checkbox -> Image -> Label -> Qty ---
     row.appendChild(checkbox);
     row.appendChild(img);
     row.appendChild(label);
     row.appendChild(qty);
     listContainer.appendChild(row);
   });
+
+  // Re-populate filters (this will automatically exclude the hidden items)
+  populateFilters();
 }
 function toggleDropdown() {
   document.getElementById("myDropdown").classList.toggle("show");
 }
 
-function filterItems() {
-  var input, filter, list, items, label, i, txtValue;
-  input = document.getElementById("searchInput");
-  filter = input.value.toUpperCase();
-  list = document.getElementById("itemList");
-  items = list.getElementsByClassName("item-row");
+function populateFilters() {
+  const catSelect = document.getElementById("categoryFilter");
+  const rarSelect = document.getElementById("rarityFilter");
+  if (!catSelect || !rarSelect) return;
 
-  for (i = 0; i < items.length; i++) {
-    label = items[i].getElementsByTagName("label")[0];
-    txtValue = label.textContent || label.innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      items[i].style.display = "";
+  // Prevent duplicate population
+  if (catSelect.options.length > 1) return;
+
+  const rows = document.querySelectorAll('#itemList .item-row');
+  const categories = new Set();
+  const rarities = new Set();
+
+  // Collect unique values from the rendered list
+  rows.forEach(row => {
+    if (row.dataset.category) categories.add(row.dataset.category);
+    if (row.dataset.rarity) rarities.add(row.dataset.rarity);
+  });
+
+  // --- 1. POPULATE CATEGORIES (Alphabetical) ---
+  [...categories].sort().forEach(cat => {
+    const opt = document.createElement("option");
+    opt.value = cat;
+    opt.innerText = formatCategory(cat);
+    catSelect.appendChild(opt);
+  });
+
+  // --- 2. POPULATE RARITIES (Custom Order) ---
+  // Define your custom priority list (Lower index = Higher up in the list)
+  const rarityOrder = [
+    "common",
+    "uncommon",
+    "rare",
+    "epic",
+    "legendary",
+    "mythic",
+    "divine", // Standard SkyBlock name (matches your style.css)
+    "divan",  // Included just in case your JSON uses this specific name
+    "special",
+    "supreme"
+  ];
+
+  [...rarities]
+    .sort((a, b) => {
+      const indexA = rarityOrder.indexOf(a.toLowerCase());
+      const indexB = rarityOrder.indexOf(b.toLowerCase());
+
+      // If both are in the list, compare their positions
+      if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+
+      // If only A is in the list, it comes first
+      if (indexA !== -1) return -1;
+
+      // If only B is in the list, it comes first
+      if (indexB !== -1) return 1;
+
+      // If neither is in the list, fallback to alphabetical
+      return a.localeCompare(b);
+    })
+    .forEach(rar => {
+      const opt = document.createElement("option");
+      opt.value = rar;
+      // Capitalize first letter for display (e.g. "rare" -> "Rare")
+      opt.innerText = rar.charAt(0).toUpperCase() + rar.slice(1);
+      rarSelect.appendChild(opt);
+    });
+}
+
+function filterItems() {
+  const nameInput = document.getElementById("searchInput").value.toUpperCase();
+  const catInput = document.getElementById("categoryFilter").value;
+  const rarInput = document.getElementById("rarityFilter").value;
+
+  const items = document.getElementsByClassName("item-row");
+
+  for (let i = 0; i < items.length; i++) {
+    const row = items[i];
+    const label = row.getElementsByTagName("label")[0];
+    const txtValue = label.textContent || label.innerText;
+
+    // Check all 3 conditions
+    const matchesName = txtValue.toUpperCase().indexOf(nameInput) > -1;
+    const matchesCat = catInput === "" || row.dataset.category === catInput;
+    const matchesRar = rarInput === "" || row.dataset.rarity === rarInput;
+
+    if (matchesName && matchesCat && matchesRar) {
+      row.style.display = "";
     } else {
-      items[i].style.display = "none";
+      row.style.display = "none";
     }
   }
 }
@@ -209,6 +285,23 @@ function toggleQty(checkbox) {
   } else {
     qtyInput.disabled = true;
   }
+}
+
+function resetSelection() {
+  const checkboxes = document.querySelectorAll('.item-row input[type="checkbox"]');
+  checkboxes.forEach(cb => {
+    cb.checked = false;
+    toggleQty(cb); // Will disable input
+  });
+
+  // Reset inputs
+  document.querySelectorAll('.item-row input[type="number"]').forEach(i => i.value = 1);
+  document.getElementById("searchInput").value = "";
+  document.getElementById("categoryFilter").value = "";
+  document.getElementById("rarityFilter").value = "";
+
+  // Refresh view
+  filterItems();
 }
 
 window.onclick = function (event) {
@@ -228,38 +321,29 @@ function getSelectedItems() {
   const listItems = [];
 
   checkedBoxes.forEach(checkbox => {
-    // 1. Get User Input
-    const cleanId = parseInt(checkbox.id.replace('item-', ''));
+    const cleanId = checkbox.dataset.id || checkbox.id.replace('item-', '');
+
+    // Find Data by ID
+    let originalItem = inventoryData.find(item => item.id == cleanId);
+
+    if (!originalItem) return;
+
     const row = checkbox.closest('.item-row');
     const qtyInput = row.querySelector('.qty-input');
     const quantity = parseInt(qtyInput.value) || 1;
 
-    // 2. Find Data
-    // Use NAME matching if ID fails, just to be safe
-    let originalItem = inventoryData.find(item => item.id === cleanId);
-
-    if (!originalItem) return; // Skip if error
-
-    // 3. CALCULATE Min/Max Crafts
     let minCrafts = 0;
     let maxCrafts = 0;
 
     if (originalItem.recipe && originalItem.recipe.length > 0) {
-      // Get the "gives" amount for every recipe variant
       const yieldAmounts = originalItem.recipe.map(r => parseInt(r.gives || 1));
-
-      // Calculate how many crafts needed for the requested quantity
-      // Math.ceil(12 needed / 4 gives) = 3 crafts
       const possibleCrafts = yieldAmounts.map(yieldAmt => Math.ceil(quantity / yieldAmt));
-
-      // Min crafts = using the high-yield recipe
-      // Max crafts = using the low-yield recipe
       minCrafts = Math.min(...possibleCrafts);
       maxCrafts = Math.max(...possibleCrafts);
     }
 
-    // 4. Push to List
     listItems.push({
+      id: originalItem.id, // NEW: Store ID
       name: originalItem.name,
       rarity: originalItem.rarity,
       quantity: quantity,
@@ -268,29 +352,28 @@ function getSelectedItems() {
     });
   });
 
-  // 5. Render the List HTML
   const displayContainer = document.getElementById('itemListDisplay');
   displayContainer.innerHTML = "";
   let htmlString = "";
 
   listItems.forEach((entry) => {
-    // Only show Min/Max if it's actually a craftable item (count > 0)
     const craftInfo = entry.timesToCraftMax > 0
       ? `| Min Crafts: ${entry.timesToCraftMin} | Max Crafts: ${entry.timesToCraftMax}`
       : `| Base Material`;
 
-    // --- NEW: Generate Image Path ---
     const imgPath = getImagePath(entry.name);
+
 
     htmlString += `
     <p class="result-row"
+       data-id="${entry.id}"
        data-name="${entry.name}"
        data-quantity="${entry.quantity}"
        style="cursor:pointer; padding: 5px; border-bottom: 1px solid #333; display: flex; align-items: center;">
 
       <img src="${imgPath}" class="item-icon-small" onerror="this.style.display='none'">
 
-      <span class="rarity-${entry.rarity}" style="font-weight:bold; margin-right: 5px;">${entry.name}</span>
+      <span class="rarity-${entry.rarity ? entry.rarity.toLowerCase() : 'common'}" style="font-weight:bold; margin-right: 5px;">${entry.name}</span>
 
       <span style="flex-grow: 1; font-size: 0.9em; color: #aaa;">
          ${craftInfo}
@@ -302,35 +385,39 @@ function getSelectedItems() {
 
   displayContainer.innerHTML = htmlString;
 
-  // 6. TRIGGER THE UPDATES
-  // Because we fixed the crash above, these will now run correctly:
   renderMaterialSummary(listItems);
   updateRecipeSelectors(listItems);
 
   return listItems;
 }
 
+function formatCategory(cat) {
+  // 1. Handle None/null/undefined
+  if (!cat || cat.toLowerCase() === 'none') return "None";
+
+  // 2. Replace underscores with spaces, split words
+  return cat.toLowerCase().split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter
+    .join(' '); // Join back with spaces
+}
 
 function buildRecipeTree(identifier, qtyNeeded = 1) {
-  // 1. Find the item
-  let item = inventoryData.find(i => i.name === identifier);
-  if (!item) item = inventoryData.find(i => i.id == identifier);
+  // 1. Try to find by ID first, then Name
+  let item = inventoryData.find(i => i.id == identifier);
+  if (!item) item = inventoryData.find(i => i.name === identifier);
 
+  // If not found (base material without definition), return default
   if (!item) {
     return {
       name: identifier,
       id: null,
       quantity: qtyNeeded,
-      color: 'bg-red-800',
-      textColor: 'text-white',
+      rarity: 'common', // Default for unknown base materials
       ingredients: []
     };
   }
 
   const children = [];
-
-  // Variable to track how many items we ACTUALLY create.
-  // If we need 1 but recipe makes 4, this becomes 4.
   let actualAmountProduced = qtyNeeded;
 
   // 2. Process Recipe
@@ -340,20 +427,23 @@ function buildRecipeTree(identifier, qtyNeeded = 1) {
 
     if (activeRecipe) {
       const gives = activeRecipe.gives ? parseInt(activeRecipe.gives) : 1;
-
       const craftsRequired = Math.ceil(qtyNeeded / gives);
-
-      // Update the display amount to reflect the full batch
       actualAmountProduced = craftsRequired * gives;
 
       Object.keys(activeRecipe).forEach(ingredientName => {
         if (ingredientName === 'gives') return;
 
         const amountPerCraft = parseInt(activeRecipe[ingredientName]);
-        // Total needed is simple multiplication now (integers only)
         const totalAmountNeeded = amountPerCraft * craftsRequired;
 
-        children.push(buildRecipeTree(ingredientName, totalAmountNeeded));
+        // Resolve Ingredient Name -> Ingredient ID
+        const ingredientItem = inventoryData.find(i => i.name === ingredientName);
+
+        if (ingredientItem) {
+          children.push(buildRecipeTree(ingredientItem.id, totalAmountNeeded));
+        } else {
+          children.push(buildRecipeTree(ingredientName, totalAmountNeeded));
+        }
       });
     }
   }
@@ -362,33 +452,29 @@ function buildRecipeTree(identifier, qtyNeeded = 1) {
     name: item.name,
     id: item.id,
     quantity: actualAmountProduced,
-    color: item.color,
-    textColor: item.text || 'text-white',
+    rarity: item.rarity || 'common', // Store the rarity
     ingredients: children
   };
 }
 
-/**
- * Renders the recursive HTML for the tree.
- * Matches CSS structure: .tree-node > .node-content + .children-container
- */
 function renderTreeHTML(node) {
   if (!node) return '';
 
   let html = `<div class="tree-node">`;
 
-  const colorClass = node.color || 'bg-gray-700';
-  const textClass = node.textColor || 'text-white';
+  // Use a dark background for the box itself
+  const colorClass = 'bg-gray-800';
+  const rarityClass = node.rarity ? `rarity-${node.rarity.toLowerCase()}` : 'rarity-common';
 
-  // --- NEW: Get Image ---
   const imgPath = getImagePath(node.name);
 
   html += `
-    <div class="node-content ${colorClass} ${textClass}">
+    <div class="node-content ${colorClass}" style="border: 1px solid #444; background: #1f2937;">
       <img src="${imgPath}" class="tree-icon" onerror="this.style.display='none'">
 
-      <div class="item-name">${node.name}</div>
-      <div class="item-qty">x${node.quantity.toLocaleString()}</div>
+      <div class="item-name ${rarityClass}" style="font-weight: bold;">${node.name}</div>
+
+      <div class="item-qty" style="color: #ccc;">x${node.quantity.toLocaleString()}</div>
     </div>
   `;
 
@@ -405,69 +491,104 @@ function renderTreeHTML(node) {
 }
 
 function renderMaterialSummary(selectedItems) {
+  const resultsDiv = document.querySelector('.results-panel');
+  if (!resultsDiv) return;
+
   const totals = {};
 
-  function decompose(itemName, qtyNeeded) {
+  // Helper to handle both ID and Name lookups
+  function decompose(identifier, qtyNeeded) {
     if (!qtyNeeded || isNaN(qtyNeeded)) qtyNeeded = 0;
-    const cleanName = itemName.trim();
-    const item = inventoryData.find(i => i.name.trim() === cleanName);
+    const cleanId = identifier.trim();
 
-    // Base Case: Item not found OR No recipes -> Base Material
+    // 1. Try to find the item in data (Try ID first, then Name)
+    // This fixes the issue where recipes using IDs weren't being found
+    let item = inventoryData.find(i => i.id == cleanId);
+    if (!item) item = inventoryData.find(i => i.name === cleanId);
+
+    // 2. Base Case: Item not found OR No recipes -> Add to Totals
+    // We store the ID (or name if ID missing) in totals to ensure uniqueness
     if (!item || !item.recipe || item.recipe.length === 0) {
-      if (!totals[cleanName]) totals[cleanName] = 0;
-      totals[cleanName] += qtyNeeded;
+      // Use the ID if we found an item, otherwise use the raw identifier string
+      const key = item ? item.id : cleanId;
+      if (!totals[key]) totals[key] = 0;
+      totals[key] += qtyNeeded;
       return;
     }
 
-    // Recursive Step
-    const recipeIndex = activeRecipeOverrides[item.name] || 0;
+    // 3. Recursive Step (Process Recipe)
+    const recipeIndex = activeRecipeOverrides[item.name] || 0; // overrides use Name keys
     const recipe = item.recipe[recipeIndex];
+
+    if (!recipe) {
+      const key = item.id;
+      if (!totals[key]) totals[key] = 0;
+      totals[key] += qtyNeeded;
+      return;
+    }
+
     const gives = recipe.gives ? parseInt(recipe.gives) : 1;
     const craftsRequired = Math.ceil(qtyNeeded / gives);
 
-    for (const [ingName, ingQtyStr] of Object.entries(recipe)) {
-      if (ingName === 'gives') continue;
+    // Loop through ingredients
+    for (const [ingKey, ingQtyStr] of Object.entries(recipe)) {
+      if (ingKey === 'gives') continue;
+
       const amountPerCraft = parseInt(ingQtyStr);
       const totalIngNeeded = amountPerCraft * craftsRequired;
-      decompose(ingName, totalIngNeeded);
+
+      // Recurse using the ingredient key (which is likely an ID in your new JSON)
+      decompose(ingKey, totalIngNeeded);
     }
   }
 
+  // Run calculation for all selected items
   selectedItems.forEach(entry => {
-    decompose(entry.name, entry.quantity);
+    // Start with ID if available, otherwise Name
+    decompose(entry.id || entry.name, entry.quantity);
   });
 
-  const resultsDiv = document.querySelector('.results-panel');
-  // Check if summary box exists, if not create it inside results-panel
-  let summaryBox = document.getElementById('base-materials-summary');
-  if (!summaryBox) {
-    summaryBox = document.createElement('div');
-    summaryBox.id = 'base-materials-summary';
-    summaryBox.style.marginTop = "20px";
-    summaryBox.style.paddingTop = "20px";
-    summaryBox.style.borderTop = "1px solid #444";
-    resultsDiv.appendChild(summaryBox);
-  }
+  // --- RENDER HTML ---
+  const sortedKeys = Object.keys(totals).sort();
 
-  let html = `<h3 style="margin-bottom:15px; color:#fff;">Total Base Resources</h3>`;
-  html += `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">`;
+  let html = `<h3 style="margin-bottom:15px; color:#fff; border-bottom: 1px solid #444; padding-bottom: 10px;">Total Base Resources</h3>`;
 
-  const sortedMaterials = Object.keys(totals).sort();
-
-  if (sortedMaterials.length === 0) {
-    html += `<p style="color: #888;">No base resources found.</p>`;
+  if (sortedKeys.length === 0) {
+    html += `<p style="color: #888;">No base resources to display.</p>`;
   } else {
-    sortedMaterials.forEach(matName => {
+    html += `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px;">`;
+
+    sortedKeys.forEach(key => {
+      // 4. DISPLAY FIX: Convert the Key (ID) back to a Display Name
+      let displayName = key;
+      let displayRarity = "common";
+
+      // Look up the item info for this ID
+      const itemData = inventoryData.find(i => i.id == key || i.name === key);
+
+      if (itemData) {
+        displayName = itemData.name;
+        if(itemData.rarity) displayRarity = itemData.rarity.toLowerCase();
+      } else {
+        // Fallback: Make the ID look pretty (ENCHANTED_POTATO -> Enchanted Potato)
+        displayName = key.toLowerCase().split('_')
+          .map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      }
+
+      const imgPath = getImagePath(displayName);
+
       html += `
-          <div style="background: #161b22; padding: 10px; border-radius: 6px; border: 1px solid #30363d; display: flex; justify-content: space-between; align-items:center;">
-             <span style="font-size:0.9rem; color:#c9d1d9;">${matName}</span>
-             <span style="color: #3b82f6; font-weight: bold; font-family: monospace; font-size:1rem;">x${totals[matName].toLocaleString()}</span>
-          </div>`;
+        <div style="background: #161b22; padding: 10px; border-radius: 6px; border: 1px solid #30363d; display: flex; align-items:center; gap: 10px;">
+           <img src="${imgPath}" class="item-icon-small" onerror="this.style.display='none'" style="width: 24px; height: 24px;">
+           <span class="rarity-${displayRarity}" style="font-size:0.9rem; flex-grow: 1;">${displayName}</span>
+           <span style="color: #3b82f6; font-weight: bold; font-family: monospace; font-size:1rem;">x${totals[key].toLocaleString()}</span>
+        </div>`;
     });
+
+    html += `</div>`;
   }
 
-  html += `</div>`;
-  summaryBox.innerHTML = html;
+  resultsDiv.innerHTML = html;
 }
 
 function updateRecipeSelectors(selectedItems) {
@@ -570,21 +691,22 @@ function updateRecipeSelectors(selectedItems) {
     container.appendChild(wrapper);
   });
 }
-// Global window function for the onclick events in the generated HTML
+
 window.selectRecipe = function (itemName, index) {
   console.log(`Switched ${itemName} to recipe option ${index}`);
   activeRecipeOverrides[itemName] = index;
 
-  // Recalculate everything
   getSelectedItems();
 
-  // If a tree is open, refresh it
   if (currentTreeContext) {
     const zoomLayer = document.getElementById('tree-display');
     if (zoomLayer) {
-      const newTree = buildRecipeTree(currentTreeContext.name, currentTreeContext.qty);
+      // NEW: Use the stored ID to rebuild
+      // Use fallback to name if ID is missing (for safety)
+      const identifier = currentTreeContext.id || currentTreeContext.name;
+      const newTree = buildRecipeTree(identifier, currentTreeContext.qty);
+
       zoomLayer.innerHTML = renderTreeHTML(newTree);
-      // We do NOT reset pan/zoom here so the user context stays stable
     }
   }
 };

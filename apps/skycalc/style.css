@@ -22,6 +22,7 @@ footer {
 .rarity-legendary { color: #FFAA00; }
 .rarity-mythic    { color: #FF55FF; }
 .rarity-divine    { color: #55FFFF;}
+.rarity-supreme    { color: #55FFFF;}
 .rarity-special   { color: #FF5555; }
 .rarity-very-special    { color: #FF5555; }
 
@@ -334,4 +335,19 @@ nav {
 .item-label {
   flex-grow: 1; /* Pushes the input box to the right */
   cursor: pointer;
+}
+
+/* Add to dropdown.css */
+.filter-row select {
+  background-color: var(--card-bg);
+  border: 1px solid var(--dark-bg);
+  color: var(--text-muted);
+  cursor: pointer;
+  flex: 1; /* Make them equal width */
+}
+
+.filter-row select:focus {
+  border-color: var(--accent);
+  color: var(--text-main);
+  outline: none;
 }

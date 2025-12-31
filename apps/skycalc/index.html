@@ -7,7 +7,7 @@
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="dropdown.css">
-  <!--<script src="data/data.js"></script> -->
+ <!-- <script src="data/data.js"></script> -->
   <script src="script.js"></script>
 </head>
 <body>
@@ -34,16 +34,26 @@
         <div id="myDropdown" class="dropdown-content">
 
           <div class="search-container">
-            <input type="text" placeholder="Search..." id="searchInput" onkeyup="filterItems()" class="search-input">
+            <input type="text" placeholder="Search Name..." id="searchInput" onkeyup="filterItems()" class="search-input">
+
+            <div class="filter-row" style="display: flex; gap: 5px; margin-top: 5px;">
+              <select id="categoryFilter" class="search-input" onchange="filterItems()" style="font-size: 0.8rem; padding: 8px;">
+                <option value="">All Categories</option>
+              </select>
+              <select id="rarityFilter" class="search-input" onchange="filterItems()" style="font-size: 0.8rem; padding: 8px;">
+                <option value="">All Rarities</option>
+              </select>
+            </div>
           </div>
 
           <div id="itemList"></div>
 
         </div>
 
-        <button onclick="getSelectedItems()" style="margin-top: 20px; padding: 10px;">
-          Calculate Resources
-        </button>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button onclick="getSelectedItems()" class="drop-btn" style="flex: 2;">Calculate</button>
+          <button onclick="resetSelection()" class="drop-btn" style="flex: 1; background-color: #442222; border-color: #663333;">Reset</button>
+        </div>
 
       </div>
         <div class="card" id="itemListDisplay"></div>
