@@ -12272,7 +12272,7 @@
     "name": "Crown of Avarice",
     "recipe": [
       {
-        "ENCHANTED_GRIFFIN_FEATHER": 64,
+        "GRIFFIN_FEATHER": 64,
         "ENCHANTED_GOLD_BLOCK": 24,
         "CROWN_OF_GREED": 1,
         "AVARICIOUS_CHALICE": 2,
@@ -12288,7 +12288,7 @@
     "name": "Epic Griffin Upgrade Stone",
     "recipe": [
       {
-        "ENCHANTED_GRIFFIN_FEATHER": 64,
+        "GRIFFIN_FEATHER": 64,
         "MYTHOS_FRAGMENT": 4,
         "ENCHANTED_ANCIENT_CLAW": 4,
         "BASE_GRIFFIN_UPGRADE_STONE": 1,
@@ -12352,7 +12352,7 @@
         "MYTHOS_FRAGMENT": 4,
         "ENCHANTED_ANCIENT_CLAW": 32,
         "CHALLENGER_CLOAK": 1,
-        "ENCHANTED_GRIFFIN_FEATHER": 64,
+        "GRIFFIN_FEATHER": 64,
         "gives": "1"
       }
     ],
@@ -12400,7 +12400,7 @@
         "ENCHANTED_GOLD_BLOCK": 16,
         "ENCHANTED_ANCIENT_CLAW": 32,
         "MYTHOS_FRAGMENT": 4,
-        "ENCHANTED_GRIFFIN_FEATHER": 64,
+        "GRIFFIN_FEATHER": 64,
         "CHALLENGER_NECKLACE": 1,
         "gives": "1"
       }
@@ -12415,7 +12415,7 @@
     "recipe": [
       {
         "ENCHANTED_GOLD": 64,
-        "ENCHANTED_GRIFFIN_FEATHER": 4,
+        "GRIFFIN_FEATHER": 4,
         "gives": "1"
       }
     ],
@@ -12428,7 +12428,7 @@
     "name": "Sword of Revelations",
     "recipe": [
       {
-        "ENCHANTED_GRIFFIN_FEATHER": 12,
+        "GRIFFIN_FEATHER": 12,
         "ENCHANTED_ANCIENT_CLAW": 8,
         "ENCHANTED_GOLD_BLOCK": 1,
         "HILT_OF_REVELATIONS": 1,
@@ -12444,7 +12444,7 @@
     "name": "Legendary Griffin Upgrade Stone",
     "recipe": [
       {
-        "ENCHANTED_GRIFFIN_FEATHER": 128,
+        "GRIFFIN_FEATHER": 128,
         "MYTHOS_FRAGMENT": 16,
         "ENCHANTED_ANCIENT_CLAW": 32,
         "BASE_GRIFFIN_UPGRADE_STONE": 1,
@@ -12461,7 +12461,7 @@
     "name": "Beastmaster Crest",
     "recipe": [
       {
-        "ENCHANTED_GRIFFIN_FEATHER": 4,
+        "GRIFFIN_FEATHER": 4,
         "ANCIENT_CLAW": 40,
         "MILK_BUCKET": 1,
         "gives": "1"
@@ -12494,7 +12494,7 @@
     "name": "Beastmaster Crest",
     "recipe": [
       {
-        "ENCHANTED_GRIFFIN_FEATHER": 256,
+        "GRIFFIN_FEATHER": 256,
         "ENCHANTED_ANCIENT_CLAW": 32,
         "BEASTMASTER_CREST_EPIC": 1,
         "gives": "1"
@@ -12510,7 +12510,7 @@
     "recipe": [
       {
         "MYTHOS_FRAGMENT": 4,
-        "ENCHANTED_GRIFFIN_FEATHER": 64,
+        "GRIFFIN_FEATHER": 64,
         "ENCHANTED_PAPER": 128,
         "DAEDALUS_STICK": 1,
         "ENCHANTED_ANCIENT_CLAW": 32,
@@ -12527,7 +12527,7 @@
     "recipe": [
       {
         "ENCHANTED_GOLD": 32,
-        "ENCHANTED_GRIFFIN_FEATHER": 4,
+        "GRIFFIN_FEATHER": 4,
         "ANCIENT_CLAW": 64,
         "gives": "1"
       }
@@ -12542,7 +12542,7 @@
     "recipe": [
       {
         "ENCHANTED_GOLD": 48,
-        "ENCHANTED_GRIFFIN_FEATHER": 4,
+        "GRIFFIN_FEATHER": 4,
         "ANCIENT_CLAW": 64,
         "gives": "1"
       }
@@ -12557,7 +12557,7 @@
     "recipe": [
       {
         "MYTHOS_FRAGMENT": 4,
-        "ENCHANTED_GRIFFIN_FEATHER": 64,
+        "GRIFFIN_FEATHER": 64,
         "CHALLENGER_LEGGINGS": 1,
         "gives": "1"
       }
@@ -12585,7 +12585,7 @@
     "name": "Beastmaster Crest",
     "recipe": [
       {
-        "ENCHANTED_GRIFFIN_FEATHER": 128,
+        "GRIFFIN_FEATHER": 128,
         "ENCHANTED_ANCIENT_CLAW": 4,
         "BEASTMASTER_CREST_RARE": 1,
         "gives": "1"
@@ -12601,7 +12601,7 @@
     "recipe": [
       {
         "ENCHANTED_GOLD": 32,
-        "ENCHANTED_GRIFFIN_FEATHER": 4,
+        "GRIFFIN_FEATHER": 4,
         "ANCIENT_CLAW": 64,
         "gives": "1"
       }
@@ -12616,7 +12616,7 @@
     "recipe": [
       {
         "ANCIENT_CLAW": 96,
-        "ENCHANTED_GRIFFIN_FEATHER": 16,
+        "GRIFFIN_FEATHER": 16,
         "gives": "1"
       }
     ],
@@ -12632,7 +12632,7 @@
         "ENCHANTED_GOLD_BLOCK": 16,
         "MYTHOS_FRAGMENT": 4,
         "ENCHANTED_ANCIENT_CLAW": 32,
-        "ENCHANTED_GRIFFIN_FEATHER": 64,
+        "GRIFFIN_FEATHER": 64,
         "CHALLENGER_BRACELET": 1,
         "gives": "1"
       }
@@ -12646,7 +12646,7 @@
     "name": "Beastmaster Crest",
     "recipe": [
       {
-        "ENCHANTED_GRIFFIN_FEATHER": 8,
+        "GRIFFIN_FEATHER": 8,
         "ANCIENT_CLAW": 80,
         "BEASTMASTER_CREST_COMMON": 1,
         "gives": "1"
@@ -12675,7 +12675,7 @@
     "name": "Uncommon Griffin Upgrade Stone",
     "recipe": [
       {
-        "ENCHANTED_GRIFFIN_FEATHER": 8,
+        "GRIFFIN_FEATHER": 8,
         "ENCHANTED_GOLD": 64,
         "ANCIENT_CLAW": 32,
         "BASE_GRIFFIN_UPGRADE_STONE": 1,
@@ -12692,7 +12692,7 @@
     "recipe": [
       {
         "ENCHANTED_ANCIENT_CLAW": 8,
-        "ENCHANTED_GRIFFIN_FEATHER": 32,
+        "GRIFFIN_FEATHER": 32,
         "ENCHANTED_GOLD_BLOCK": 2,
         "ANCESTRAL_SPADE": 1,
         "HILT_OF_REVELATIONS": 1,
@@ -12726,7 +12726,7 @@
         "ENCHANTED_ANCIENT_CLAW": 32,
         "ENCHANTED_GOLD_BLOCK": 16,
         "CHALLENGER_BELT": 1,
-        "ENCHANTED_GRIFFIN_FEATHER": 64,
+        "GRIFFIN_FEATHER": 64,
         "MYTHOS_FRAGMENT": 4,
         "gives": "1"
       }
@@ -12784,7 +12784,7 @@
     "name": "Rare Griffin Upgrade Stone",
     "recipe": [
       {
-        "ENCHANTED_GRIFFIN_FEATHER": 16,
+        "GRIFFIN_FEATHER": 16,
         "ENCHANTED_GOLD_BLOCK": 4,
         "ANCIENT_CLAW": 64,
         "BASE_GRIFFIN_UPGRADE_STONE": 1,
@@ -12835,7 +12835,7 @@
       {
         "ENCHANTED_GOLD": 32,
         "ANCIENT_CLAW": 64,
-        "ENCHANTED_GRIFFIN_FEATHER": 4,
+        "GRIFFIN_FEATHER": 4,
         "gives": "1"
       }
     ],
@@ -12861,7 +12861,7 @@
     "name": "Beastmaster Crest",
     "recipe": [
       {
-        "ENCHANTED_GRIFFIN_FEATHER": 32,
+        "GRIFFIN_FEATHER": 32,
         "ANCIENT_CLAW": 256,
         "BEASTMASTER_CREST_UNCOMMON": 1,
         "gives": "1"
@@ -12877,7 +12877,7 @@
     "recipe": [
       {
         "ENCHANTED_GOLD": 32,
-        "ENCHANTED_GRIFFIN_FEATHER": 4,
+        "GRIFFIN_FEATHER": 4,
         "ANCIENT_CLAW": 64,
         "gives": "1"
       }
@@ -12891,7 +12891,7 @@
     "name": "Challenger's Necklace",
     "recipe": [
       {
-        "ENCHANTED_GRIFFIN_FEATHER": 4,
+        "GRIFFIN_FEATHER": 4,
         "ANCIENT_CLAW": 64,
         "ENCHANTED_GOLD": 32,
         "gives": "1"
@@ -12923,7 +12923,7 @@
       {
         "ANCIENT_CLAW": 128,
         "ENCHANTED_GOLD": 16,
-        "ENCHANTED_GRIFFIN_FEATHER": 4,
+        "GRIFFIN_FEATHER": 4,
         "gives": "1"
       }
     ],
@@ -17029,7 +17029,7 @@
     "name": "Braided Griffin Feather",
     "recipe": [
       {
-        "ENCHANTED_GRIFFIN_FEATHER": 160,
+        "GRIFFIN_FEATHER": 160,
         "SOUL_STRING": 256,
         "gives": "1"
       }
@@ -18373,7 +18373,7 @@
     "name": "Base Griffin Upgrade Stone",
     "recipe": [
       {
-        "ENCHANTED_GRIFFIN_FEATHER": 8,
+        "GRIFFIN_FEATHER": 8,
         "ENCHANTED_GOLD": 16,
         "ENCHANTED_COBBLESTONE": 8,
         "gives": "1"
@@ -24251,7 +24251,13 @@
       {
         "ENCHANTED_COAL": 16,
         "ENCHANTED_SULPHUR": 1,
-        "gives": "1"
+        "gives": "4"
+      },
+      {
+        "ENCHANTED_COAL": 16,
+        "ENCHANTED_SULPHUR": 1,
+        "CHILI_PEPPER": 4,
+        "gives": "12"
       }
     ],
     "rarity": "rare",
@@ -24623,7 +24629,16 @@
         "ENCHANTED_BLAZE_POWDER": 32,
         "ENCHANTED_RED_SAND": 8,
         "ENCHANTED_NETHER_STALK": 32,
-        "gives": "1"
+        "gives": "2"
+      },
+      {
+        "ENCHANTED_GLOWSTONE": 4,
+        "ENCHANTED_MYCELIUM_CUBE": 1,
+        "WHIPPED_MAGMA_CREAM": 4,
+        "ENCHANTED_BLAZE_ROD": 4,
+        "ENCHANTED_RED_SAND_CUBE": 1,
+        "MUTANT_NETHER_STALK": 4,
+        "gives": "40"
       }
     ],
     "rarity": "rare",
@@ -46957,14 +46972,6 @@
   {
     "id": "PET_ITEM_IRON_CLAWS_LEGENDARY",
     "name": "Iron Claws",
-    "recipe": [],
-    "rarity": "legendary",
-    "category": "None",
-    "time": ""
-  },
-  {
-    "id": "ENCHANTED_GRIFFIN_FEATHER",
-    "name": "Griffin Feather",
     "recipe": [],
     "rarity": "legendary",
     "category": "None",

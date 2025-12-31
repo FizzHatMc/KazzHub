@@ -11,37 +11,37 @@ let currentTreeContext = null;
 
 document.addEventListener('DOMContentLoaded', async function () {
 
-        // --- A. FETCH DATA ---
-        try {
-          // Ensure this path matches exactly where your file is
-          const response = await fetch('../../assets/data.json');
+          // --- A. FETCH DATA ---
+          try {
+            // Ensure this path matches exactly where your file is
+            const response = await fetch('../../assets/data.json');
 
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            inventoryData = await response.json();
+            console.log("Data loaded successfully:", inventoryData.length, "items.");
+
+            // Once data is loaded, render the sidebar list
+            renderList();
+
+          } catch (error) {
+            console.error("Failed to load inventory data:", error);
+            alert("Error loading data. Check console. (Note: You must use a Local Server to fetch JSON files due to CORS)");
+            return; // Stop execution if data fails
           }
-
-          inventoryData = await response.json();
-          console.log("Data loaded successfully:", inventoryData.length, "items.");
-
-          // Once data is loaded, render the sidebar list
-          renderList();
-
-        } catch (error) {
-          console.error("Failed to load inventory data:", error);
-          alert("Error loading data. Check console. (Note: You must use a Local Server to fetch JSON files due to CORS)");
-          return; // Stop execution if data fails
-        }
-
   /*
-       // Load Data
-             if (typeof DATA !== 'undefined') {
-               inventoryData = DATA;
-               console.log("Data loaded successfully:", inventoryData.length, "items.");
-               renderList();
-             } else {
-               console.error("Data source missing. Make sure mutations.js is linked in HTML.");
-             }
-  */
+
+         // Load Data
+               if (typeof DATA !== 'undefined') {
+                 inventoryData = DATA;
+                 console.log("Data loaded successfully:", inventoryData.length, "items.");
+                 renderList();
+               } else {
+                 console.error("Data source missing. Make sure mutations.js is linked in HTML.");
+               }
+*/
   // --- B. SETUP UI REFERENCES ---
   const viewport = document.getElementById('panZoomViewport');
   const zoomLayer = document.getElementById('tree-display');
@@ -401,18 +401,35 @@ function formatCategory(cat) {
     .join(' '); // Join back with spaces
 }
 
-function buildRecipeTree(identifier, qtyNeeded = 1) {
-  // 1. Try to find by ID first, then Name
+function buildRecipeTree(identifier, qtyNeeded = 1, visited = new Set()) {
+  // 1. RECURSION GUARD: Check if we've already seen this ID in this branch
+  // This prevents the "Too much recursion" crash
+  if (visited.has(identifier)) {
+    return {
+      name: "Loop Detected",
+      id: identifier,
+      quantity: qtyNeeded,
+      rarity: 'common',
+      color: 'bg-red-900', // Make it red to warn the user
+      ingredients: []
+    };
+  }
+
+  // Create a new set for the next level (allows diamonds, prevents circles)
+  const newVisited = new Set(visited);
+  newVisited.add(identifier);
+
+  // 2. Find Item Data (Try ID first, then Name)
   let item = inventoryData.find(i => i.id == identifier);
   if (!item) item = inventoryData.find(i => i.name === identifier);
 
-  // If not found (base material without definition), return default
+  // Fallback for base materials or unknown items
   if (!item) {
     return {
       name: identifier,
       id: null,
       quantity: qtyNeeded,
-      rarity: 'common', // Default for unknown base materials
+      rarity: 'common',
       ingredients: []
     };
   }
@@ -420,8 +437,9 @@ function buildRecipeTree(identifier, qtyNeeded = 1) {
   const children = [];
   let actualAmountProduced = qtyNeeded;
 
-  // 2. Process Recipe
+  // 3. Process Recipe
   if (item.recipe && item.recipe.length > 0) {
+    // Check overrides using NAME (since keys are names)
     const recipeIndex = activeRecipeOverrides[item.name] || 0;
     const activeRecipe = item.recipe[recipeIndex];
 
@@ -439,10 +457,11 @@ function buildRecipeTree(identifier, qtyNeeded = 1) {
         // Resolve Ingredient Name -> Ingredient ID
         const ingredientItem = inventoryData.find(i => i.name === ingredientName);
 
+        // RECURSIVE CALL: Pass 'newVisited' to the child
         if (ingredientItem) {
-          children.push(buildRecipeTree(ingredientItem.id, totalAmountNeeded));
+          children.push(buildRecipeTree(ingredientItem.id, totalAmountNeeded, newVisited));
         } else {
-          children.push(buildRecipeTree(ingredientName, totalAmountNeeded));
+          children.push(buildRecipeTree(ingredientName, totalAmountNeeded, newVisited));
         }
       });
     }
@@ -452,7 +471,7 @@ function buildRecipeTree(identifier, qtyNeeded = 1) {
     name: item.name,
     id: item.id,
     quantity: actualAmountProduced,
-    rarity: item.rarity || 'common', // Store the rarity
+    rarity: item.rarity || 'common',
     ingredients: children
   };
 }
