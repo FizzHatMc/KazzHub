@@ -612,45 +612,53 @@ function renderMaterialSummary(selectedItems) {
 
 function updateRecipeSelectors(selectedItems) {
   const container = document.getElementById('recipe-variant-container');
-
-  // Debug check:
-  if (!container) {
-    console.error("HTML Error: Could not find <div id='recipe-variant-container'> in your HTML.");
-    return;
-  }
+  if (!container) return;
 
   container.innerHTML = ""; // Clear previous
 
-  // Track which items we have already created a dropdown for
   const itemsWithMultipleRecipes = new Set();
-  const processedItems = new Set();
+  const processedIds = new Set(); // Track IDs to prevent infinite loops
 
-  // Recursive scanner to find ALL items in the tree that have multiple recipes
-  function scanForAlternates(itemName) {
-    if (processedItems.has(itemName)) return;
-    processedItems.add(itemName);
+  // Recursive scanner
+  function scanForAlternates(identifier) {
+    // 1. Resolve the item (Try ID, then Name)
+    let item = inventoryData.find(i => i.id == identifier);
+    if (!item) item = inventoryData.find(i => i.name === identifier);
 
-    const item = inventoryData.find(i => i.name === itemName);
-    if (!item || !item.recipe) return;
+    // If item doesn't exist in data, we can't check its recipes
+    if (!item) return;
 
-    // If item has 2+ recipes, mark it for a dropdown
+    // 2. Loop Protection: Check if we already scanned this ITEM ID
+    if (processedIds.has(item.id)) return;
+    processedIds.add(item.id);
+
+    if (!item.recipe) return;
+
+    // 3. If it has multiple recipes, add to the list
     if (item.recipe.length > 1) {
       itemsWithMultipleRecipes.add(item.name);
     }
 
-    // Continue scanning down the CURRENT active recipe
+    // 4. Continue scanning down the CURRENT active recipe
+    // We use item.name for the override key
     const activeIndex = activeRecipeOverrides[item.name] || 0;
     const activeRecipe = item.recipe[activeIndex];
 
     if (activeRecipe) {
       Object.keys(activeRecipe).forEach(key => {
-        if (key !== 'gives') scanForAlternates(key);
+        if (key !== 'gives') {
+          // Recurse using the key from the recipe (which might be ID or Name)
+          scanForAlternates(key);
+        }
       });
     }
   }
 
   // Start scan from selected items
-  selectedItems.forEach(entry => scanForAlternates(entry.name));
+  selectedItems.forEach(entry => {
+    // Pass ID if we have it, otherwise Name
+    scanForAlternates(entry.id || entry.name);
+  });
 
   if (itemsWithMultipleRecipes.size === 0) {
     container.innerHTML = "<p style='color:#888; font-size:0.8rem; padding:10px;'>No alternative recipes available for this selection.</p>";
@@ -660,6 +668,9 @@ function updateRecipeSelectors(selectedItems) {
   // Render the Dropdowns
   itemsWithMultipleRecipes.forEach(itemName => {
     const itemData = inventoryData.find(i => i.name === itemName);
+    // If we found it via ID scan but can't find it by name here, safety check:
+    if (!itemData) return;
+
     const currentIndex = activeRecipeOverrides[itemName] || 0;
 
     const wrapper = document.createElement('div');
@@ -689,11 +700,17 @@ function updateRecipeSelectors(selectedItems) {
       const option = document.createElement('option');
       option.value = index;
 
-      // Create a nice label: "Option 1 (Gives 4) - Cost: 16 Coal..."
       const gives = recipe.gives || 1;
+
+      // Attempt to make ingredient list pretty
       const ingredients = Object.keys(recipe)
         .filter(k => k !== 'gives')
-        .map(k => `${recipe[k]} ${k}`)
+        .map(k => {
+          // Try to convert ID to Name for the dropdown label
+          const ingItem = inventoryData.find(i => i.id == k || i.name === k);
+          const displayName = ingItem ? ingItem.name : k;
+          return `${recipe[k]} ${displayName}`;
+        })
         .join(', ');
 
       option.text = `Var ${index + 1} (x${gives}): ${ingredients}`;
@@ -701,7 +718,6 @@ function updateRecipeSelectors(selectedItems) {
       select.appendChild(option);
     });
 
-    // Handle Change
     select.onchange = function() {
       window.selectRecipe(itemName, parseInt(this.value));
     };
@@ -710,7 +726,6 @@ function updateRecipeSelectors(selectedItems) {
     container.appendChild(wrapper);
   });
 }
-
 window.selectRecipe = function (itemName, index) {
   console.log(`Switched ${itemName} to recipe option ${index}`);
   activeRecipeOverrides[itemName] = index;
