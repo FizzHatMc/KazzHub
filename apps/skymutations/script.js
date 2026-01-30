@@ -9,105 +9,194 @@ let startY = 0;
 let setTransform;
 let currentTreeContext = null;
 
+// Progressive Mode State
+let completedItems = new Set();
+let lastContextId = null;
+let currentTreeData = null;
+let currentCandidates = new Set();
+
+// Greenhouse State
+let greenhouseCount = 1;
+let currentGreenhouseView = 0; // 0, 1, 2
+let gh1LockedState = new Set(); // Indices 0-99
+// Initialize GH1 as fully locked
+for(let i=0; i<100; i++) gh1LockedState.add(i);
+
+let lastSolution = null; // Store solution to re-render on view switch
+
 function unlockAll(){
-  for(i=0;i<10;i++){
-    for(j=0;j<10;j++){
-      setGridState(i,j,true);
-    }
-  }
+  if (currentGreenhouseView !== 0) return; // Only GH1 can be locked/unlocked
+  gh1LockedState.clear();
+  renderGrid();
 }
 
-/**
- * Sets the state of a specific grid cell using X/Y coordinates.
- * @param {Number} x - The column (0-9).
- * @param {Number} y - The row (0-9).
- * @param {Boolean} isOpen - true = Green (Open), false = Red (Locked).
- */
-function setGridState(x, y, isOpen) {
-  // 1. Calculate the linear index (0-99)
-  // Formula: Index = (Row * 10) + Column
-  const index = (y * 10) + x;
+function resetGrid() {
+  if (currentGreenhouseView !== 0) return;
+  gh1LockedState.clear();
+  for(let i=0; i<100; i++) gh1LockedState.add(i);
+  renderGrid();
+}
 
-  // 2. Find the cell
-  const gridCells = document.querySelectorAll('#layoutGrid .grid-cell');
-  if (!gridCells || !gridCells[index]) {
-    console.warn(`Grid cell not found for coordinates (${x}, ${y}) -> Index ${index}`);
+// --- Greenhouse Management ---
+
+function addGreenhouse() {
+  if (greenhouseCount >= 3) return;
+
+  // Check if GH1 is fully unlocked
+  if (gh1LockedState.size > 0) {
+    alert("You must fully unlock Greenhouse 1 before adding more!");
     return;
   }
 
-  const cell = gridCells[index];
+  greenhouseCount++;
+  updateGreenhouseControls();
+  // Switch to new greenhouse
+  viewGreenhouse(greenhouseCount - 1);
 
-  // 3. Apply the state
-  // We remove both classes first to be clean, then add the correct one.
-  cell.classList.remove('locked', 'open');
+  // Re-run solver to utilize new space
+  runSolverForCurrentContext();
+}
 
-  if (isOpen) {
-    cell.classList.add('open');
-    cell.innerText = ''; // Clear 'X'
-  } else {
-    cell.classList.add('locked');
-    cell.innerText = 'X';
+function removeGreenhouse() {
+  if (greenhouseCount <= 1) return;
+  greenhouseCount--;
+  if (currentGreenhouseView >= greenhouseCount) {
+    currentGreenhouseView = greenhouseCount - 1;
+  }
+  updateGreenhouseControls();
+  viewGreenhouse(currentGreenhouseView);
+
+  // Re-run solver
+  runSolverForCurrentContext();
+}
+
+function viewGreenhouse(index) {
+  if (index < 0 || index >= greenhouseCount) return;
+  currentGreenhouseView = index;
+  updateGreenhouseControls();
+  renderGrid();
+
+  // Re-render solution for this view
+  if (lastSolution) {
+    const gridCells = document.querySelectorAll('#layoutGrid .grid-cell');
+    renderSolverResults(lastSolution, gridCells);
   }
 }
 
-/**
- * HELPER: Clears the entire grid (sets all to Locked).
- */
-function resetGrid() {
-  const gridCells = document.querySelectorAll('#layoutGrid .grid-cell');
-  gridCells.forEach(cell => {
-    cell.classList.remove('open', 'mutation-spot', 'ingredient-spot');
-    cell.classList.add('locked');
-    cell.innerText = 'X';
-    // Remove any leftover images
-    const img = cell.querySelector('img');
-    if (img) img.remove();
-  });
+function updateGreenhouseControls() {
+  const selector = document.getElementById('gh-selector');
+  selector.innerHTML = '';
+
+  for(let i=0; i<greenhouseCount; i++) {
+    const btn = document.createElement('button');
+    btn.className = `view-btn ${i === currentGreenhouseView ? 'active' : ''}`;
+    btn.innerText = i + 1;
+    btn.onclick = () => viewGreenhouse(i);
+    selector.appendChild(btn);
+  }
+
+  document.getElementById('gh-add-btn').disabled = (greenhouseCount >= 3);
+  document.getElementById('gh-remove-btn').disabled = (greenhouseCount <= 1);
 }
 
+// --- Grid Logic ---
+
+function initLayoutGrid() {
+  renderGrid();
+  updateGreenhouseControls();
+}
+
+function renderGrid() {
+  const gridContainer = document.getElementById('layoutGrid');
+  if (!gridContainer) return;
+  gridContainer.innerHTML = '';
+
+  for (let i = 0; i < 100; i++) {
+    const cell = document.createElement('div');
+    cell.dataset.index = i;
+
+    // Determine state
+    let isLocked = false;
+    if (currentGreenhouseView === 0) {
+      isLocked = gh1LockedState.has(i);
+    } else {
+      isLocked = false; // GH2/3 always open
+    }
+
+    cell.className = `grid-cell ${isLocked ? 'locked' : 'open'}`;
+    cell.innerText = isLocked ? 'X' : '';
+
+    cell.addEventListener('click', function() {
+      toggleGridCell(i);
+    });
+
+    gridContainer.appendChild(cell);
+  }
+}
+
+function toggleGridCell(index) {
+  // Only GH1 is editable
+  if (currentGreenhouseView !== 0) return;
+
+  if (gh1LockedState.has(index)) {
+    gh1LockedState.delete(index);
+  } else {
+    gh1LockedState.add(index);
+  }
+
+  // Update UI directly for performance
+  const cell = document.querySelector(`#layoutGrid .grid-cell[data-index="${index}"]`);
+  if (cell) {
+    const isLocked = gh1LockedState.has(index);
+    cell.className = `grid-cell ${isLocked ? 'locked' : 'open'}`;
+    cell.innerText = isLocked ? 'X' : '';
+  }
+}
+
+function setGridState(x, y, isOpen) {
+  if (currentGreenhouseView !== 0) return;
+  const index = (y * 10) + x;
+  if (isOpen) gh1LockedState.delete(index);
+  else gh1LockedState.add(index);
+
+  // Update UI
+  const cell = document.querySelector(`#layoutGrid .grid-cell[data-index="${index}"]`);
+  if (cell) {
+    cell.className = `grid-cell ${isOpen ? 'open' : 'locked'}`;
+    cell.innerText = isOpen ? '' : 'X';
+  }
+}
+
+// --- Selection Logic ---
+
 function selectMutations(items, clearExisting = true) {
-  // 1. Clear existing selections if requested
   if (clearExisting) {
     const allCheckboxes = document.querySelectorAll('.item-row input[type="checkbox"]');
     allCheckboxes.forEach(cb => {
       if (cb.checked) {
         cb.checked = false;
-        // Reset the input state using your existing helper
         if (typeof toggleQty === "function") toggleQty(cb);
       }
     });
   }
 
-  // 2. Iterate through the requested items
   items.forEach(target => {
-    // Handle both object format {id: "x", quantity: 5} and simple string format "x"
     const targetId = target.id || target;
     const targetQty = target.quantity || 1;
-
-    // Find the DOM elements
     const checkbox = document.getElementById("item-" + targetId);
     const qtyInput = document.getElementById("qty-" + targetId);
 
     if (checkbox && qtyInput) {
-      // Check the box
       checkbox.checked = true;
-
-      // Enable the input (calls your existing logic)
       if (typeof toggleQty === "function") {
         toggleQty(checkbox);
       } else {
         qtyInput.disabled = false;
       }
-
-      // Set the quantity
       qtyInput.value = targetQty;
-    } else {
-      console.warn(`Could not find mutation with ID: ${targetId}`);
     }
   });
 
-  // 3. Refresh the Display Logic
-  // This calls your main function that reads the checkboxes and updates the results
   if (typeof getSelectedItems === "function") {
     getSelectedItems();
   }
@@ -171,43 +260,16 @@ function toggleHelp() {
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
-
     try {
-      // Ensure this path matches exactly where your file is
       const response = await fetch('data/mutations.json');
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       mutations = await response.json();
-      console.log("Data loaded successfully:", mutations.length, "items.");
-
-      // Once data is loaded, render the sidebar list
       renderList();
-
     } catch (error) {
       console.error("Failed to load inventory data:", error);
-      alert("Error loading data. Check console. (Note: You must use a Local Server to fetch JSON files due to CORS)");
-      return; // Stop execution if data fails
+      alert("Error loading data. Check console.");
+      return;
     }
-
-
-
-  /*
-
-      // Load Data
-      if (typeof MUTATIONS !== 'undefined') {
-        mutations = MUTATIONS;
-        console.log("Data loaded successfully:", mutations.length, "items.");
-        renderList();
-      } else {
-        console.error("Data source missing. Make sure mutations.js is linked in HTML.");
-      }
-*/
-
-
-
 
   // Pan & Zoom Logic
   const viewport = document.getElementById('panZoomViewport');
@@ -228,17 +290,14 @@ document.addEventListener('DOMContentLoaded', async function () {
       panning = true;
       viewport.style.cursor = 'grabbing';
     };
-
     viewport.onmouseup = function (e) {
       panning = false;
       viewport.style.cursor = 'grab';
     };
-
     viewport.onmouseleave = function (e) {
       panning = false;
       viewport.style.cursor = 'grab';
     };
-
     viewport.onmousemove = function (e) {
       e.preventDefault();
       if (!panning) return;
@@ -246,106 +305,55 @@ document.addEventListener('DOMContentLoaded', async function () {
       pointY = e.clientY - startY;
       setTransform();
     };
-
     viewport.onwheel = function (e) {
       e.preventDefault();
       const delta = -e.deltaY;
       (delta > 0) ? (scale *= 1.1) : (scale /= 1.1);
-
       const xs = (e.clientX - pointX) / scale;
       const ys = (e.clientY - pointY) / scale;
       pointX = e.clientX - xs * scale;
       pointY = e.clientY - ys * scale;
-
       setTransform();
     };
   }
+
+  document.querySelectorAll('input[name="solver-mode"]').forEach(radio => {
+    radio.addEventListener('change', runSolverForCurrentContext);
+  });
 
   if (displayContainer) {
     displayContainer.addEventListener('click', function (e) {
       const clickedRow = e.target.closest('.result-row');
       if (!clickedRow) return;
 
-
       const welcomeMsg = document.getElementById('welcome-message');
       if (welcomeMsg && !welcomeMsg.classList.contains('hidden')) {
         welcomeMsg.classList.add('hidden');
       }
-      // 1. Visual Select Highlight
+
       const currentSelected = displayContainer.querySelector('.selected-row');
       if (currentSelected) currentSelected.classList.remove('selected-row');
       clickedRow.classList.add('selected-row');
 
-      // 2. Tree Logic (Standard)
       const itemId = clickedRow.dataset.id;
       const itemName = clickedRow.dataset.name;
       const qtyNeeded = parseInt(clickedRow.dataset.quantity) || 1;
 
       currentTreeContext = { id: itemId, name: itemName, qty: qtyNeeded };
-      const resultTree = buildRecipeTree(itemId || itemName, qtyNeeded);
+
+      if (lastContextId !== itemId) {
+         completedItems.clear();
+         currentCandidates.clear();
+         lastContextId = itemId;
+      }
+
+      currentTreeData = buildRecipeTree(itemId || itemName, qtyNeeded);
 
       if (zoomLayer) {
-        zoomLayer.innerHTML = renderTreeHTML(resultTree);
+        zoomLayer.innerHTML = renderTreeHTML(currentTreeData);
       }
 
-      // ---------------------------------------------
-      // 3. SOLVER LOGIC (Best of 5 + Count Update)
-      // ---------------------------------------------
-      const isMultiMode = document.getElementById('mode-multiple').checked;
-
-      // Get Grid State
-      const gridCells = document.querySelectorAll('#layoutGrid .grid-cell');
-      const gridState = Array.from(gridCells).map(cell => cell.classList.contains('open'));
-
-      let solution;
-      let selectionList = [];
-
-      // Prepare Data
-      if (isMultiMode) {
-        const selectedItems = getSelectedItems();
-        selectionList = selectedItems.map(s => {
-          const fullItem = mutations.find(m => m.id === s.id);
-          return { item: fullItem, ratio: s.quantity, id: s.id };
-        });
-      } else {
-        const fullItemData = mutations.find(i => i.id === itemId || i.name === itemName);
-        selectionList = [{ item: fullItemData, ratio: 1, id: fullItemData.id }];
-      }
-
-      // RUN SOLVER (5 Times)
-      console.log("Running Best-of-5 Solver...");
-      solution = runSolverBestOf(5, selectionList, gridState);
-
-      // Render Grid
-      renderSolverResults(solution, gridCells);
-
-      // ---------------------------------------------
-      // 4. UPDATE SIDEBAR COUNTS
-      // ---------------------------------------------
-      // Reset all counts to 0 first
-      const allAmountSpans = displayContainer.querySelectorAll('.calc-amount');
-      allAmountSpans.forEach(span => span.innerText = "0");
-
-      if (solution && solution.placements) {
-        // Count placements: { "choconut": 12, "wheat": 5 }
-        const counts = {};
-        solution.placements.forEach(p => {
-          const id = p.item.id;
-          counts[id] = (counts[id] || 0) + 1;
-        });
-
-        // Update HTML
-        Object.keys(counts).forEach(id => {
-          // Find the specific span for this ID
-          const targetSpan = displayContainer.querySelector(`.calc-amount[data-id="${id}"]`);
-          if (targetSpan) {
-            targetSpan.innerText = counts[id];
-            // Optional: Make it bold/green to pop
-            targetSpan.style.fontWeight = "bold";
-            targetSpan.style.color = "#4ade80";
-          }
-        });
-      }
+      runSolverForCurrentContext();
     });
   }
 
@@ -361,10 +369,9 @@ function renderList() {
 
     const row = document.createElement("div");
     row.className = "item-row";
-    // Flexbox ensures items align vertically in the center
     row.style.display = "flex";
     row.style.alignItems = "center";
-    row.style.gap = "8px"; // Spacing between elements
+    row.style.gap = "8px";
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
@@ -372,22 +379,18 @@ function renderList() {
     checkbox.onchange = function () { toggleQty(this); };
 
     const img = document.createElement("img");
-    // Use item.image if present, else generate path from name
     img.src = item.image ? item.image : `assets/images/${item.name.toLowerCase().replace(/\s/g, '_')}.png`;
     img.alt = item.name;
     img.style.width = "24px";
     img.style.height = "24px";
     img.style.objectFit = "contain";
     img.style.borderRadius = "2px";
-    // Hide image if it fails to load
     img.onerror = function() { this.style.display = 'none'; };
-    // -----------------------
 
     const label = document.createElement("label");
     label.htmlFor = "item-" + item.id;
     label.className = "item-label";
     label.innerText = item.name;
-    // Make label take up remaining space so text aligns left
     label.style.flexGrow = "1";
 
     if (item.rarity) label.classList.add("rarity-" + item.rarity);
@@ -399,9 +402,8 @@ function renderList() {
     qty.value = 1;
     qty.min = 1;
     qty.disabled = true;
-    qty.style.width = "50px"; // Ensure input doesn't get too wide
+    qty.style.width = "50px";
 
-    // Append in order: Checkbox -> Image -> Label -> Quantity
     row.appendChild(checkbox);
     row.appendChild(img);
     row.appendChild(label);
@@ -439,35 +441,31 @@ function toggleQty(checkbox) {
   }
 }
 
-/**
- * Recursive function to build tree data.
- * FIXED: Specifically handles your JSON structure where requirements only have 'id'.
- */
-function buildRecipeTree(identifier, qtyNeeded = 1) {
-  // Find item by ID (preferred) or Name
+function buildRecipeTree(identifier, qtyMin = 1, qtyMax = null) {
+  if (qtyMax === null) qtyMax = qtyMin;
   const item = mutations.find(i => String(i.id) === String(identifier) || i.name === identifier);
 
   if (!item) {
     return {
       name: identifier || "Unknown",
       id: identifier,
-      quantity: qtyNeeded,
+      min: qtyMin,
+      max: qtyMax,
       image: null,
-      rarityClass: 'rarity-common', // Default fallback
+      rarityClass: 'rarity-common',
       ingredients: []
     };
   }
 
   const children = [];
-
   if (item.requirements && item.requirements.length > 0) {
     item.requirements.forEach(req => {
-      // FIX: Use req.id first. This solves the "undefined" bug.
       const childId = req.id || req.name;
-      const childQty = req.amount; // Static quantity
-
+      const amount = req.amount || 1;
+      const childMin = amount;
+      const childMax = amount * qtyMax;
       if (childId) {
-        children.push(buildRecipeTree(childId, childQty));
+        children.push(buildRecipeTree(childId, childMin, childMax));
       }
     });
   }
@@ -475,7 +473,8 @@ function buildRecipeTree(identifier, qtyNeeded = 1) {
   return {
     name: item.name,
     id: item.id,
-    quantity: qtyNeeded,
+    min: qtyMin,
+    max: qtyMax,
     image: item.image ? item.image : `assets/images/${item.name.toLowerCase().replace(' ', '_')}.png`,
     rarityClass: item.rarity ? "rarity-" + item.rarity : "rarity-common",
     ingredients: children
@@ -485,26 +484,35 @@ function buildRecipeTree(identifier, qtyNeeded = 1) {
 function renderTreeHTML(node) {
   if (!node) return '';
 
-  // 1. Image
-  // Using the 'tree-icon' class from your CSS
   const imgHtml = `
     <img src="${node.image}"
          alt="${node.name}"
          class="tree-icon"
          onerror="this.style.display='none'">`;
 
-  // 2. The Node HTML
-  // We apply the rarity class (e.g., rarity-legendary) to the name
+  let qtyText = `x${node.min.toLocaleString()}`;
+  if (node.min !== node.max) {
+    qtyText += `-${node.max.toLocaleString()}`;
+  }
+
+  const isCompleted = completedItems.has(node.id);
+  const isCandidate = currentCandidates.has(node.id);
+  const isProgressive = document.getElementById('mode-progressive').checked;
+
+  let nodeClasses = 'node-content';
+  if (isCompleted) nodeClasses += ' completed-node';
+  if (isProgressive && isCandidate && !isCompleted) nodeClasses += ' active-candidate';
+
   let html = `
     <div class="tree-node">
-      <div class="node-content">
+      <div class="${nodeClasses}" onclick="toggleItemCompletion('${node.id}')">
         ${imgHtml}
         <div class="item-name ${node.rarityClass}">${node.name}</div>
-        <div class="item-qty">x${node.quantity.toLocaleString()}</div>
+        <div class="item-qty">${qtyText}</div>
+        ${isCompleted ? '<div class="checkmark">✔</div>' : ''}
       </div>
   `;
 
-  // 3. Children
   if (node.ingredients && node.ingredients.length > 0) {
     html += '<div class="children-container">';
     node.ingredients.forEach(child => {
@@ -517,232 +525,196 @@ function renderTreeHTML(node) {
   return html;
 }
 
-function renderMaterialSummary(selectedItems) {
-  const totals = {};
-
-  function decompose(itemName, qtyNeeded) {
-    if (!qtyNeeded || isNaN(qtyNeeded)) qtyNeeded = 0;
-    const cleanName = itemName.trim();
-    const item = mutations.find(i => i.name.trim() === cleanName);
-
-    // Base Case: Item not found OR No recipes -> Base Material
-    if (!item || !item.recipe || item.recipe.length === 0) {
-      if (!totals[cleanName]) totals[cleanName] = 0;
-      totals[cleanName] += qtyNeeded;
-      return;
-    }
-
-    // Recursive Step
-    const recipeIndex = activeRecipeOverrides[item.name] || 0;
-    const recipe = item.recipe[recipeIndex];
-    const gives = recipe.gives ? parseInt(recipe.gives) : 1;
-    const craftsRequired = Math.ceil(qtyNeeded / gives);
-
-    for (const [ingName, ingQtyStr] of Object.entries(recipe)) {
-      if (ingName === 'gives') continue;
-      const amountPerCraft = parseInt(ingQtyStr);
-      const totalIngNeeded = amountPerCraft * craftsRequired;
-      decompose(ingName, totalIngNeeded);
-    }
-  }
-
-  selectedItems.forEach(entry => {
-    decompose(entry.name, entry.quantity);
-  });
-
-  const resultsDiv = document.querySelector('.results-panel');
-  // Check if summary box exists, if not create it inside results-panel
-  let summaryBox = document.getElementById('base-materials-summary');
-  if (!summaryBox) {
-    summaryBox = document.createElement('div');
-    summaryBox.id = 'base-materials-summary';
-    summaryBox.style.marginTop = "20px";
-    summaryBox.style.paddingTop = "20px";
-    summaryBox.style.borderTop = "1px solid #444";
-    resultsDiv.appendChild(summaryBox);
-  }
-
-  let html = `<h3 style="margin-bottom:15px; color:#fff;">Total Base Resources</h3>`;
-  html += `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">`;
-
-  const sortedMaterials = Object.keys(totals).sort();
-
-  if (sortedMaterials.length === 0) {
-    html += `<p style="color: #888;">No base resources found.</p>`;
-  } else {
-    sortedMaterials.forEach(matName => {
-      html += `
-          <div style="background: #161b22; padding: 10px; border-radius: 6px; border: 1px solid #30363d; display: flex; justify-content: space-between; align-items:center;">
-             <span style="font-size:0.9rem; color:#c9d1d9;">${matName}</span>
-             <span style="color: #3b82f6; font-weight: bold; font-family: monospace; font-size:1rem;">x${totals[matName].toLocaleString()}</span>
-          </div>`;
-    });
-  }
-
-  html += `</div>`;
-  summaryBox.innerHTML = html;
-}
-
-function updateRecipeSelectors(selectedItems) {
-  const container = document.getElementById('recipe-variant-container');
-  if (!container) return;
-
-  const itemsWithMultipleRecipes = new Set();
-  const processed = new Set();
-
-  function scanRecipes(itemName) {
-    if (processed.has(itemName)) return;
-    processed.add(itemName);
-
-    const item = mutations.find(i => i.name === itemName);
-    if (!item || !item.recipe) return;
-
-    if (item.recipe.length > 1) {
-      itemsWithMultipleRecipes.add(item.name);
-    }
-
-    const activeIndex = activeRecipeOverrides[item.name] || 0;
-    const activeRecipe = item.recipe[activeIndex];
-
-    if(activeRecipe) {
-      Object.keys(activeRecipe).forEach(key => {
-        if (key !== 'gives') scanRecipes(key);
-      });
-    }
-  }
-
-  selectedItems.forEach(entry => scanRecipes(entry.name));
-
-  container.innerHTML = "";
-
-  if (itemsWithMultipleRecipes.size === 0) return;
-
-  itemsWithMultipleRecipes.forEach(itemName => {
-    const itemData = mutations.find(i => i.name === itemName);
-    const currentIndex = activeRecipeOverrides[itemName] || 0;
-
-    const card = document.createElement('div');
-    card.className = 'variant-card';
-
-    let html = `<div class="variant-title">Select Recipe: ${itemName}</div>`;
-
-    itemData.recipe.forEach((recipe, index) => {
-      const isSelected = index === currentIndex;
-      const ingredientsList = Object.entries(recipe)
-        .filter(([k]) => k !== 'gives')
-        .map(([k, v]) => `${v} ${k}`)
-        .join(', ');
-      const givesAmount = recipe.gives || 1;
-
-      html += `
-        <div class="recipe-option ${isSelected ? 'active-recipe' : ''}"
-             onclick="selectRecipe('${itemName}', ${index})">
-          <div><strong>Option ${index + 1}</strong> (Gives ${givesAmount})</div>
-          <div class="recipe-details">${ingredientsList}</div>
-        </div>`;
-    });
-
-    card.innerHTML = html;
-    container.appendChild(card);
-  });
-}
-
-window.selectRecipe = function (itemName, index) {
-  console.log(`Switched ${itemName} to recipe option ${index}`);
-  activeRecipeOverrides[itemName] = index;
-
-  // Recalculate everything
-  getSelectedItems();
-
-  // If a tree is open, refresh it
-  if (currentTreeContext) {
-    const zoomLayer = document.getElementById('tree-display');
-    if (zoomLayer) {
-      const newTree = buildRecipeTree(currentTreeContext.name, currentTreeContext.qty);
-      zoomLayer.innerHTML = renderTreeHTML(newTree);
-      // We do NOT reset pan/zoom here so the user context stays stable
-    }
-  }
-};
-
-window.onclick = function (event) {
-  if (!event.target.matches('.drop-btn') && !event.target.closest('.dropdown-content')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    for (var i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-}
-
 function toggleDropdown() {
   document.getElementById("myDropdown").classList.toggle("show");
 }
 
+function toggleItemCompletion(id) {
+  if (completedItems.has(id)) {
+    completedItems.delete(id);
+  } else {
+    completedItems.add(id);
+  }
 
-function initLayoutGrid() {
-  const gridContainer = document.getElementById('layoutGrid');
-  if (!gridContainer) return;
+  const isProgressive = document.getElementById('mode-progressive').checked;
+  if (isProgressive) {
+    runSolverForCurrentContext();
+  }
 
-  gridContainer.innerHTML = ''; // Clear any existing content
+  const zoomLayer = document.getElementById('tree-display');
+  if (zoomLayer && currentTreeData) {
+    zoomLayer.innerHTML = renderTreeHTML(currentTreeData);
+  }
+}
 
-  // Create 100 Cells (10x10)
-  for (let i = 0; i < 100; i++) {
-    const cell = document.createElement('div');
+function getProgressiveCandidates(node, candidates = []) {
+  if (!node) return candidates;
 
-    // Default State: Locked
-    cell.classList.add('grid-cell', 'locked');
-    cell.innerText = 'X';
-    cell.dataset.index = i; // Store index if you need to save logic later
+  const isDone = completedItems.has(node.id);
+  if (isDone) return candidates;
 
-    // Click Event
-    cell.addEventListener('click', function() {
-      toggleGridCell(this);
+  let allChildrenReady = true;
+  if (node.ingredients && node.ingredients.length > 0) {
+    for (const child of node.ingredients) {
+       const isBase = (!child.ingredients || child.ingredients.length === 0);
+       const isChildDone = completedItems.has(child.id);
+
+       if (!isBase && !isChildDone) {
+         allChildrenReady = false;
+         getProgressiveCandidates(child, candidates);
+       }
+    }
+  }
+
+  if (allChildrenReady) {
+    const existing = candidates.find(c => c.id === node.id);
+    if (existing) {
+      existing.quantity += node.min;
+    } else {
+      candidates.push({
+        id: node.id,
+        name: node.name,
+        quantity: node.min,
+        item: mutations.find(m => m.id === node.id)
+      });
+    }
+  }
+
+  return candidates;
+}
+
+function runSolverForCurrentContext() {
+  if (!currentTreeContext) return;
+
+  const modeSingle = document.getElementById('mode-single').checked;
+  const modeMulti = document.getElementById('mode-multiple').checked;
+  const modeProgressive = document.getElementById('mode-progressive').checked;
+
+  const gridCells = document.querySelectorAll('#layoutGrid .grid-cell');
+  const displayContainer = document.getElementById('itemListDisplay');
+
+  let selectionList = [];
+  currentCandidates.clear();
+
+  if (modeProgressive) {
+     if (!currentTreeData) {
+        currentTreeData = buildRecipeTree(currentTreeContext.id, currentTreeContext.qty);
+     }
+     const candidates = getProgressiveCandidates(currentTreeData, []);
+     selectionList = candidates.map(c => {
+       // We add to currentCandidates LATER, only if placed.
+       // But wait, we need to know what we ATTEMPTED to solve for.
+       // User said: "highlight only the ones currently solved for".
+       // "Solved for" usually means "attempted".
+       // But user also said: "Soggybud is highlighed but not solved for" (meaning it didn't fit).
+       // So we should only highlight items that end up in the solution.
+       return { item: c.item, ratio: c.quantity, id: c.id };
+     });
+
+  } else if (modeMulti) {
+     const selectedItems = getSelectedItems();
+     selectionList = selectedItems.map(s => {
+        const fullItem = mutations.find(m => m.id === s.id);
+        return { item: fullItem, ratio: s.quantity, id: s.id };
+     });
+  } else {
+     const fullItemData = mutations.find(i => i.id === currentTreeContext.id);
+     selectionList = [{ item: fullItemData, ratio: 1, id: fullItemData.id }];
+  }
+
+  // Construct Combined Grid State
+  // GH1: 0-99 (Respect locks)
+  // GH2: 100-199 (All open if exists)
+  // GH3: 200-299 (All open if exists)
+
+  let combinedGridState = [];
+
+  // GH1
+  for(let i=0; i<100; i++) {
+    combinedGridState.push(!gh1LockedState.has(i));
+  }
+
+  // GH2
+  if (greenhouseCount >= 2) {
+    for(let i=0; i<100; i++) combinedGridState.push(true);
+  }
+
+  // GH3
+  if (greenhouseCount >= 3) {
+    for(let i=0; i<100; i++) combinedGridState.push(true);
+  }
+
+  console.log("Running Solver...", selectionList, "Grid Size:", combinedGridState.length);
+  const solution = runSolverBestOf(5, selectionList, combinedGridState);
+  lastSolution = solution; // Store for view switching
+
+  renderSolverResults(solution, gridCells);
+
+  // Update Highlights based on ACTUAL placements
+  if (modeProgressive && solution && solution.placements) {
+    const placedIds = new Set(solution.placements.map(p => p.item.id));
+    selectionList.forEach(s => {
+      if (placedIds.has(s.id)) {
+        currentCandidates.add(s.id);
+      }
+    });
+  }
+
+  // Update Sidebar Counts
+  const allAmountSpans = displayContainer.querySelectorAll('.calc-amount');
+  allAmountSpans.forEach(span => span.innerText = "0");
+
+  if (solution && solution.placements) {
+    const counts = {};
+    solution.placements.forEach(p => {
+      const id = p.item.id;
+      counts[id] = (counts[id] || 0) + 1;
     });
 
-    gridContainer.appendChild(cell);
+    Object.keys(counts).forEach(id => {
+      const targetSpan = displayContainer.querySelector(`.calc-amount[data-id="${id}"]`);
+      if (targetSpan) {
+        targetSpan.innerText = counts[id];
+        targetSpan.style.fontWeight = "bold";
+        targetSpan.style.color = "#4ade80";
+      }
+    });
+  }
+
+  const zoomLayer = document.getElementById('tree-display');
+  if (zoomLayer && currentTreeData) {
+    zoomLayer.innerHTML = renderTreeHTML(currentTreeData);
   }
 }
 
-function toggleGridCell(cell) {
-  if (cell.classList.contains('locked')) {
-    // Switch to OPEN
-    cell.classList.remove('locked');
-    cell.classList.add('open');
-    cell.innerText = ''; // Clear the X
-  } else {
-    // Switch back to LOCKED
-    cell.classList.remove('open');
-    cell.classList.add('locked');
-    cell.innerText = 'X';
-  }
-}
+// --- Geometry Helpers (Updated for Multi-Grid) ---
 
+const getCropIndices = (globalIndex, size) => {
+  const gridIdx = Math.floor(globalIndex / 100);
+  const localIdx = globalIndex % 100;
+  const tx = localIdx % 10;
+  const ty = Math.floor(localIdx / 10);
 
-/* =========================================
-   SOLVER LOGIC: ATOMIC PLACEMENT (Guaranteed Stability)
-   ========================================= */
-
-const getCropIndices = (topLeftIndex, size) => {
   const indices = [];
-  const tx = topLeftIndex % 10;
-  const ty = Math.floor(topLeftIndex / 10);
   for (let dy = 0; dy < size; dy++) {
     for (let dx = 0; dx < size; dx++) {
       const nx = tx + dx;
       const ny = ty + dy;
-      if (nx < 0 || nx > 9 || ny < 0 || ny > 9) return null;
-      indices.push(ny * 10 + nx);
+      // Check bounds within the 10x10 subgrid
+      if (nx > 9 || ny > 9) return null;
+
+      indices.push(gridIdx * 100 + ny * 10 + nx);
     }
   }
   return indices;
 };
 
-const getRingNeighbors = (topLeftIndex, size) => {
-  const tx = topLeftIndex % 10;
-  const ty = Math.floor(topLeftIndex / 10);
+const getRingNeighbors = (globalIndex, size) => {
+  const gridIdx = Math.floor(globalIndex / 100);
+  const localIdx = globalIndex % 100;
+  const tx = localIdx % 10;
+  const ty = Math.floor(localIdx / 10);
+
   const neighbors = [];
   for (let dy = -1; dy <= size; dy++) {
     for (let dx = -1; dx <= size; dx++) {
@@ -750,24 +722,20 @@ const getRingNeighbors = (topLeftIndex, size) => {
       const nx = tx + dx;
       const ny = ty + dy;
       if (nx >= 0 && nx <= 9 && ny >= 0 && ny <= 9) {
-        neighbors.push(ny * 10 + nx);
+        neighbors.push(gridIdx * 100 + ny * 10 + nx);
       }
     }
   }
   return neighbors;
 };
 
-/* --- ATOMIC SOLVER ---
-   Places Mutation + Ingredients in one step.
-*/
+/* --- ATOMIC SOLVER --- */
 const runMultiSolver = (selectionList, gridState) => {
-  const INITIAL_DATA = mutations; // Access global data
+  const INITIAL_DATA = mutations;
 
-  // 1. Setup Result Container
   let bestScore = -1;
   let bestResult = { placements: [], layout: {} };
 
-  // 2. Prepare Targets
   const totalRatio = selectionList.reduce((acc, cur) => acc + cur.ratio, 0);
   const normalizedTargets = selectionList.map(s => ({
     ...s,
@@ -775,128 +743,112 @@ const runMultiSolver = (selectionList, gridState) => {
     placedCount: 0
   }));
 
-  const ATTEMPTS = 100; // High speed iterations
+  const ATTEMPTS = 100;
 
   for (let run = 0; run < ATTEMPTS; run++) {
-    // Current Run State
-    let currentPlacements = []; // [{index, item}]
-    let currentLayout = {};     // {index: IngredientItem}
+    let currentPlacements = [];
+    let currentLayout = {};
     let placedCounts = selectionList.map(() => 0);
 
-    // Occupied Set (Tracks both Mutations AND Ingredients)
     let occupied = new Set();
-    gridState.forEach((isOpen, idx) => { if(!isOpen) occupied.add(idx); }); // Add locked cells
+    gridState.forEach((isOpen, idx) => { if(!isOpen) occupied.add(idx); });
 
-    // Shuffle Grid Start Positions
     let openCells = gridState.map((isOpen, idx) => isOpen ? idx : -1).filter(i => i !== -1);
     openCells.sort(() => Math.random() - 0.5);
 
-    // --- PLACEMENT LOOP ---
-    for (const cellIndex of openCells) {
-      if (occupied.has(cellIndex)) continue; // Skip if already taken by previous placement
+    const passes = ['STRICT', 'FILL'];
 
-      const totalPlaced = currentPlacements.length || 1;
+    for (const pass of passes) {
+        for (const cellIndex of openCells) {
+          if (occupied.has(cellIndex)) continue;
 
-      // Prioritize items that are "behind" on their ratio
-      const candidates = selectionList.map((s, i) => ({
-        id: i,
-        item: s.item,
-        deficit: (placedCounts[i] / totalPlaced) - normalizedTargets[i].weight
-      }));
+          const totalPlaced = currentPlacements.length || 1;
 
-      candidates.sort((a, b) => a.deficit - b.deficit); // Highest deficit first
+          const candidates = selectionList.map((s, i) => ({
+            id: i,
+            item: s.item,
+            deficit: (placedCounts[i] / totalPlaced) - normalizedTargets[i].weight,
+            isCapped: placedCounts[i] >= s.ratio
+          }));
 
-      // Try candidates in order
-      for (const candidate of candidates) {
-        const item = candidate.item;
-        const mSize = item.size || 1;
-        const indices = getCropIndices(cellIndex, mSize);
+          let validCandidates = candidates;
+          if (pass === 'STRICT') {
+             validCandidates = candidates.filter(c => !c.isCapped);
+          }
 
-        // A. Basic Space Check (For the Mutation itself)
-        if (!indices) continue; // Bounds check
-        if (indices.some(idx => occupied.has(idx))) continue; // Overlap check
+          if (validCandidates.length === 0) continue;
 
-        // B. Atomic Ingredient Check (Can we satisfy needs RIGHT NOW?)
-        // Calculate raw needs
-        const requiredIngredients = [];
-        if (item.requirements) {
-          item.requirements.forEach(req => {
-            for(let k=0; k<req.amount; k++) requiredIngredients.push(req.id);
-          });
-        }
+          validCandidates.sort((a, b) => a.deficit - b.deficit);
 
-        // If no requirements, easy placement
-        if (requiredIngredients.length === 0) {
-          // Success! Place it.
-          indices.forEach(idx => occupied.add(idx));
-          currentPlacements.push({ index: cellIndex, item: item });
-          placedCounts[candidate.id]++;
-          break; // Move to next cell
-        }
+          for (const candidate of validCandidates) {
+            const item = candidate.item;
+            const mSize = item.size || 1;
+            const indices = getCropIndices(cellIndex, mSize);
 
-        // C. Check Neighbors for Ingredients
-        const neighbors = getRingNeighbors(cellIndex, mSize);
-        const validNeighbors = neighbors.filter(n => gridState[n] && !indices.includes(n)); // Exclude self
+            if (!indices) continue;
+            if (indices.some(idx => occupied.has(idx))) continue;
 
-        // We need to match requirements to neighbors.
-        // 1. Use Existing: Check if a neighbor ALREADY has the needed ingredient.
-        // 2. Place New: Use an empty neighbor.
+            const requiredIngredients = [];
+            if (item.requirements) {
+              item.requirements.forEach(req => {
+                for(let k=0; k<req.amount; k++) requiredIngredients.push(req.id);
+              });
+            }
 
-        let satisfiedCount = 0;
-        let spotsToFill = []; // { index: 55, itemId: "wheat" }
+            if (requiredIngredients.length === 0) {
+              indices.forEach(idx => occupied.add(idx));
+              currentPlacements.push({ index: cellIndex, item: item });
+              placedCounts[candidate.id]++;
+              break;
+            }
 
-        // Clone needs so we can tick them off
-        let pendingNeeds = [...requiredIngredients];
+            const neighbors = getRingNeighbors(cellIndex, mSize);
+            const validNeighbors = neighbors.filter(n => gridState[n] && !indices.includes(n));
 
-        // Step C1: Check Existing Layout
-        for (const nIdx of validNeighbors) {
-          if (currentLayout[nIdx]) {
-            const existingId = currentLayout[nIdx].id;
-            const needIdx = pendingNeeds.indexOf(existingId);
-            if (needIdx > -1) {
-              pendingNeeds.splice(needIdx, 1); // Satisfied by existing!
+            let satisfiedCount = 0;
+            let spotsToFill = [];
+            let pendingNeeds = [...requiredIngredients];
+
+            for (const nIdx of validNeighbors) {
+              if (currentLayout[nIdx]) {
+                const existingId = currentLayout[nIdx].id;
+                const needIdx = pendingNeeds.indexOf(existingId);
+                if (needIdx > -1) {
+                  pendingNeeds.splice(needIdx, 1);
+                }
+              }
+            }
+
+            if (pendingNeeds.length > 0) {
+              const emptyNeighbors = validNeighbors.filter(n => !occupied.has(n));
+
+              if (emptyNeighbors.length >= pendingNeeds.length) {
+                for (let i = 0; i < pendingNeeds.length; i++) {
+                  spotsToFill.push({ index: emptyNeighbors[i], itemId: pendingNeeds[i] });
+                }
+                pendingNeeds = [];
+              }
+            }
+
+            if (pendingNeeds.length === 0) {
+              indices.forEach(idx => occupied.add(idx));
+              currentPlacements.push({ index: cellIndex, item: item });
+              placedCounts[candidate.id]++;
+
+              spotsToFill.forEach(fill => {
+                occupied.add(fill.index);
+                const ingData = INITIAL_DATA.find(d => d.id === fill.itemId);
+                if (ingData) {
+                  currentLayout[fill.index] = ingData;
+                }
+              });
+
+              break;
             }
           }
         }
-
-        // Step C2: Fill Empty Spots
-        if (pendingNeeds.length > 0) {
-          // Find empty valid neighbors
-          const emptyNeighbors = validNeighbors.filter(n => !occupied.has(n));
-
-          if (emptyNeighbors.length >= pendingNeeds.length) {
-            // We have enough space! Assign them.
-            for (let i = 0; i < pendingNeeds.length; i++) {
-              spotsToFill.push({ index: emptyNeighbors[i], itemId: pendingNeeds[i] });
-            }
-            pendingNeeds = []; // All accounted for
-          }
-        }
-
-        // D. Final Decision
-        if (pendingNeeds.length === 0) {
-          // SUCCESS - COMMIT EVERYTHING
-
-          // 1. Mark Mutation Spots
-          indices.forEach(idx => occupied.add(idx));
-          currentPlacements.push({ index: cellIndex, item: item });
-          placedCounts[candidate.id]++;
-
-          // 2. Mark Ingredient Spots
-          spotsToFill.forEach(fill => {
-            occupied.add(fill.index);
-            const ingData = INITIAL_DATA.find(d => d.id === fill.itemId);
-            if (ingData) {
-              currentLayout[fill.index] = ingData;
-            }
-          });
-
-          break; // Success, stop checking candidates for this cell
-        }
-      }
     }
 
-    // End of Run - Check Score
     if (currentPlacements.length > bestScore) {
       bestScore = currentPlacements.length;
       bestResult = { placements: [...currentPlacements], layout: {...currentLayout} };
@@ -906,25 +858,39 @@ const runMultiSolver = (selectionList, gridState) => {
   return bestResult;
 };
 
-/* --- RENDERER (Ensure this matches your latest version) --- */
 function renderSolverResults(solution, gridCells) {
-  // 1. Reset Grid
+  // Reset Grid (Only current view)
   gridCells.forEach(cell => {
     cell.classList.remove('mutation-spot', 'ingredient-spot');
     const img = cell.querySelector('img');
     if (img) img.remove();
-    cell.innerText = cell.classList.contains('locked') ? 'X' : '';
+    // Restore lock state visual
+    const index = parseInt(cell.dataset.index);
+    if (currentGreenhouseView === 0 && gh1LockedState.has(index)) {
+       cell.innerText = 'X';
+    } else {
+       cell.innerText = '';
+    }
   });
 
   if (!solution || !solution.placements || solution.placements.length === 0) {
-    console.warn("Solver: No layout generated.");
     return;
   }
 
-  // 2. Draw Mutation Spots
+  // Filter placements for current view
+  const viewStart = currentGreenhouseView * 100;
+  const viewEnd = viewStart + 100;
+
+  // Draw Mutation Spots
   solution.placements.forEach(obj => {
+    // Check if this placement belongs to current view
+    // Note: A placement might span boundaries? No, getCropIndices prevents that.
+    if (obj.index < viewStart || obj.index >= viewEnd) return;
+
+    const localIndex = obj.index - viewStart;
     const mSize = obj.item.size || 1;
-    const indices = getCropIndices(obj.index, mSize);
+    // We need local indices for rendering
+    const indices = getCropIndices(localIndex, mSize); // Use local index for geometry relative to 0-99
     if (!indices) return;
 
     indices.forEach(idx => {
@@ -933,7 +899,6 @@ function renderSolverResults(solution, gridCells) {
         cell.classList.add('mutation-spot');
         cell.innerText = '';
 
-        // Add Image
         const img = document.createElement('img');
         img.src = obj.item.image ? obj.item.image : `assets/images/${obj.item.name.toLowerCase().replace(/\s/g, '_')}.png`;
         img.onerror = function() { this.style.display = 'none'; this.parentNode.innerText = 'M'; };
@@ -942,11 +907,15 @@ function renderSolverResults(solution, gridCells) {
     });
   });
 
-  // 3. Draw Ingredients
+  // Draw Ingredients
   Object.keys(solution.layout).forEach(key => {
-    const index = parseInt(key); // Fix string key
-    if (gridCells[index]) {
-      const cell = gridCells[index];
+    const globalIndex = parseInt(key);
+    if (globalIndex < viewStart || globalIndex >= viewEnd) return;
+
+    const localIndex = globalIndex - viewStart;
+
+    if (gridCells[localIndex]) {
+      const cell = gridCells[localIndex];
       const item = solution.layout[key];
 
       cell.classList.add('ingredient-spot');
@@ -965,7 +934,6 @@ function runSolverBestOf(attempts, selectionList, gridState) {
   let bestGlobalResult = { placements: [], layout: {} };
 
   for (let i = 0; i < attempts; i++) {
-    // Run the solver (which already does 100 internal attempts, so this is very thorough)
     const result = runMultiSolver(selectionList, gridState);
 
     if (result && result.placements.length > bestGlobalScore) {

@@ -7,7 +7,7 @@
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="dropdown.css">
-  <script src="script.js?v=2"></script>
+  <script src="script.js?v=5"></script>
  <!-- <script src="data/tempMutation.js"></script> -->
 </head>
 <body>
@@ -90,6 +90,24 @@
 
               <input type="radio" id="mode-multiple" name="solver-mode">
               <label for="mode-multiple">Multiple</label>
+
+              <input type="radio" id="mode-progressive" name="solver-mode">
+              <label for="mode-progressive">Progressive</label>
+            </div>
+          </div>
+
+          <!-- NEW: Greenhouse Controls -->
+          <div class="layout-controls" style="text-align: center; margin-top: 10px; border-top: 1px solid #333; padding-top: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+              <span style="font-size: 0.8rem; color: #a0a0a0;">Greenhouses:</span>
+              <div style="display: flex; gap: 5px;">
+                <button id="gh-add-btn" class="gh-btn" onclick="addGreenhouse()">+ Add</button>
+                <button id="gh-remove-btn" class="gh-btn" onclick="removeGreenhouse()">- Remove</button>
+              </div>
+            </div>
+            <div id="gh-selector" style="display: flex; gap: 5px; justify-content: center;">
+              <button class="view-btn active" onclick="viewGreenhouse(0)">1</button>
+              <!-- Buttons 2 and 3 will be added dynamically -->
             </div>
           </div>
 
