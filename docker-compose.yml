@@ -1,0 +1,43 @@
+version: '3'
+
+networks:
+  kazzhub-net:
+    driver: bridge
+
+services:
+  tunnel:
+    command: >-
+      tunnel run --token XXXXXX
+    container_name: kazzhub-tunnel
+    image: cloudflare/cloudflared:latest
+    networks:
+      - kazzhub-net
+    restart: always
+
+  watchtowerkazz:
+    command: '--interval 300 --cleanup'
+    container_name: watchtowerkazz
+    image: containrrr/watchtower
+    networks:
+      - kazzhub-net
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  web:
+    container_name: kazzhub
+    image: ghcr.io/fizzhatmc/kazzhub:latest
+    networks:
+      - kazzhub-net
+    ports:
+      - '9046:80'
+    restart: always
+
+  backend:
+    container_name: kazzhub-backend
+    image: ghcr.io/fizzhatmc/kazzhub-backend:latest
+    networks:
+      - kazzhub-net
+    ports:
+      - '3000:3000'
+    restart: always
