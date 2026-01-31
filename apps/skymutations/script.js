@@ -28,6 +28,7 @@ let lastSolution = null; // Store solution to re-render on view switch
 
 const APP_STATE_KEY = 'skymutations_app_state';
 const FAVORITES_KEY = 'skymutations_favorites';
+const API_BASE_URL = 'https://api.kazz.wtf'; // Production Endpoint
 
 const SolverCache = {
   KEY: 'skymutations_solver_cache',
@@ -94,7 +95,7 @@ function loadAppState() {
       if (state.completedItems) completedItems = new Set(state.completedItems);
       if (state.gameId && document.getElementById('gameIdInput')) {
         document.getElementById('gameIdInput').value = state.gameId;
-        // Simulate connection if ID exists
+        // Auto-connect if ID exists
         if(state.gameId) connectGame(true);
       }
     }
@@ -106,7 +107,7 @@ function loadAppState() {
 
 // --- SYNC & FAVORITES ---
 
-function connectGame(silent = false) {
+async function connectGame(silent = false) {
   const gameId = document.getElementById('gameIdInput').value;
   const statusSpan = document.getElementById('syncStatus');
 
@@ -115,13 +116,40 @@ function connectGame(silent = false) {
     return;
   }
 
-  // Mock Connection
   statusSpan.innerText = "Connecting...";
-  setTimeout(() => {
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/sync/${gameId}`);
+
+    if (res.status === 404) {
+       // ID not found on server yet (Mod hasn't sent data?)
+       // We treat this as "Linked but waiting for data" or just keep local state
+       statusSpan.innerText = "Linked (No Data)";
+       if(!silent) console.log("Game ID linked, but no server data found yet.");
+       saveAppState();
+       return;
+    }
+
+    if (!res.ok) throw new Error("Connection failed");
+
+    const data = await res.json();
+
+    // Update State from Server
+    if (data.greenhouseCount) greenhouseCount = data.greenhouseCount;
+    if (data.gh1LockedState) gh1LockedState = new Set(data.gh1LockedState);
+
     statusSpan.innerText = "Linked ✓";
     saveAppState();
-    // Here you would fetch data from backend
-  }, 500);
+
+    // Refresh UI
+    updateGreenhouseControls();
+    renderGrid();
+
+  } catch (e) {
+    console.error(e);
+    statusSpan.innerText = "Error";
+    if(!silent) alert("Could not connect to server. Check your internet or Game ID.");
+  }
 }
 
 function saveCurrentProfile() {
@@ -233,7 +261,7 @@ function renderFavorites() {
   }
 }
 
-function uploadToGame() {
+async function uploadToGame() {
   const gameId = document.getElementById('gameIdInput').value;
   if (!gameId) {
     alert("Please link a Game ID first.");
@@ -245,13 +273,27 @@ function uploadToGame() {
     return;
   }
 
-  // Mock Upload
-  alert(`Uploading layout for ${currentTreeContext.name} to Game ID: ${gameId}...`);
-  console.log("Uploading payload:", {
-    gameId,
-    layout: lastSolution.layout,
-    placements: lastSolution.placements
-  });
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/layout/${gameId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        profileName: currentTreeContext ? currentTreeContext.name : 'Custom Layout',
+        greenhouseView: currentGreenhouseView,
+        placements: lastSolution.placements,
+        layout: lastSolution.layout
+      })
+    });
+
+    if (res.ok) {
+      alert("Layout uploaded to Minecraft!");
+    } else {
+      throw new Error("Server error");
+    }
+  } catch (e) {
+    console.error(e);
+    alert("Failed to upload layout. Check connection.");
+  }
 }
 
 // ---

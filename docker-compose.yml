@@ -7,7 +7,7 @@ networks:
 services:
   tunnel:
     command: >-
-      tunnel run --token XXXXXX
+      tunnel run --token XXXXX
     container_name: kazzhub-tunnel
     image: cloudflare/cloudflared:latest
     networks:
