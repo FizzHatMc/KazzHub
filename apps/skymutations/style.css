@@ -660,3 +660,62 @@ header {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* --- Sync & Favorites --- */
+.sync-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sync-input {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  width: 150px;
+}
+
+.sync-status {
+  font-size: 0.8rem;
+  color: #4ade80;
+}
+
+.favorites-list {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+.favorite-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #30363d;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.favorite-item:hover {
+  background: #2a2a2a;
+}
+
+.fav-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.fav-btn {
+  background: none;
+  border: none;
+  color: #8b949e;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.fav-btn:hover {
+  color: white;
+}

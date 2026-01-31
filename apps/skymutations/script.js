@@ -27,19 +27,16 @@ let lastSolution = null; // Store solution to re-render on view switch
 // --- CACHE & PERSISTENCE ---
 
 const APP_STATE_KEY = 'skymutations_app_state';
+const FAVORITES_KEY = 'skymutations_favorites';
 
 const SolverCache = {
   KEY: 'skymutations_solver_cache',
   LIMIT: 50,
 
   generateKey: (selectionList, gridState) => {
-    // Sort selection to ensure order independence
     const sortedSel = [...selectionList].sort((a, b) => a.id.localeCompare(b.id));
     const selStr = sortedSel.map(s => `${s.id}:${s.ratio}`).join('|');
-
-    // Compress grid state (0/1 string)
     const gridStr = gridState.map(b => b ? '1' : '0').join('');
-
     return `${selStr}#${gridStr}`;
   },
 
@@ -50,7 +47,6 @@ const SolverCache = {
       const cache = JSON.parse(raw);
       const entry = cache.find(e => e.key === key);
       if (entry) {
-        // Update timestamp (LRU)
         entry.lastUsed = Date.now();
         localStorage.setItem(SolverCache.KEY, JSON.stringify(cache));
         return entry.solution;
@@ -65,21 +61,12 @@ const SolverCache = {
     try {
       const raw = localStorage.getItem(SolverCache.KEY);
       let cache = raw ? JSON.parse(raw) : [];
-
-      // Remove existing if any
       cache = cache.filter(e => e.key !== key);
-
-      // Add new
       cache.push({ key, solution, lastUsed: Date.now() });
-
-      // Sort by lastUsed desc
       cache.sort((a, b) => b.lastUsed - a.lastUsed);
-
-      // Trim
       if (cache.length > SolverCache.LIMIT) {
         cache = cache.slice(0, SolverCache.LIMIT);
       }
-
       localStorage.setItem(SolverCache.KEY, JSON.stringify(cache));
     } catch (e) {
       console.error("Cache save error", e);
@@ -91,7 +78,8 @@ function saveAppState() {
   const state = {
     greenhouseCount,
     gh1LockedState: Array.from(gh1LockedState),
-    completedItems: Array.from(completedItems)
+    completedItems: Array.from(completedItems),
+    gameId: document.getElementById('gameIdInput') ? document.getElementById('gameIdInput').value : ''
   };
   localStorage.setItem(APP_STATE_KEY, JSON.stringify(state));
 }
@@ -104,10 +92,166 @@ function loadAppState() {
       if (state.greenhouseCount) greenhouseCount = state.greenhouseCount;
       if (state.gh1LockedState) gh1LockedState = new Set(state.gh1LockedState);
       if (state.completedItems) completedItems = new Set(state.completedItems);
+      if (state.gameId && document.getElementById('gameIdInput')) {
+        document.getElementById('gameIdInput').value = state.gameId;
+        // Simulate connection if ID exists
+        if(state.gameId) connectGame(true);
+      }
     }
+    renderFavorites();
   } catch (e) {
     console.error("State load error", e);
   }
+}
+
+// --- SYNC & FAVORITES ---
+
+function connectGame(silent = false) {
+  const gameId = document.getElementById('gameIdInput').value;
+  const statusSpan = document.getElementById('syncStatus');
+
+  if (!gameId) {
+    if(!silent) alert("Please enter a Game ID");
+    return;
+  }
+
+  // Mock Connection
+  statusSpan.innerText = "Connecting...";
+  setTimeout(() => {
+    statusSpan.innerText = "Linked ✓";
+    saveAppState();
+    // Here you would fetch data from backend
+  }, 500);
+}
+
+function saveCurrentProfile() {
+  if (!currentTreeContext) {
+    alert("No active profile to save.");
+    return;
+  }
+
+  const name = prompt("Enter a name for this profile:", currentTreeContext.name);
+  if (!name) return;
+
+  const profile = {
+    id: Date.now().toString(),
+    name: name,
+    context: currentTreeContext,
+    completedItems: Array.from(completedItems),
+    greenhouseCount: greenhouseCount,
+    gh1LockedState: Array.from(gh1LockedState)
+  };
+
+  try {
+    const raw = localStorage.getItem(FAVORITES_KEY);
+    const favs = raw ? JSON.parse(raw) : [];
+    favs.push(profile);
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
+    renderFavorites();
+  } catch (e) {
+    console.error("Save fav error", e);
+  }
+}
+
+function loadProfile(id) {
+  try {
+    const raw = localStorage.getItem(FAVORITES_KEY);
+    if (!raw) return;
+    const favs = JSON.parse(raw);
+    const profile = favs.find(p => p.id === id);
+
+    if (profile) {
+      // Restore State
+      greenhouseCount = profile.greenhouseCount || 1;
+      gh1LockedState = new Set(profile.gh1LockedState || []);
+      completedItems = new Set(profile.completedItems || []);
+
+      // Update UI
+      updateGreenhouseControls();
+      renderGrid();
+
+      // Load Context
+      currentTreeContext = profile.context;
+      lastContextId = currentTreeContext.id;
+
+      // Trigger Build
+      currentTreeData = buildRecipeTree(currentTreeContext.id, currentTreeContext.qty);
+      const zoomLayer = document.getElementById('tree-display');
+      if (zoomLayer) {
+        zoomLayer.innerHTML = renderTreeHTML(currentTreeData);
+      }
+
+      runSolverForCurrentContext();
+    }
+  } catch (e) {
+    console.error("Load fav error", e);
+  }
+}
+
+function deleteProfile(id) {
+  if(!confirm("Delete this profile?")) return;
+  try {
+    const raw = localStorage.getItem(FAVORITES_KEY);
+    if (!raw) return;
+    let favs = JSON.parse(raw);
+    favs = favs.filter(p => p.id !== id);
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
+    renderFavorites();
+  } catch (e) {
+    console.error("Delete fav error", e);
+  }
+}
+
+function renderFavorites() {
+  const list = document.getElementById('favoritesList');
+  if (!list) return;
+  list.innerHTML = '';
+
+  try {
+    const raw = localStorage.getItem(FAVORITES_KEY);
+    const favs = raw ? JSON.parse(raw) : [];
+
+    if (favs.length === 0) {
+      list.innerHTML = '<div style="text-align: center; color: #555; font-size: 0.8rem; padding: 10px;">No saved profiles</div>';
+      return;
+    }
+
+    favs.forEach(fav => {
+      const item = document.createElement('div');
+      item.className = 'favorite-item';
+      item.innerHTML = `
+        <span onclick="loadProfile('${fav.id}')">${fav.name}</span>
+        <div class="fav-actions">
+          <button class="fav-btn" onclick="loadProfile('${fav.id}')" title="Load">📂</button>
+          <button class="fav-btn" onclick="deleteProfile('${fav.id}')" title="Delete">🗑</button>
+        </div>
+      `;
+      list.appendChild(item);
+    });
+  } catch (e) {
+    console.error("Render fav error", e);
+  }
+}
+
+function uploadToGame() {
+  const gameId = document.getElementById('gameIdInput').value;
+  if (!gameId) {
+    alert("Please link a Game ID first.");
+    return;
+  }
+
+  if (!lastSolution) {
+    alert("No active solution to upload.");
+    return;
+  }
+
+  // Mock Upload
+  alert(`Uploading layout for ${currentTreeContext.name} to Game ID: ${gameId}...`);
+  console.log("Uploading payload:", {
+    gameId,
+    layout: lastSolution.layout,
+    placements: lastSolution.placements
+  });
 }
 
 // ---
@@ -457,13 +601,6 @@ document.addEventListener('DOMContentLoaded', async function () {
       currentTreeContext = { id: itemId, name: itemName, qty: qtyNeeded };
 
       if (lastContextId !== itemId) {
-         // Don't clear completedItems if we want persistence across sessions for the same item?
-         // But user might want to start fresh for a new item.
-         // Let's keep the logic: clear if ID changes.
-         // But since we load completedItems from storage, we might have old data.
-         // If the user switches items, we probably should clear.
-         // But if they refresh the page, we want to keep it.
-         // So: if lastContextId is null (first load), don't clear.
          if (lastContextId !== null) {
              completedItems.clear();
              currentCandidates.clear();
