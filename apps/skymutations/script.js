@@ -24,10 +24,99 @@ for(let i=0; i<100; i++) gh1LockedState.add(i);
 
 let lastSolution = null; // Store solution to re-render on view switch
 
+// --- CACHE & PERSISTENCE ---
+
+const APP_STATE_KEY = 'skymutations_app_state';
+
+const SolverCache = {
+  KEY: 'skymutations_solver_cache',
+  LIMIT: 50,
+
+  generateKey: (selectionList, gridState) => {
+    // Sort selection to ensure order independence
+    const sortedSel = [...selectionList].sort((a, b) => a.id.localeCompare(b.id));
+    const selStr = sortedSel.map(s => `${s.id}:${s.ratio}`).join('|');
+
+    // Compress grid state (0/1 string)
+    const gridStr = gridState.map(b => b ? '1' : '0').join('');
+
+    return `${selStr}#${gridStr}`;
+  },
+
+  get: (key) => {
+    try {
+      const raw = localStorage.getItem(SolverCache.KEY);
+      if (!raw) return null;
+      const cache = JSON.parse(raw);
+      const entry = cache.find(e => e.key === key);
+      if (entry) {
+        // Update timestamp (LRU)
+        entry.lastUsed = Date.now();
+        localStorage.setItem(SolverCache.KEY, JSON.stringify(cache));
+        return entry.solution;
+      }
+    } catch (e) {
+      console.error("Cache read error", e);
+    }
+    return null;
+  },
+
+  save: (key, solution) => {
+    try {
+      const raw = localStorage.getItem(SolverCache.KEY);
+      let cache = raw ? JSON.parse(raw) : [];
+
+      // Remove existing if any
+      cache = cache.filter(e => e.key !== key);
+
+      // Add new
+      cache.push({ key, solution, lastUsed: Date.now() });
+
+      // Sort by lastUsed desc
+      cache.sort((a, b) => b.lastUsed - a.lastUsed);
+
+      // Trim
+      if (cache.length > SolverCache.LIMIT) {
+        cache = cache.slice(0, SolverCache.LIMIT);
+      }
+
+      localStorage.setItem(SolverCache.KEY, JSON.stringify(cache));
+    } catch (e) {
+      console.error("Cache save error", e);
+    }
+  }
+};
+
+function saveAppState() {
+  const state = {
+    greenhouseCount,
+    gh1LockedState: Array.from(gh1LockedState),
+    completedItems: Array.from(completedItems)
+  };
+  localStorage.setItem(APP_STATE_KEY, JSON.stringify(state));
+}
+
+function loadAppState() {
+  try {
+    const raw = localStorage.getItem(APP_STATE_KEY);
+    if (raw) {
+      const state = JSON.parse(raw);
+      if (state.greenhouseCount) greenhouseCount = state.greenhouseCount;
+      if (state.gh1LockedState) gh1LockedState = new Set(state.gh1LockedState);
+      if (state.completedItems) completedItems = new Set(state.completedItems);
+    }
+  } catch (e) {
+    console.error("State load error", e);
+  }
+}
+
+// ---
+
 function unlockAll(){
   if (currentGreenhouseView !== 0) return; // Only GH1 can be locked/unlocked
   gh1LockedState.clear();
   renderGrid();
+  saveAppState();
 }
 
 function resetGrid() {
@@ -35,6 +124,7 @@ function resetGrid() {
   gh1LockedState.clear();
   for(let i=0; i<100; i++) gh1LockedState.add(i);
   renderGrid();
+  saveAppState();
 }
 
 // --- Greenhouse Management ---
@@ -52,6 +142,7 @@ function addGreenhouse() {
   updateGreenhouseControls();
   // Switch to new greenhouse
   viewGreenhouse(greenhouseCount - 1);
+  saveAppState();
 
   // Re-run solver to utilize new space
   runSolverForCurrentContext();
@@ -65,6 +156,7 @@ function removeGreenhouse() {
   }
   updateGreenhouseControls();
   viewGreenhouse(currentGreenhouseView);
+  saveAppState();
 
   // Re-run solver
   runSolverForCurrentContext();
@@ -144,6 +236,8 @@ function toggleGridCell(index) {
     gh1LockedState.add(index);
   }
 
+  saveAppState();
+
   // Update UI directly for performance
   const cell = document.querySelector(`#layoutGrid .grid-cell[data-index="${index}"]`);
   if (cell) {
@@ -158,6 +252,8 @@ function setGridState(x, y, isOpen) {
   const index = (y * 10) + x;
   if (isOpen) gh1LockedState.delete(index);
   else gh1LockedState.add(index);
+
+  saveAppState();
 
   // Update UI
   const cell = document.querySelector(`#layoutGrid .grid-cell[data-index="${index}"]`);
@@ -259,7 +355,26 @@ function toggleHelp() {
   }
 }
 
+function toggleDropdown() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+window.onclick = function (event) {
+  if (!event.target.matches('.drop-btn') && !event.target.closest('.dropdown-content')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    for (var i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async function () {
+    // Load persisted state
+    loadAppState();
+
     try {
       const response = await fetch('data/mutations.json');
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -342,8 +457,18 @@ document.addEventListener('DOMContentLoaded', async function () {
       currentTreeContext = { id: itemId, name: itemName, qty: qtyNeeded };
 
       if (lastContextId !== itemId) {
-         completedItems.clear();
-         currentCandidates.clear();
+         // Don't clear completedItems if we want persistence across sessions for the same item?
+         // But user might want to start fresh for a new item.
+         // Let's keep the logic: clear if ID changes.
+         // But since we load completedItems from storage, we might have old data.
+         // If the user switches items, we probably should clear.
+         // But if they refresh the page, we want to keep it.
+         // So: if lastContextId is null (first load), don't clear.
+         if (lastContextId !== null) {
+             completedItems.clear();
+             currentCandidates.clear();
+             saveAppState();
+         }
          lastContextId = itemId;
       }
 
@@ -525,16 +650,13 @@ function renderTreeHTML(node) {
   return html;
 }
 
-function toggleDropdown() {
-  document.getElementById("myDropdown").classList.toggle("show");
-}
-
 function toggleItemCompletion(id) {
   if (completedItems.has(id)) {
     completedItems.delete(id);
   } else {
     completedItems.add(id);
   }
+  saveAppState();
 
   const isProgressive = document.getElementById('mode-progressive').checked;
   if (isProgressive) {
@@ -602,12 +724,6 @@ function runSolverForCurrentContext() {
      }
      const candidates = getProgressiveCandidates(currentTreeData, []);
      selectionList = candidates.map(c => {
-       // We add to currentCandidates LATER, only if placed.
-       // But wait, we need to know what we ATTEMPTED to solve for.
-       // User said: "highlight only the ones currently solved for".
-       // "Solved for" usually means "attempted".
-       // But user also said: "Soggybud is highlighed but not solved for" (meaning it didn't fit).
-       // So we should only highlight items that end up in the solution.
        return { item: c.item, ratio: c.quantity, id: c.id };
      });
 
@@ -623,30 +739,32 @@ function runSolverForCurrentContext() {
   }
 
   // Construct Combined Grid State
-  // GH1: 0-99 (Respect locks)
-  // GH2: 100-199 (All open if exists)
-  // GH3: 200-299 (All open if exists)
-
   let combinedGridState = [];
-
-  // GH1
   for(let i=0; i<100; i++) {
     combinedGridState.push(!gh1LockedState.has(i));
   }
-
-  // GH2
   if (greenhouseCount >= 2) {
     for(let i=0; i<100; i++) combinedGridState.push(true);
   }
-
-  // GH3
   if (greenhouseCount >= 3) {
     for(let i=0; i<100; i++) combinedGridState.push(true);
   }
 
-  console.log("Running Solver...", selectionList, "Grid Size:", combinedGridState.length);
-  const solution = runSolverBestOf(5, selectionList, combinedGridState);
-  lastSolution = solution; // Store for view switching
+  // --- CACHE CHECK ---
+  const cacheKey = SolverCache.generateKey(selectionList, combinedGridState);
+  const cachedSolution = SolverCache.get(cacheKey);
+
+  let solution;
+  if (cachedSolution) {
+    console.log("Using Cached Solution");
+    solution = cachedSolution;
+  } else {
+    console.log("Running Solver...", selectionList, "Grid Size:", combinedGridState.length);
+    solution = runSolverBestOf(5, selectionList, combinedGridState);
+    SolverCache.save(cacheKey, solution);
+  }
+
+  lastSolution = solution;
 
   renderSolverResults(solution, gridCells);
 
