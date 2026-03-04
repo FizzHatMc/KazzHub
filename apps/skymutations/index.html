@@ -4,11 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SkyMutations - KazzHub</title>
-
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="dropdown.css">
-  <script src="script.js?v=6"></script>
- <!-- <script src="data/tempMutation.js"></script> -->
+  <script src="script.js?v=7"></script>
 </head>
 <body>
 <header>
@@ -23,179 +21,216 @@
       </div>
     </div>
 
-    <button onclick="toggleHelp()" class="icon-btn" title="Show Instructions">
-      ?
-    </button>
+    <button onclick="toggleHelp()" class="icon-btn" title="Show Instructions">?</button>
   </nav>
 </header>
 
 <main>
-
   <div class="workspace">
     <h1>SkyMutations</h1>
 
-
-    <div class="app-layout">
-      <div class="sidebar-column">
-
-        <!-- Favorites Panel -->
-        <div class="card">
-           <div class="layout-header" style="margin-bottom: 10px;">
-              <div class="header-title">★ SAVED PROFILES</div>
-           </div>
-           <div id="favoritesList" class="favorites-list">
-             <div style="text-align: center; color: #555; font-size: 0.8rem; padding: 10px;">No saved profiles</div>
-           </div>
-        </div>
-
-        <div class="complex-dropdown card">
-          <button onclick="toggleDropdown()" class="drop-btn">
-            <span style="margin-right:8px;">+</span> Add Items to Queue
-          </button>
-
-          <div id="myDropdown" class="dropdown-content">
-            <div class="search-container">
-              <input type="text" placeholder="Search..." id="searchInput" onkeyup="filterItems()" class="search-input">
-            </div>
-            <div id="itemList"></div>
-          </div>
-
-          <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <button onclick="getSelectedItems()" class="action-btn primary-btn" style="flex: 2;">
-              Calculate
-            </button>
-            <button onclick="selectMutations([], true)" class="action-btn secondary-btn" style="flex: 1;">
-              Clear
-            </button>
-          </div>
-
-          <button onclick="selectMutations([
-            { id: 'glasscorn', quantity: 1 },
-            { id: 'devourer', quantity: 1 },
-            { id: 'allinaloe', quantity: 1 },
-            { id: 'phantomleaf', quantity: 1 },
-            { id: 'timestalk', quantity: 1 },
-            ]);" class="text-btn" style="margin-top: 10px; font-size: 0.8rem;">
-            Load Rose Dragon Mutations
-          </button>
-        </div>
-
-        <div class="card" id="itemListDisplay"></div>
-
-        <div class="card search-card"></div>
-
-        <div class="layout-card">
-          <div class="layout-header">
-            <div class="header-title">
-              <span style="opacity: 0.7;">▤</span> OPTIMIZED LAYOUT
-            </div>
-            <div style="display: flex; gap: 10px; align-items: center;">
-               <button onclick="saveCurrentProfile()" class="icon-btn" title="Save Profile" style="width: 24px; height: 24px; font-size: 0.9rem;">★</button>
-               <div class="legend">
-                  <div class="legend-item">
-                    <span class="dot dot-open"></span> Open
-                  </div>
-                  <div class="legend-item">
-                    <span class="dot dot-locked"></span> Locked
-                  </div>
-               </div>
-            </div>
-          </div>
-
-          <div id="layoutGrid" class="grid-container"></div>
-
-          <div class="layout-controls" style="text-align: center; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
-            <span style="font-size: 0.8rem; color: #a0a0a0; margin-right: 10px;">Mode:</span>
-            <div class="switch-toggle">
-              <input type="radio" id="mode-single" name="solver-mode" checked>
-              <label for="mode-single">Single</label>
-
-              <input type="radio" id="mode-multiple" name="solver-mode">
-              <label for="mode-multiple">Multiple</label>
-
-              <input type="radio" id="mode-progressive" name="solver-mode">
-              <label for="mode-progressive">Progressive</label>
-            </div>
-          </div>
-
-          <!-- Greenhouse Controls -->
-          <div class="layout-controls" style="text-align: center; margin-top: 10px; border-top: 1px solid #333; padding-top: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-              <span style="font-size: 0.8rem; color: #a0a0a0;">Greenhouses:</span>
-              <div style="display: flex; gap: 5px;">
-                <button id="gh-add-btn" class="gh-btn" onclick="addGreenhouse()">+ Add</button>
-                <button id="gh-remove-btn" class="gh-btn" onclick="removeGreenhouse()">- Remove</button>
-              </div>
-            </div>
-            <div id="gh-selector" style="display: flex; gap: 5px; justify-content: center;">
-              <button class="view-btn active" onclick="viewGreenhouse(0)">1</button>
-            </div>
-          </div>
-
-          <button onclick="resetGrid()" style="margin-top: 20px; padding: 10px;">
-            Reset Layout
-          </button>
-
-          <button onclick="unlockAll()" style="margin-top: 20px; padding: 10px;">
-            Unlock All
-          </button>
-
-          <button onclick="uploadToGame()" class="action-btn primary-btn" style="width:100%; margin-top:20px; background-color: #238636;">
-            Upload to Minecraft
-          </button>
-
-        </div>
-      </div>
-
-      <div class="main-content" id="panZoomViewport">
-        <div id="welcome-message" class="instruction-overlay">
-
-          <button onclick="toggleHelp()" class="close-overlay-btn">&times;</button>
-
-          <h2>Welcome to SkyMutations <br> (Help is in the Top Right Corner)</h2>
-          <p>Optimize your garden layouts and track crafting recipes in 3 steps:</p>
-
-          <div class="step-guide">
-            <div class="step">
-              <span class="step-num">1</span>
-              <strong>Select Items</strong>
-              <p>Use the dropdown on the left to choose the mutations or items you want to craft.</p>
-            </div>
-            <div class="step">
-              <span class="step-num">2</span>
-              <strong>Define Space</strong>
-              <p>Click the grid cells (bottom-left) to toggle them <span style="color:#2ea043">Open</span> or <span style="color:#f85149">Locked</span> to match your garden shape.</p>
-            </div>
-            <div class="step">
-              <span class="step-num">3</span>
-              <strong>Calculate & Solve</strong>
-              <p>Click "Calculate Resources", then click any item in the result list to generate the recipe tree and auto-solve the layout.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="app-card zoom-layer" id="tree-display"></div>
-      </div>
-
-
-
-
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <button class="main-tab active" data-tab="solver" onclick="switchTab('solver')">
+        ⚙ Solver
+      </button>
+      <button class="main-tab" data-tab="collection" onclick="switchTab('collection')">
+        📋 Collection
+      </button>
     </div>
 
+    <!-- ===== TAB: SOLVER ===== -->
+    <div id="tab-solver" class="tab-content">
+      <div class="app-layout">
+        <div class="sidebar-column">
 
+          <!-- Favorites Panel -->
+          <div class="card">
+            <div class="layout-header" style="margin-bottom: 10px;">
+              <div class="header-title">★ SAVED PROFILES</div>
+            </div>
+            <div id="favoritesList" class="favorites-list">
+              <div style="text-align: center; color: #555; font-size: 0.8rem; padding: 10px;">No saved profiles</div>
+            </div>
+          </div>
+
+          <div class="complex-dropdown card">
+            <button onclick="toggleDropdown()" class="drop-btn">
+              <span style="margin-right:8px;">+</span> Add Items to Queue
+            </button>
+
+            <div id="myDropdown" class="dropdown-content">
+              <div class="search-container">
+                <input type="text" placeholder="Search..." id="searchInput" onkeyup="filterItems()" class="search-input">
+              </div>
+              <div id="itemList"></div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+              <button onclick="getSelectedItems()" class="action-btn primary-btn" style="flex: 2;">
+                Calculate
+              </button>
+              <button onclick="selectMutations([], true)" class="action-btn secondary-btn" style="flex: 1;">
+                Clear
+              </button>
+            </div>
+
+            <button onclick="selectMutations([
+              { id: 'glasscorn', quantity: 1 },
+              { id: 'devourer', quantity: 1 },
+              { id: 'allinaloe', quantity: 1 },
+              { id: 'phantomleaf', quantity: 1 },
+              { id: 'timestalk', quantity: 1 },
+            ]);" class="text-btn" style="margin-top: 10px; font-size: 0.8rem;">
+              Load Rose Dragon Mutations
+            </button>
+          </div>
+
+          <!-- Progressive mode info banner -->
+          <div id="progressive-tip" class="info-banner hidden">
+            <span style="font-size:0.75rem; color:#eab308;">
+              ⚡ Progressive mode distributes all selected mutations across your available greenhouses.
+              Click items in the result list to focus the tree view. Mark items ✔ complete to advance.
+            </span>
+          </div>
+
+          <div class="card" id="itemListDisplay"></div>
+
+          <div class="layout-card">
+            <div class="layout-header">
+              <div class="header-title">
+                <span style="opacity: 0.7;">▤</span> OPTIMIZED LAYOUT
+              </div>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <button onclick="saveCurrentProfile()" class="icon-btn" title="Save Profile" style="width: 24px; height: 24px; font-size: 0.9rem;">★</button>
+                <div class="legend">
+                  <div class="legend-item"><span class="dot dot-open"></span> Open</div>
+                  <div class="legend-item"><span class="dot dot-locked"></span> Locked</div>
+                </div>
+              </div>
+            </div>
+
+            <div id="layoutGrid" class="grid-container"></div>
+
+            <div class="layout-controls" style="text-align: center; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
+              <span style="font-size: 0.8rem; color: #a0a0a0; margin-right: 10px;">Mode:</span>
+              <div class="switch-toggle">
+                <input type="radio" id="mode-single" name="solver-mode" checked>
+                <label for="mode-single">Single</label>
+                <input type="radio" id="mode-multiple" name="solver-mode">
+                <label for="mode-multiple">Multiple</label>
+                <input type="radio" id="mode-progressive" name="solver-mode">
+                <label for="mode-progressive">Progressive</label>
+              </div>
+            </div>
+
+            <div class="layout-controls" style="text-align: center; margin-top: 10px; border-top: 1px solid #333; padding-top: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                <span style="font-size: 0.8rem; color: #a0a0a0;">Greenhouses:</span>
+                <div style="display: flex; gap: 5px;">
+                  <button id="gh-add-btn" class="gh-btn" onclick="addGreenhouse()">+ Add</button>
+                  <button id="gh-remove-btn" class="gh-btn" onclick="removeGreenhouse()">- Remove</button>
+                </div>
+              </div>
+              <div id="gh-selector" style="display: flex; gap: 5px; justify-content: center;">
+                <button class="view-btn active" onclick="viewGreenhouse(0)">1</button>
+              </div>
+            </div>
+
+            <button onclick="resetGrid()" style="margin-top: 20px; padding: 10px;">Reset Layout</button>
+            <button onclick="unlockAll()" style="margin-top: 20px; padding: 10px;">Unlock All</button>
+            <button onclick="uploadToGame()" class="action-btn primary-btn" style="width:100%; margin-top:20px; background-color: #238636;">
+              Upload to Minecraft
+            </button>
+          </div>
+        </div>
+
+        <div class="main-content" id="panZoomViewport">
+          <div id="welcome-message" class="instruction-overlay">
+            <button onclick="toggleHelp()" class="close-overlay-btn">&times;</button>
+            <h2>Welcome to SkyMutations <br> (Help is in the Top Right Corner)</h2>
+            <p>Optimize your garden layouts and track crafting recipes in 3 steps:</p>
+            <div class="step-guide">
+              <div class="step">
+                <span class="step-num">1</span>
+                <strong>Select Items</strong>
+                <p>Use the dropdown on the left to choose the mutations or items you want to craft.</p>
+              </div>
+              <div class="step">
+                <span class="step-num">2</span>
+                <strong>Define Space</strong>
+                <p>Click the grid cells to toggle them <span style="color:#2ea043">Open</span> or <span style="color:#f85149">Locked</span> to match your garden shape.</p>
+              </div>
+              <div class="step">
+                <span class="step-num">3</span>
+                <strong>Calculate &amp; Solve</strong>
+                <p>Click "Calculate Resources", then click any item in the result list to generate the recipe tree and auto-solve the layout.</p>
+              </div>
+            </div>
+          </div>
+          <div class="app-card zoom-layer" id="tree-display"></div>
+        </div>
+      </div>
+    </div><!-- /tab-solver -->
+
+    <!-- ===== TAB: COLLECTION ===== -->
+    <div id="tab-collection" class="tab-content hidden">
+      <div class="collection-toolbar">
+        <div class="collection-search-wrap">
+          <input type="text" id="collectionSearch" placeholder="Search mutations..." class="sync-input" style="width:220px;"
+                 oninput="filterCollection(this.value)">
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span id="collection-total" style="font-size:0.85rem; color:#555;"></span>
+          <button onclick="syncAnalyzedFromServer(document.getElementById('gameIdInput').value)"
+                  class="gh-btn" style="padding: 6px 14px;">
+            ↻ Sync from Mod
+          </button>
+        </div>
+      </div>
+
+      <div id="collectionGrid" class="collection-grid">
+        <p style="color:#555; padding:40px; text-align:center;">Loading mutations...</p>
+      </div>
+    </div><!-- /tab-collection -->
 
   </div>
-
-
 </main>
-
 
 <footer>
   <p>&copy; 2025 RealKazz</p>
 </footer>
 
+<script>
+  // Show/hide the progressive tip banner when mode changes
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('input[name="solver-mode"]').forEach(r => {
+      r.addEventListener('change', function() {
+        const tip = document.getElementById('progressive-tip');
+        if (tip) tip.classList.toggle('hidden', !document.getElementById('mode-progressive').checked);
+      });
+    });
+
+    // Update collection total after mutations load (script.js fires renderList first)
+    const observer = new MutationObserver(() => {
+      const totalEl = document.getElementById('collection-total');
+      if (totalEl && typeof mutations !== 'undefined' && mutations.length > 0) {
+        const nonBase = mutations.filter(m => m.type !== 'base').length;
+        totalEl.textContent = `0 / ${nonBase} analyzed`;
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  });
+
+  // Live search for collection tab
+  function filterCollection(query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll('.mutation-card').forEach(card => {
+      const name = card.querySelector('.mc-name')?.textContent?.toLowerCase() || '';
+      card.style.display = name.includes(q) ? '' : 'none';
+    });
+  }
+</script>
 </body>
-
-
-
 </html>
