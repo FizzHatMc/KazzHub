@@ -17,7 +17,7 @@ services:
   watchtowerkazz:
     command: '--interval 300 --cleanup'
     container_name: watchtowerkazz
-    image: containrrr/watchtower
+    image: containrrr/watchtower:latest
     networks:
       - kazzhub-net
     restart: always
