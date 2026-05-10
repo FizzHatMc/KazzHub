@@ -364,3 +364,88 @@ nav {
   color: var(--text-main);
   outline: none;
 }
+
+/* --- Minion Calculator Styles --- */
+#minion-calculator-panel {
+  margin-top: 20px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 20px;
+}
+
+.minion-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.minion-card {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.minion-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.minion-config-row {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin-bottom: 5px;
+  background: #0d1117;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #21262d;
+}
+
+.minion-config-row select, .minion-config-row input {
+  background: #1e1e1e;
+  border: 1px solid #30363d;
+  color: white;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.minion-config-row input[type="number"] {
+  width: 50px;
+}
+
+.minion-add-btn {
+  background: #238636;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+.minion-remove-btn {
+  background: #da3633;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.minion-result {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #8b949e;
+  background: #0d1117;
+  padding: 8px;
+  border-radius: 4px;
+  border-left: 3px solid var(--accent);
+}

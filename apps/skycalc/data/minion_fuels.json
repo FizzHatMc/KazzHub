@@ -1,0 +1,92 @@
+{
+  "None": {
+    "duration": "infinite",
+    "speed_multiplier": 1,
+    "output_multiplier": 1
+  },
+  "Enchanted_Lava_Bucket": {
+    "duration": "infinite",
+    "speed_multiplier": 1.25,
+    "output_multiplier": 1
+  },
+  "Magma_Bucket": {
+    "duration": "infinite",
+    "speed_multiplier": 1.30,
+    "output_multiplier": 1
+  },
+  "Plasma_Bucket": {
+    "duration": "infinite",
+    "speed_multiplier": 1.35,
+    "output_multiplier": 1
+  },
+  "Everburning_Flame": {
+    "duration": "infinite",
+    "speed_multiplier": 1.35,
+    "output_multiplier": 1
+  },
+  "Catalyst": {
+    "duration": 10800,
+    "speed_multiplier": 1,
+    "output_multiplier": 3
+  },
+  "Hyper_Catalyst": {
+    "duration": 21600,
+    "speed_multiplier": 1,
+    "output_multiplier": 4
+  },
+  "Coal": {
+    "duration": 1800,
+    "speed_multiplier": 1.05,
+    "output_multiplier": 1
+  },
+  "Enchanted_Coal": {
+    "duration": 86400,
+    "speed_multiplier": 1.10,
+    "output_multiplier": 1
+  },
+  "Coal_Block": {
+    "duration": 18000,
+    "speed_multiplier": 1.05,
+    "output_multiplier": 1
+  },
+  "Enchanted_Bread": {
+    "duration": 43200,
+    "speed_multiplier": 1.05,
+    "output_multiplier": 1
+  },
+  "Solar_Panel": {
+    "duration": "infinite",
+    "speed_multiplier": 1.25,
+    "output_multiplier": 1
+  },
+  "Hamster_Wheel": {
+    "duration": 86400,
+    "speed_multiplier": 1.50,
+    "output_multiplier": 1
+  },
+  "Foul_Flesh": {
+    "duration": 18000,
+    "speed_multiplier": 1.90,
+    "output_multiplier": 1
+  },
+  "Tasty_Cheese": {
+    "duration": 3600,
+    "speed_multiplier": 1,
+    "output_multiplier": 2
+  },
+  "Inferno_Minion_Fuel_T1": {
+    "duration": 86400,
+    "speed_multiplier": 1,
+    "output_multiplier": 10
+  },
+  "Inferno_Minion_Fuel_T2": {
+    "duration": 86400,
+    "speed_multiplier": 1,
+    "output_multiplier": 15
+  },
+  "Inferno_Minion_Fuel_T3": {
+    "duration": 86400,
+    "speed_multiplier": 1,
+    "output_multiplier": 20
+  }
+}

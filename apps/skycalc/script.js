@@ -1,4 +1,7 @@
 let inventoryData = [];
+let minionsData = {};
+let minionFuels = {};
+let userMinionConfigs = {}; // Store user's minion configurations
 let activeRecipeOverrides = {};
 let scale = 1;
 let panning = false;
@@ -14,14 +17,22 @@ document.addEventListener('DOMContentLoaded', async function () {
             // --- A. FETCH DATA ---
             try {
               // Ensure this path matches exactly where your file is
-              const response = await fetch('../../assets/data.json');
+              const [response, minionResp, fuelResp] = await Promise.all([
+                fetch('../../assets/data.json'),
+                fetch('data/minions_data.json'),
+                fetch('data/minion_fuels.json')
+              ]);
 
-              if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-              }
+              if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+              if (!minionResp.ok) throw new Error(`HTTP error! status: ${minionResp.status}`);
+              if (!fuelResp.ok) throw new Error(`HTTP error! status: ${fuelResp.status}`);
 
               inventoryData = await response.json();
+              minionsData = await minionResp.json();
+              minionFuels = await fuelResp.json();
+              
               console.log("Data loaded successfully:", inventoryData.length, "items.");
+              console.log("Minions loaded:", Object.keys(minionsData).length);
 
               // Once data is loaded, render the sidebar list
               renderList();
@@ -608,6 +619,277 @@ function renderMaterialSummary(selectedItems) {
   }
 
   resultsDiv.innerHTML = html;
+  
+  // Render Minion Calculator based on these base materials
+  renderMinionCalculator(totals);
+}
+
+function findMinionsForMaterial(materialNameOrId) {
+  let displayName = materialNameOrId;
+  const itemData = inventoryData.find(i => i.id == materialNameOrId || i.name === materialNameOrId);
+  if (itemData) displayName = itemData.name;
+
+  // The materials in minions_data.json have underscores and exact names
+  // e.g. "Blaze_Rod", "Enchanted_Glowstone_Dust" ? 
+  // Let's format the display name to match Minion material keys
+  const minionMaterialKey = displayName.replace(/ /g, '_');
+
+  const matchingMinions = [];
+  for (const [minionName, minionData] of Object.entries(minionsData)) {
+    if (minionData.Materials && minionData.Materials[minionMaterialKey]) {
+      matchingMinions.push({
+        minionName: minionName,
+        materialData: minionData.Materials[minionMaterialKey]
+      });
+    } else {
+      // sometimes minion keys have different formats, try case insensitive
+      const materialKeys = Object.keys(minionData.Materials || {});
+      const matchedKey = materialKeys.find(k => k.toLowerCase() === minionMaterialKey.toLowerCase());
+      if (matchedKey) {
+        matchingMinions.push({
+          minionName: minionName,
+          materialData: minionData.Materials[matchedKey]
+        });
+      }
+    }
+  }
+  return matchingMinions;
+}
+
+function renderMinionCalculator(totals) {
+  const minionPanel = document.getElementById('minion-calculator-panel');
+  if (!minionPanel) return;
+  
+  // Find all required materials and their minions
+  const materialsWithMinions = {};
+  
+  Object.keys(totals).forEach(key => {
+    const qty = totals[key];
+    const minions = findMinionsForMaterial(key);
+    
+    if (minions.length > 0) {
+      // Just use the first minion found for this material for simplicity,
+      // or group by minion. Let's group by minion.
+      minions.forEach(m => {
+        if (!materialsWithMinions[m.minionName]) {
+          materialsWithMinions[m.minionName] = [];
+        }
+        
+        // Find display name
+        let displayName = key;
+        const itemData = inventoryData.find(i => i.id == key || i.name === key);
+        if (itemData) displayName = itemData.name;
+        
+        materialsWithMinions[m.minionName].push({
+          materialKey: key,
+          displayName: displayName,
+          requiredQty: qty,
+          amountPerHarvest: m.materialData.Amount,
+          chance: m.materialData.Chance
+        });
+      });
+    }
+  });
+  
+  if (Object.keys(materialsWithMinions).length === 0) {
+    minionPanel.style.display = 'none';
+    return;
+  }
+  
+  minionPanel.style.display = 'block';
+  
+  let html = `<h2 style="margin-bottom:20px; color:#fff; border-bottom: 2px solid #444; padding-bottom: 10px;">Minion Requirements</h2>`;
+  html += `<div class="minion-cards-container">`;
+  
+  for (const [minionName, materials] of Object.entries(materialsWithMinions)) {
+    // Initialize config if not exists
+    if (!userMinionConfigs[minionName]) {
+      userMinionConfigs[minionName] = [{ tier: 11, amount: 1, fuel: 'None' }];
+    }
+    
+    const displayMinionName = minionName.replace(/_/g, ' ');
+    const imgPath = getImagePath(displayMinionName);
+    
+    html += `
+      <div class="minion-card" data-minion="${minionName}">
+        <div class="minion-header">
+          <img src="${imgPath}" class="item-icon-small" onerror="this.src='images/Minion.png'; this.onerror=null;">
+          <span style="font-size: 1.2rem;">${displayMinionName}</span>
+        </div>
+        <div class="minion-materials-needed" style="font-size: 0.85rem; color: #8b949e; margin-bottom: 15px;">
+          <strong>Produces:</strong> ${materials.map(m => `${m.displayName} (${m.requiredQty.toLocaleString()})`).join(', ')}
+        </div>
+        <div class="minion-configs" id="configs-${minionName}" style="flex-grow: 1;">
+          ${renderMinionConfigs(minionName)}
+        </div>
+        <button class="minion-add-btn" onclick="addMinionConfig('${minionName}')" style="margin-top: 10px; width: 100%;">+ Add Setup</button>
+        <div class="minion-result" id="result-${minionName}">
+          ${calculateMinionProduction(minionName, materials)}
+        </div>
+      </div>
+    `;
+  }
+  
+  html += `</div>`;
+  minionPanel.innerHTML = html;
+}
+
+window.addMinionConfig = function(minionName) {
+  if (!userMinionConfigs[minionName]) userMinionConfigs[minionName] = [];
+  userMinionConfigs[minionName].push({ tier: 11, amount: 1, fuel: 'None' });
+  refreshMinionUI();
+};
+
+window.removeMinionConfig = function(minionName, index) {
+  if (userMinionConfigs[minionName]) {
+    userMinionConfigs[minionName].splice(index, 1);
+    if (userMinionConfigs[minionName].length === 0) {
+      userMinionConfigs[minionName].push({ tier: 11, amount: 1, fuel: 'None' });
+    }
+  }
+  refreshMinionUI();
+};
+
+window.updateMinionConfig = function(minionName, index, field, value) {
+  if (userMinionConfigs[minionName] && userMinionConfigs[minionName][index]) {
+    if (field === 'tier' || field === 'amount') value = parseInt(value) || 1;
+    userMinionConfigs[minionName][index][field] = value;
+    refreshMinionUI();
+  }
+};
+
+function refreshMinionUI() {
+  getSelectedItems(); // Recalculate everything and re-render
+}
+
+function renderMinionConfigs(minionName) {
+  const configs = userMinionConfigs[minionName] || [];
+  let html = '';
+  
+  // Find max tier for this minion
+  const minionData = minionsData[minionName];
+  const maxTier = Object.keys(minionData).filter(k => !isNaN(parseInt(k))).map(k => parseInt(k)).reduce((a, b) => Math.max(a, b), 1);
+  
+  configs.forEach((config, index) => {
+    let tierOptions = '';
+    for (let i = 1; i <= maxTier; i++) {
+      tierOptions += `<option value="${i}" ${config.tier === i ? 'selected' : ''}>T${i}</option>`;
+    }
+    
+    let fuelOptions = '';
+    for (const fuelKey of Object.keys(minionFuels)) {
+      fuelOptions += `<option value="${fuelKey}" ${config.fuel === fuelKey ? 'selected' : ''}>${fuelKey.replace(/_/g, ' ')}</option>`;
+    }
+    
+    html += `
+      <div class="minion-config-row">
+        <span>Amount:</span>
+        <input type="number" min="1" value="${config.amount}" onchange="updateMinionConfig('${minionName}', ${index}, 'amount', this.value)">
+        <select onchange="updateMinionConfig('${minionName}', ${index}, 'tier', this.value)">
+          ${tierOptions}
+        </select>
+        <select onchange="updateMinionConfig('${minionName}', ${index}, 'fuel', this.value)">
+          ${fuelOptions}
+        </select>
+        <button class="minion-remove-btn" onclick="removeMinionConfig('${minionName}', ${index})">X</button>
+      </div>
+    `;
+  });
+  
+  return html;
+}
+
+function parseAmount(amountStr) {
+  if (typeof amountStr === 'number') return amountStr;
+  if (typeof amountStr !== 'string') return 1;
+  if (amountStr.includes('-')) {
+    const parts = amountStr.split('-');
+    return (parseFloat(parts[0]) + parseFloat(parts[1])) / 2;
+  }
+  return parseFloat(amountStr) || 1;
+}
+
+function formatTime(seconds) {
+  if (!isFinite(seconds) || seconds <= 0) return "0s";
+  
+  const d = Math.floor(seconds / (3600 * 24));
+  const h = Math.floor(seconds % (3600 * 24) / 3600);
+  const m = Math.floor(seconds % 3600 / 60);
+  const s = Math.floor(seconds % 60);
+  
+  let result = [];
+  if (d > 0) result.push(`${d} Days`);
+  if (h > 0) result.push(`${h} Hours`);
+  if (m > 0 && d === 0) result.push(`${m} Mins`); // only show mins if no days
+  if (s > 0 && d === 0 && h === 0) result.push(`${s} Secs`);
+  
+  return result.join(' ') || "0s";
+}
+
+function calculateMinionProduction(minionName, materials) {
+  const configs = userMinionConfigs[minionName] || [];
+  const minionData = minionsData[minionName];
+  if (!minionData) return "Minion data not found.";
+  
+  let html = '';
+  
+  materials.forEach(mat => {
+    let totalItemsPerSecond = 0;
+    let fuelNeededDetails = {};
+    
+    configs.forEach(config => {
+      const tierData = minionData[config.tier];
+      if (!tierData) return;
+      
+      const speed = parseFloat(tierData.Speed); // seconds per action
+      if (isNaN(speed) || speed <= 0) return;
+      
+      const fuelData = minionFuels[config.fuel] || minionFuels['None'];
+      
+      // Speed multiplier reduces time per action
+      const actualSpeed = speed / (fuelData.speed_multiplier || 1);
+      
+      // Time between harvests (2 actions: spawn + kill)
+      const harvestTime = actualSpeed * 2;
+      
+      // Items per harvest
+      const amount = parseAmount(mat.amountPerHarvest);
+      const chance = parseFloat(mat.chance) / 100 || 1;
+      let itemsPerHarvest = amount * chance;
+      
+      // Apply fuel output multiplier
+      itemsPerHarvest *= (fuelData.output_multiplier || 1);
+      
+      // Production rate
+      const itemsPerSecond = (itemsPerHarvest / harvestTime) * config.amount;
+      totalItemsPerSecond += itemsPerSecond;
+    });
+    
+    if (totalItemsPerSecond > 0) {
+      const timeRequiredSeconds = mat.requiredQty / totalItemsPerSecond;
+      html += `<div style="margin-bottom: 5px;"><strong>${mat.displayName}:</strong> takes ${formatTime(timeRequiredSeconds)}</div>`;
+      
+      // Calculate specific finite fuels
+      configs.forEach(config => {
+        const fuelData = minionFuels[config.fuel];
+        if (fuelData && fuelData.duration !== "infinite") {
+          const durationSeconds = fuelData.duration;
+          const fuelNeeded = (timeRequiredSeconds / durationSeconds) * config.amount;
+          if (fuelNeeded > 0) {
+             const formattedFuelName = config.fuel.replace(/_/g, ' ');
+             // Store or accumulate to avoid printing the same fuel multiple times, 
+             // but here we just list it
+             html += `<div style="color:#d29922; font-size: 0.75rem; margin-left: 10px;">↳ Needs ${Math.ceil(fuelNeeded).toLocaleString()}x ${formattedFuelName} (for ${config.amount}x T${config.tier})</div>`;
+          }
+        }
+      });
+      
+    } else {
+      html += `<div><strong>${mat.displayName}:</strong> Not produced with current setup.</div>`;
+    }
+  });
+  
+  return html || "No materials calculated.";
 }
 
 function updateRecipeSelectors(selectedItems) {

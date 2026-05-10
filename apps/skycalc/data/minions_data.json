@@ -1,0 +1,4694 @@
+{
+    "Acacia_Minion": {
+        "Materials": {
+            "Acacia_Log": {
+                "Amount": "4",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 48.0,
+            "APM": 1.25,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 48.0,
+            "APM": 1.25,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 33.0,
+            "APM": 1.82,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 33.0,
+            "APM": 1.82,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Birch_Minion": {
+        "Materials": {
+            "Birch_Log": {
+                "Amount": "4",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 48.0,
+            "APM": 1.25,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 48.0,
+            "APM": 1.25,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 33.0,
+            "APM": 1.82,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 33.0,
+            "APM": 1.82,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Blaze_Minion": {
+        "Materials": {
+            "Blaze_Rod": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 33.0,
+            "APM": 1.82,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 33.0,
+            "APM": 1.82,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 31.0,
+            "APM": 1.94,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 31.0,
+            "APM": 1.94,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 28.5,
+            "APM": 2.11,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 28.5,
+            "APM": 2.11,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 16.5,
+            "APM": 3.64,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 15.0,
+            "APM": 4.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Cactus_Minion": {
+        "Materials": {
+            "Cactus": {
+                "Amount": "3",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 15.0,
+            "APM": 4.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Carrot_Minion": {
+        "Materials": {
+            "Carrot": {
+                "Amount": "2-4",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 8.0,
+            "APM": 7.5,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Cave_Spider_Minion": {
+        "Materials": {
+            "Spider_Eye": {
+                "Amount": "1",
+                "Chance": 100
+            },
+            "String": {
+                "Amount": "1",
+                "Chance": 50
+            }
+        },
+        "1": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 128,
+            "Stack Storage": 2
+        },
+        "2": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 256,
+            "Stack Storage": 4
+        },
+        "3": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 256,
+            "Stack Storage": 4
+        },
+        "4": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Chicken_Minion": {
+        "Materials": {
+            "Raw_Chicken": {
+                "Amount": "1",
+                "Chance": 100
+            },
+            "Feather": {
+                "Amount": "1",
+                "Chance": 100
+            },
+            "Egg_(With_Enchanted_Egg_Upgrade)": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "2": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 320,
+            "Stack Storage": 5
+        },
+        "3": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 320,
+            "Stack Storage": 5
+        },
+        "4": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 448,
+            "Stack Storage": 7
+        },
+        "5": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 448,
+            "Stack Storage": 7
+        },
+        "6": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 15.0,
+            "APM": 4.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Clay_Minion": {
+        "Materials": {
+            "Clay_Ball": {
+                "Amount": "4",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 32.0,
+            "APM": 1.88,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 32.0,
+            "APM": 1.88,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 27.5,
+            "APM": 2.18,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 27.5,
+            "APM": 2.18,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Coal_Minion": {
+        "Materials": {
+            "Coal": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 15.0,
+            "APM": 4.0,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 15.0,
+            "APM": 4.0,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 9.0,
+            "APM": 6.67,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 9.0,
+            "APM": 6.67,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 7.0,
+            "APM": 8.57,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 6.0,
+            "APM": 10.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Cobblestone_Minion": {
+        "Materials": {
+            "Cobblestone": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 9.0,
+            "APM": 6.67,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 9.0,
+            "APM": 6.67,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 8.0,
+            "APM": 7.5,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 8.0,
+            "APM": 7.5,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 7.0,
+            "APM": 8.57,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 6.0,
+            "APM": 10.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Cocoa_Beans_Minion": {
+        "Materials": {
+            "Cocoa_Beans": {
+                "Amount": "3",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 15.0,
+            "APM": 4.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Cow_Minion": {
+        "Materials": {
+            "Raw_Beef": {
+                "Amount": "1",
+                "Chance": 100
+            },
+            "Leather": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 128,
+            "Stack Storage": 2
+        },
+        "2": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 256,
+            "Stack Storage": 4
+        },
+        "3": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 256,
+            "Stack Storage": 4
+        },
+        "4": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Creeper_Minion": {
+        "Materials": {
+            "Gunpowder": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Dark_Oak_Minion": {
+        "Materials": {
+            "Dark_Oak_Log": {
+                "Amount": "4",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 48.0,
+            "APM": 1.25,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 48.0,
+            "APM": 1.25,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 33.0,
+            "APM": 1.82,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 33.0,
+            "APM": 1.82,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Diamond_Minion": {
+        "Materials": {
+            "Diamond": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 29.0,
+            "APM": 2.07,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 29.0,
+            "APM": 2.07,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 15.0,
+            "APM": 4.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Emerald_Minion": {
+        "Materials": {
+            "Emerald": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 28.0,
+            "APM": 2.14,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 28.0,
+            "APM": 2.14,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "End_Stone_Minion": {
+        "Materials": {
+            "End_Stone": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Enderman_Minion": {
+        "Materials": {
+            "Ender_Pearl": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 32.0,
+            "APM": 1.88,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 32.0,
+            "APM": 1.88,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 28.0,
+            "APM": 2.14,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 28.0,
+            "APM": 2.14,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Fishing_Minion": {
+        "Materials": {
+            "Raw_Cod": {
+                "Amount": "1",
+                "Chance": 50
+            },
+            "Raw_Salmon": {
+                "Amount": "1",
+                "Chance": 25
+            },
+            "Pufferfish": {
+                "Amount": "1",
+                "Chance": 12
+            },
+            "Tropical_Fish": {
+                "Amount": "1",
+                "Chance": 4
+            },
+            "Prismarine_Crystals": {
+                "Amount": "1",
+                "Chance": 3
+            },
+            "Prismarine_Shard": {
+                "Amount": "1",
+                "Chance": 3
+            },
+            "Sponge": {
+                "Amount": "1",
+                "Chance": 3
+            }
+        },
+        "1": {
+            "Speed": 75.0,
+            "APM": 0.8,
+            "Storage": 640,
+            "Stack Storage": 10
+        },
+        "2": {
+            "Speed": 75.0,
+            "APM": 0.8,
+            "Storage": 640,
+            "Stack Storage": 10
+        },
+        "3": {
+            "Speed": 72.0,
+            "APM": 0.83,
+            "Storage": 640,
+            "Stack Storage": 10
+        },
+        "4": {
+            "Speed": 72.0,
+            "APM": 0.83,
+            "Storage": 704,
+            "Stack Storage": 11
+        },
+        "5": {
+            "Speed": 68.0,
+            "APM": 0.88,
+            "Storage": 704,
+            "Stack Storage": 11
+        },
+        "6": {
+            "Speed": 68.0,
+            "APM": 0.88,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "7": {
+            "Speed": 62.5,
+            "APM": 0.96,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "8": {
+            "Speed": 62.5,
+            "APM": 0.96,
+            "Storage": 832,
+            "Stack Storage": 13
+        },
+        "9": {
+            "Speed": 53.0,
+            "APM": 1.13,
+            "Storage": 832,
+            "Stack Storage": 13
+        },
+        "10": {
+            "Speed": 53.0,
+            "APM": 1.13,
+            "Storage": 896,
+            "Stack Storage": 14
+        },
+        "11": {
+            "Speed": 35.0,
+            "APM": 1.71,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Flower_Minion": {
+        "Materials": {},
+        "1": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "2": {
+            "Speed": 29.0,
+            "APM": 2.07,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "3": {
+            "Speed": 28.0,
+            "APM": 2.14,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "4": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "5": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "6": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "7": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "8": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "9": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "10": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 15.0,
+            "APM": 4.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Ghast_Minion": {
+        "Materials": {
+            "Ghast_Tear": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 50.0,
+            "APM": 1.2,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 50.0,
+            "APM": 1.2,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 47.0,
+            "APM": 1.28,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 47.0,
+            "APM": 1.28,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 44.0,
+            "APM": 1.36,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 44.0,
+            "APM": 1.36,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 41.0,
+            "APM": 1.46,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 41.0,
+            "APM": 1.46,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 32.0,
+            "APM": 1.88,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Glowstone_Minion": {
+        "Materials": {
+            "Glowstone_Dust": {
+                "Amount": "2-4",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 11.0,
+            "APM": 5.45,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Gold_Minion": {
+        "Materials": {
+            "Gold_Ore": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 11.0,
+            "APM": 5.45,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 9.0,
+            "APM": 6.67,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Gravel_Minion": {
+        "Materials": {
+            "Gravel": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 128,
+            "Stack Storage": 2
+        },
+        "2": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 256,
+            "Stack Storage": 4
+        },
+        "3": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 256,
+            "Stack Storage": 4
+        },
+        "4": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Hard_Stone_Minion": {
+        "Materials": {
+            "Hard_Stone": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 9.0,
+            "APM": 6.67,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 9.0,
+            "APM": 6.67,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 8.0,
+            "APM": 7.5,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 8.0,
+            "APM": 7.5,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 7.0,
+            "APM": 8.57,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 6.0,
+            "APM": 10.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Ice_Minion": {
+        "Materials": {
+            "Ice": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 9.0,
+            "APM": 6.67,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 9.0,
+            "APM": 6.67,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 8.0,
+            "APM": 7.5,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 8.0,
+            "APM": 7.5,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 7.0,
+            "APM": 8.57,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 6.0,
+            "APM": 10.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Inferno_Minion": {
+        "Materials": {},
+        "1": {
+            "Speed": 1.0,
+            "APM": 60.0,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 982.0,
+            "APM": 0.06,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 950.0,
+            "APM": 0.06,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 919.0,
+            "APM": 0.07,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 886.0,
+            "APM": 0.07,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 855.0,
+            "APM": 0.07,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 823.0,
+            "APM": 0.07,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 792.0,
+            "APM": 0.08,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 760.0,
+            "APM": 0.08,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 728.0,
+            "APM": 0.08,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 697.0,
+            "APM": 0.09,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Iron_Minion": {
+        "Materials": {
+            "Iron_Ore": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 15.0,
+            "APM": 4.0,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 15.0,
+            "APM": 4.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 8.0,
+            "APM": 7.5,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 7.0,
+            "APM": 8.57,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Jungle_Minion": {
+        "Materials": {
+            "Jungle_Log": {
+                "Amount": "4",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 48.0,
+            "APM": 1.25,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 48.0,
+            "APM": 1.25,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 33.0,
+            "APM": 1.82,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 33.0,
+            "APM": 1.82,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Lapis_Minion": {
+        "Materials": {
+            "Lapis_Lazuli": {
+                "Amount": "3-6",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 29.0,
+            "APM": 2.07,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 29.0,
+            "APM": 2.07,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Magma_Cube_Minion": {
+        "Materials": {
+            "Magma_Cream": {
+                "Amount": "1-3",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 32.0,
+            "APM": 1.88,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 32.0,
+            "APM": 1.88,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 28.0,
+            "APM": 2.14,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 28.0,
+            "APM": 2.14,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Melon_Minion": {
+        "Materials": {
+            "Melon_Slice": {
+                "Amount": "3-7",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 22.5,
+            "APM": 2.67,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 22.5,
+            "APM": 2.67,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 18.5,
+            "APM": 3.24,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 18.5,
+            "APM": 3.24,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Mithril_Minion": {
+        "Materials": {
+            "Mithril": {
+                "Amount": "2",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 80.0,
+            "APM": 0.75,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 80.0,
+            "APM": 0.75,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 75.0,
+            "APM": 0.8,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 75.0,
+            "APM": 0.8,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 70.0,
+            "APM": 0.86,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 70.0,
+            "APM": 0.86,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 65.0,
+            "APM": 0.92,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 65.0,
+            "APM": 0.92,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 60.0,
+            "APM": 1.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 60.0,
+            "APM": 1.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 55.0,
+            "APM": 1.09,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 50.0,
+            "APM": 1.2,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Mushroom_Minion": {
+        "Materials": {
+            "Red_Mushroom": {
+                "Amount": "1",
+                "Chance": 50
+            },
+            "Brown_Mushroom": {
+                "Amount": "1",
+                "Chance": 50
+            }
+        },
+        "1": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 128,
+            "Stack Storage": 2
+        },
+        "2": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 256,
+            "Stack Storage": 4
+        },
+        "3": {
+            "Speed": 28.0,
+            "APM": 2.14,
+            "Storage": 256,
+            "Stack Storage": 4
+        },
+        "4": {
+            "Speed": 28.0,
+            "APM": 2.14,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Mycelium_Minion": {
+        "Materials": {
+            "Mycelium": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 128,
+            "Stack Storage": 2
+        },
+        "3": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 320,
+            "Stack Storage": 5
+        },
+        "5": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 512,
+            "Stack Storage": 8
+        },
+        "7": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 704,
+            "Stack Storage": 11
+        },
+        "9": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 896,
+            "Stack Storage": 14
+        },
+        "11": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 11.0,
+            "APM": 5.45,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Nether_Wart_Minion": {
+        "Materials": {
+            "Nether_Wart": {
+                "Amount": "2-4",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 50.0,
+            "APM": 1.2,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 50.0,
+            "APM": 1.2,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 47.0,
+            "APM": 1.28,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 47.0,
+            "APM": 1.28,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 44.0,
+            "APM": 1.36,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 44.0,
+            "APM": 1.36,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 41.0,
+            "APM": 1.46,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 41.0,
+            "APM": 1.46,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 32.0,
+            "APM": 1.88,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Oak_Minion": {
+        "Materials": {
+            "Oak_Log": {
+                "Amount": "4",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 48.0,
+            "APM": 1.25,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 48.0,
+            "APM": 1.25,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 33.0,
+            "APM": 1.82,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 33.0,
+            "APM": 1.82,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Obsidian_Minion": {
+        "Materials": {
+            "Obsidian": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 39.0,
+            "APM": 1.54,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 39.0,
+            "APM": 1.54,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 35.0,
+            "APM": 1.71,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 35.0,
+            "APM": 1.71,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Pig_Minion": {
+        "Materials": {
+            "Raw_Porkchop": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Potato_Minion": {
+        "Materials": {
+            "Potato": {
+                "Amount": "2-4",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 14.0,
+            "APM": 4.29,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 8.0,
+            "APM": 7.5,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Pumpkin_Minion": {
+        "Materials": {
+            "Pumpkin": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 32.0,
+            "APM": 1.88,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 32.0,
+            "APM": 1.88,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Quartz_Minion": {
+        "Materials": {
+            "Nether_Quartz": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 22.5,
+            "APM": 2.67,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 22.5,
+            "APM": 2.67,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 14.5,
+            "APM": 4.14,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 14.5,
+            "APM": 4.14,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 11.5,
+            "APM": 5.22,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Rabbit_Minion": {
+        "Materials": {
+            "Raw_Rabbit": {
+                "Amount": "1",
+                "Chance": 100
+            },
+            "Rabbit_Hide": {
+                "Amount": "1",
+                "Chance": 70
+            },
+            "Rabbit's_Foot": {
+                "Amount": "1",
+                "Chance": 70
+            }
+        },
+        "1": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "2": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 320,
+            "Stack Storage": 5
+        },
+        "3": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 320,
+            "Stack Storage": 5
+        },
+        "4": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 448,
+            "Stack Storage": 7
+        },
+        "5": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 448,
+            "Stack Storage": 7
+        },
+        "6": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Red_Sand_Minion": {
+        "Materials": {
+            "Red_Sand": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 128,
+            "Stack Storage": 2
+        },
+        "3": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 320,
+            "Stack Storage": 5
+        },
+        "5": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 512,
+            "Stack Storage": 8
+        },
+        "7": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 704,
+            "Stack Storage": 11
+        },
+        "9": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 896,
+            "Stack Storage": 14
+        },
+        "11": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 11.0,
+            "APM": 5.45,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Redstone_Minion": {
+        "Materials": {
+            "Redstone_Dust": {
+                "Amount": "3-6",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 29.0,
+            "APM": 2.07,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 29.0,
+            "APM": 2.07,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 25.0,
+            "APM": 2.4,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 21.0,
+            "APM": 2.86,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Revenant_Minion": {
+        "Materials": {
+            "Rotten_Flesh": {
+                "Amount": "2-5",
+                "Chance": 100
+            },
+            "Diamond": {
+                "Amount": "1",
+                "Chance": 20
+            }
+        },
+        "1": {
+            "Speed": 29.0,
+            "APM": 2.07,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 29.0,
+            "APM": 2.07,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 14.5,
+            "APM": 4.14,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 14.5,
+            "APM": 4.14,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 8.0,
+            "APM": 7.5,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Sand_Minion": {
+        "Materials": {
+            "Sand": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Sheep_Minion": {
+        "Materials": {
+            "Mutton": {
+                "Amount": "1",
+                "Chance": 100
+            },
+            "Wool": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 128,
+            "Stack Storage": 2
+        },
+        "2": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 256,
+            "Stack Storage": 4
+        },
+        "3": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 256,
+            "Stack Storage": 4
+        },
+        "4": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 9.0,
+            "APM": 6.67,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Skeleton_Minion": {
+        "Materials": {
+            "Bone": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Slime_Minion": {
+        "Materials": {
+            "Slimeball": {
+                "Amount": "1",
+                "Chance": 50
+            }
+        },
+        "1": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Snow_Minion": {
+        "Materials": {
+            "Snowball": {
+                "Amount": "4",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 11.0,
+            "APM": 5.45,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 11.0,
+            "APM": 5.45,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 9.5,
+            "APM": 6.32,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 9.5,
+            "APM": 6.32,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 8.0,
+            "APM": 7.5,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 8.0,
+            "APM": 7.5,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 6.5,
+            "APM": 9.23,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 5.8,
+            "APM": 10.34,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Spider_Minion": {
+        "Materials": {
+            "String": {
+                "Amount": "1",
+                "Chance": 100
+            },
+            "Spider_Eye": {
+                "Amount": "1",
+                "Chance": 50
+            }
+        },
+        "1": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 128,
+            "Stack Storage": 2
+        },
+        "2": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 256,
+            "Stack Storage": 4
+        },
+        "3": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 256,
+            "Stack Storage": 4
+        },
+        "4": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Spruce_Minion": {
+        "Materials": {
+            "Spruce_Log": {
+                "Amount": "4",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 48.0,
+            "APM": 1.25,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 48.0,
+            "APM": 1.25,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 38.0,
+            "APM": 1.58,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 33.0,
+            "APM": 1.82,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 33.0,
+            "APM": 1.82,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 27.0,
+            "APM": 2.22,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Sugar_Cane_Minion": {
+        "Materials": {
+            "Sugar_Cane": {
+                "Amount": "3",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 18.0,
+            "APM": 3.33,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 16.0,
+            "APM": 3.75,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 14.5,
+            "APM": 4.14,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 14.5,
+            "APM": 4.14,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 12.0,
+            "APM": 5.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 9.0,
+            "APM": 6.67,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Tarantula_Minion": {
+        "Materials": {
+            "String": {
+                "Amount": "2-5",
+                "Chance": 100
+            },
+            "Spider_Eye": {
+                "Amount": "1",
+                "Chance": 100
+            },
+            "Iron_Ingot": {
+                "Amount": "1",
+                "Chance": 20
+            }
+        },
+        "1": {
+            "Speed": 29.0,
+            "APM": 2.07,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 29.0,
+            "APM": 2.07,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 23.0,
+            "APM": 2.61,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 19.0,
+            "APM": 3.16,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 14.5,
+            "APM": 4.14,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 14.5,
+            "APM": 4.14,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 8.0,
+            "APM": 7.5,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Vampire_Minion": {
+        "Materials": {
+            "Hemovibe": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 190.0,
+            "APM": 0.32,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 190.0,
+            "APM": 0.32,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 175.0,
+            "APM": 0.34,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 175.0,
+            "APM": 0.34,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 160.0,
+            "APM": 0.38,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 160.0,
+            "APM": 0.38,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 140.0,
+            "APM": 0.43,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 140.0,
+            "APM": 0.43,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 117.0,
+            "APM": 0.51,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 117.0,
+            "APM": 0.51,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 95.0,
+            "APM": 0.63,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Voidling_Minion": {
+        "Materials": {
+            "Obsidian": {
+                "Amount": "2-3",
+                "Chance": 100
+            },
+            "Nether_Quartz": {
+                "Amount": "1",
+                "Chance": 40
+            },
+            "Enchanted_Ender_Pearl": {
+                "Amount": "1",
+                "Chance": 0.0625
+            }
+        },
+        "1": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 45.0,
+            "APM": 1.33,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 42.0,
+            "APM": 1.43,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 39.0,
+            "APM": 1.54,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 39.0,
+            "APM": 1.54,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 35.0,
+            "APM": 1.71,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 35.0,
+            "APM": 1.71,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 30.0,
+            "APM": 2.0,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Wheat_Minion": {
+        "Materials": {
+            "Wheat": {
+                "Amount": "1",
+                "Chance": 100
+            },
+            "Seeds": {
+                "Amount": "1",
+                "Chance": 100
+            }
+        },
+        "1": {
+            "Speed": 15.0,
+            "APM": 4.0,
+            "Storage": 128,
+            "Stack Storage": 2
+        },
+        "2": {
+            "Speed": 15.0,
+            "APM": 4.0,
+            "Storage": 256,
+            "Stack Storage": 4
+        },
+        "3": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 256,
+            "Stack Storage": 4
+        },
+        "4": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 11.0,
+            "APM": 5.45,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 11.0,
+            "APM": 5.45,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 10.0,
+            "APM": 6.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 9.0,
+            "APM": 6.67,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 9.0,
+            "APM": 6.67,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 8.0,
+            "APM": 7.5,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "12": {
+            "Speed": 7.0,
+            "APM": 8.57,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    },
+    "Zombie_Minion": {
+        "Materials": {
+            "Rotten_Flesh": {
+                "Amount": "1",
+                "Chance": 100
+            },
+            "Carrot": {
+                "Amount": "1",
+                "Chance": 1
+            },
+            "Potato": {
+                "Amount": "1",
+                "Chance": 1
+            },
+            "Poisonous_Potato": {
+                "Amount": "1",
+                "Chance": 2
+            }
+        },
+        "1": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 64,
+            "Stack Storage": 1
+        },
+        "2": {
+            "Speed": 26.0,
+            "APM": 2.31,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "3": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 192,
+            "Stack Storage": 3
+        },
+        "4": {
+            "Speed": 24.0,
+            "APM": 2.5,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "5": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 384,
+            "Stack Storage": 6
+        },
+        "6": {
+            "Speed": 22.0,
+            "APM": 2.73,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "7": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 576,
+            "Stack Storage": 9
+        },
+        "8": {
+            "Speed": 20.0,
+            "APM": 3.0,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "9": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 768,
+            "Stack Storage": 12
+        },
+        "10": {
+            "Speed": 17.0,
+            "APM": 3.53,
+            "Storage": 960,
+            "Stack Storage": 15
+        },
+        "11": {
+            "Speed": 13.0,
+            "APM": 4.62,
+            "Storage": 960,
+            "Stack Storage": 15
+        }
+    }
+}
